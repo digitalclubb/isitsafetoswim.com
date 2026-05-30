@@ -1,23 +1,42 @@
 <script lang="ts">
 	import '$lib/styles/app.css';
 	import Masthead from '$lib/components/Masthead.svelte';
+	import NavProgress from '$lib/components/NavProgress.svelte';
 	import SiteFooter from '$lib/components/SiteFooter.svelte';
-	import { page } from '$app/state';
+	import { onNavigate } from '$app/navigation';
+	import { navigating, page } from '$app/state';
 
 	let { children } = $props();
 
-	let current = $derived(
+	let current: '' | 'home' | 'about' = $derived(
 		page.url.pathname === '/'
 			? 'home'
 			: page.url.pathname.startsWith('/about')
 				? 'about'
 				: ''
-	) as '' | 'home' | 'about';
+	);
+
+	let busy = $derived(Boolean(navigating.to));
+
+	// Cross-fade between routes using the browser View Transitions API. Falls
+	// through to a plain navigation when the browser lacks support. onNavigate
+	// only fires in the browser so no SSR guard is needed.
+	onNavigate((navigation) => {
+		if (!('startViewTransition' in document)) return;
+
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
 </script>
 
+<NavProgress />
 <Masthead {current} />
 
-<main id="main">
+<main id="main" aria-busy={busy}>
 	{@render children?.()}
 </main>
 
