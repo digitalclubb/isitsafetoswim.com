@@ -62,6 +62,12 @@
 		font-weight: 600;
 		font-size: var(--text-lg);
 		letter-spacing: -0.01em;
+		font-feature-settings: 'kern' 1, 'liga' 1;
+	}
+
+	.punct {
+		display: inline-block;
+		transform: translateY(-0.04em);
 	}
 
 	.brand:hover {
@@ -75,17 +81,22 @@
 
 	.punct {
 		color: var(--yes);
+		font-style: italic;
 	}
 
 	nav {
 		display: inline-flex;
-		gap: var(--space-5);
+		gap: var(--space-2);
 		font-size: var(--text-sm);
 	}
 
 	nav a {
 		color: var(--ink-soft);
 		text-decoration: none;
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		padding-inline: var(--space-3);
 	}
 
 	nav a:hover {

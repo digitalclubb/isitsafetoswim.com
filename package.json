@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "node ./scripts/build-location-index.mjs && vite build",
+    "build": "node ./scripts/build-location-index.mjs && node ./scripts/generate-images.mjs && vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -14,10 +14,12 @@
     "lint:fix": "biome check --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "data:index": "node ./scripts/build-location-index.mjs"
+    "data:index": "node ./scripts/build-location-index.mjs",
+    "data:images": "node ./scripts/generate-images.mjs"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.16",
+    "@resvg/resvg-js": "^2.6.2",
     "@sveltejs/adapter-vercel": "^6.3.3",
     "@sveltejs/kit": "^2.61.1",
     "@sveltejs/vite-plugin-svelte": "^7.1.2",

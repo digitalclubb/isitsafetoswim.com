@@ -18,6 +18,7 @@
 	);
 
 	let formattedTime = $derived(formatRelative(verdict.fetchedAt));
+	let formattedDate = $derived(formatDate(verdict.fetchedAt));
 
 	function formatRelative(iso: string): string {
 		const t = Date.parse(iso);
@@ -30,20 +31,38 @@
 		const days = Math.round(hours / 24);
 		return `${days} day${days === 1 ? '' : 's'} ago`;
 	}
+
+	function formatDate(iso: string): string {
+		const t = Date.parse(iso);
+		if (!Number.isFinite(t)) return '';
+		return new Date(t).toLocaleDateString('en-GB', {
+			weekday: 'long',
+			day: 'numeric',
+			month: 'long'
+		});
+	}
 </script>
 
 <section class="verdict" data-tone={tone} aria-labelledby="verdict-head">
-	<p class="kicker">
-		<span class="dot" aria-hidden="true"></span>
-		<span>{country}{region ? ` · ${region}` : ''}</span>
-	</p>
+	<header class="head">
+		<p class="kicker">
+			<span class="dot" aria-hidden="true"></span>
+			<span>{country}{region ? ` · ${region}` : ''}</span>
+		</p>
+		<p class="dateline">{formattedDate}</p>
+	</header>
+
 	<h1 class="name">{locationName}</h1>
+
 	<p class="headline" id="verdict-head">
 		<strong>{verdict.headline}</strong>
 		<span class="reason">{verdict.reason}</span>
 	</p>
+
+	<div class="rule" aria-hidden="true"></div>
+
 	<p class="updated">
-		<span aria-hidden="true">·</span> Updated {formattedTime}
+		Updated {formattedTime}
 		{#if verdict.dataAge === 'cached'}
 			<span class="badge">cached</span>
 		{:else if verdict.dataAge === 'unavailable'}
@@ -81,16 +100,32 @@
 		--tone-color: var(--no);
 	}
 
+	.head {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: var(--space-4);
+		margin-bottom: var(--space-3);
+	}
+
 	.kicker {
 		font-family: var(--font-sans);
 		font-size: var(--text-xs);
 		text-transform: uppercase;
 		letter-spacing: 0.12em;
 		color: var(--ink-soft);
-		margin: 0 0 var(--space-3);
+		margin: 0;
 		display: inline-flex;
 		align-items: center;
 		gap: var(--space-2);
+	}
+
+	.dateline {
+		font-family: var(--font-serif);
+		font-style: italic;
+		font-size: var(--text-sm);
+		color: var(--ink-soft);
+		margin: 0;
 	}
 
 	.dot {
@@ -106,6 +141,7 @@
 		font-size: clamp(var(--text-2xl), 5vw, var(--text-3xl));
 		margin: 0 0 var(--space-5);
 		line-height: 1.05;
+		font-feature-settings: 'kern' 1, 'liga' 1, 'lnum' 1;
 	}
 
 	.headline {
@@ -113,13 +149,16 @@
 		font-size: clamp(var(--text-2xl), 6vw, var(--text-4xl));
 		line-height: 1.04;
 		letter-spacing: -0.02em;
-		margin: 0 0 var(--space-4);
+		margin: 0;
+		text-indent: -0.1em;
+		font-feature-settings: 'kern' 1, 'liga' 1;
+		hanging-punctuation: first;
 	}
 
 	.headline strong {
 		color: var(--tone-color);
 		font-weight: 700;
-		margin-right: 0.3em;
+		margin-right: 0.18em;
 	}
 
 	.reason {
@@ -127,13 +166,23 @@
 		font-weight: 400;
 	}
 
+	.rule {
+		width: 88px;
+		height: var(--rule-weight-strong);
+		background: var(--tone-color);
+		margin: var(--space-5) 0 var(--space-3);
+	}
+
 	.updated {
+		font-family: var(--font-sans);
 		font-size: var(--text-sm);
-		color: var(--ink-muted);
+		color: var(--ink-soft);
 		margin: 0;
 		display: inline-flex;
-		gap: var(--space-2);
+		gap: var(--space-3);
 		align-items: center;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
 	}
 
 	.badge {
@@ -143,12 +192,19 @@
 		border-radius: 999px;
 		background: var(--surface-sunken);
 		color: var(--ink-soft);
-		text-transform: uppercase;
 		letter-spacing: 0.08em;
 	}
 
 	.badge.warn {
 		background: var(--caution-soft);
 		color: var(--caution);
+	}
+
+	@media (max-width: 540px) {
+		.head {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: var(--space-2);
+		}
 	}
 </style>

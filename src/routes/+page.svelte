@@ -16,7 +16,9 @@
 	<meta property="og:title" content="Is it safe to swim?" />
 	<meta property="og:description" content="A plain-English verdict on UK water quality." />
 	<meta property="og:type" content="website" />
-	<meta property="og:image" content="https://isitsafetoswim.com/og.svg" />
+	<meta property="og:image" content="https://isitsafetoswim.com/og.png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
 	<meta property="og:url" content="https://isitsafetoswim.com/" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<link rel="canonical" href="https://isitsafetoswim.com/" />
@@ -44,12 +46,9 @@
 			<NearMeButton />
 		</div>
 
-		<p class="stats">
-			<strong>{data.meta.count}</strong> bathing waters covered ·
-			<span>{data.meta.byCountry.England} England</span> ·
-			<span>{data.meta.byCountry.Wales} Wales</span> ·
-			<span>{data.meta.byCountry.Scotland} Scotland</span> ·
-			<span>{data.meta.byCountry['Northern Ireland']} Northern Ireland</span>
+		<p class="coverage">
+			Every designated bathing water in England, Wales, Scotland and Northern
+			Ireland. {data.meta.count} sites in total.
 		</p>
 	</div>
 </section>
@@ -67,46 +66,58 @@
 </section>
 
 <section class="block container">
-	<div class="block-head">
-		<h2>What we check and how</h2>
-	</div>
-	<div class="explain">
-		<article>
-			<h3>1. The official classification</h3>
-			<p>
-				Every year the environment regulators rate each bathing water as Excellent, Good,
-				Sufficient or Poor based on four years of bacteria readings. We use that as the baseline.
-			</p>
-		</article>
-		<article>
-			<h3>2. Today's pollution risk</h3>
-			<p>
-				During the bathing season the Environment Agency and Natural Resources Wales publish a
-				daily forecast that flags raised risk after heavy rain, tidal events and other expected
-				short-term pollution.
-			</p>
-		</article>
-		<article>
-			<h3>3. Sewage in the last 48 hours</h3>
-			<p>
-				We query each water company's live storm overflow feed for discharges within ten
-				kilometres of the bathing water. An ongoing or recent event downgrades the verdict.
-			</p>
-		</article>
-		<article>
-			<h3>4. Rainfall</h3>
-			<p>
-				Heavy rain in the last 24 hours flushes pollutants into rivers and the sea. We pull
-				rainfall from the nearest Environment Agency flood-monitoring station and factor it in.
-			</p>
-		</article>
-	</div>
+	<p class="block-kicker">Method</p>
+	<h2 class="block-h">What we check and how</h2>
+	<ol class="methodology">
+		<li>
+			<span class="numeral" aria-hidden="true">i</span>
+			<div class="body">
+				<h3>The official classification</h3>
+				<p>
+					Every year the environment regulators rate each bathing water as Excellent, Good,
+					Sufficient or Poor based on four years of bacteria readings. We use that as the
+					baseline.
+				</p>
+			</div>
+		</li>
+		<li class="offset">
+			<span class="numeral" aria-hidden="true">ii</span>
+			<div class="body">
+				<h3>Today's pollution risk</h3>
+				<p>
+					During the bathing season the Environment Agency and Natural Resources Wales publish a
+					daily forecast that flags raised risk after heavy rain, tidal events and other
+					expected short-term pollution.
+				</p>
+			</div>
+		</li>
+		<li>
+			<span class="numeral" aria-hidden="true">iii</span>
+			<div class="body">
+				<h3>Sewage in the last 48 hours</h3>
+				<p>
+					We query each water company's live storm overflow feed for discharges within ten
+					kilometres of the bathing water. An ongoing or recent event downgrades the verdict.
+				</p>
+			</div>
+		</li>
+		<li class="offset">
+			<span class="numeral" aria-hidden="true">iv</span>
+			<div class="body">
+				<h3>Rainfall</h3>
+				<p>
+					Heavy rain in the last 24 hours flushes pollutants into rivers and the sea. We pull
+					rainfall from the nearest Environment Agency flood-monitoring station and factor it
+					in.
+				</p>
+			</div>
+		</li>
+	</ol>
 </section>
 
 <style>
 	.hero {
 		padding: var(--space-8) 0 var(--space-7);
-		background: linear-gradient(180deg, var(--background) 0%, var(--surface) 100%);
 		border-bottom: var(--rule-weight) solid var(--rule);
 	}
 
@@ -164,15 +175,11 @@
 		background: var(--rule);
 	}
 
-	.stats {
+	.coverage {
 		margin: var(--space-7) 0 0;
 		font-size: var(--text-sm);
 		color: var(--ink-soft);
-	}
-
-	.stats strong {
-		color: var(--ink);
-		font-weight: 600;
+		max-width: 48ch;
 	}
 
 	.block {
@@ -193,20 +200,71 @@
 		gap: var(--space-4);
 	}
 
-	.explain {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-		gap: var(--space-6);
+	.block-kicker {
+		font-family: var(--font-sans);
+		font-size: var(--text-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.14em;
+		color: var(--ink-soft);
+		margin: 0 0 var(--space-2);
 	}
 
-	.explain article h3 {
+	.block-h {
+		margin-bottom: var(--space-6);
+	}
+
+	.methodology {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		gap: var(--space-7);
+		counter-reset: none;
+	}
+
+	.methodology li {
+		display: grid;
+		grid-template-columns: 88px minmax(0, 1fr);
+		gap: var(--space-5);
+		align-items: baseline;
+	}
+
+	.methodology li.offset {
+		padding-left: clamp(0px, 8vw, 88px);
+	}
+
+	.numeral {
+		font-family: var(--font-serif);
+		font-style: italic;
+		font-size: clamp(40px, 6vw, 64px);
+		line-height: 1;
+		color: var(--rule-strong);
+		text-align: right;
+		letter-spacing: -0.02em;
+	}
+
+	.methodology .body {
+		max-width: 56ch;
+	}
+
+	.methodology .body h3 {
 		font-size: var(--text-lg);
 		margin-bottom: var(--space-2);
 	}
 
-	.explain article p {
+	.methodology .body p {
 		font-size: var(--text-md);
 		color: var(--ink-soft);
 		margin: 0;
+	}
+
+	@media (max-width: 560px) {
+		.methodology li {
+			grid-template-columns: 56px minmax(0, 1fr);
+			gap: var(--space-3);
+		}
+		.methodology li.offset {
+			padding-left: 0;
+		}
 	}
 </style>

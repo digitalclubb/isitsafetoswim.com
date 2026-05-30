@@ -92,8 +92,15 @@
 		padding: 0;
 		margin: 0;
 		display: grid;
-		gap: var(--space-2);
+		gap: var(--space-1);
 		font-size: var(--text-sm);
+	}
+
+	.links a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		padding-block: var(--space-1);
 	}
 
 	.attribution {

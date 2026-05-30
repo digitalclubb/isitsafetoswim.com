@@ -12,7 +12,8 @@
 	--surface-sunken: #f3efe3;
 	--ink: #0b1f2a;
 	--ink-soft: #475a64;
-	--ink-muted: #7a8a92;
+	/* Darkened from #7a8a92 to clear WCAG AA 4.5:1 against --background. */
+	--ink-muted: #5e6c75;
 	--rule: #ddd6c0;
 	--rule-strong: #c7be9f;
 	--link: #0b3f70;
@@ -21,7 +22,8 @@
 	/* Verdicts. */
 	--yes: #1f6f4b;
 	--yes-soft: #d5e7dc;
-	--caution: #a86b1c;
+	/* Darkened from #a86b1c so badge text clears 4.5:1 against --caution-soft. */
+	--caution: #7a4a08;
 	--caution-soft: #f4e4c2;
 	--no: #9b2c2c;
 	--no-soft: #f1d4d2;

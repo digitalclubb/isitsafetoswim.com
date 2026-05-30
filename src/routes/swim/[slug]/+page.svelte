@@ -83,7 +83,9 @@
 	<meta property="og:title" content={metaTitle} />
 	<meta property="og:description" content={metaDescription} />
 	<meta property="og:type" content="website" />
-	<meta property="og:image" content="https://isitsafetoswim.com/og.svg" />
+	<meta property="og:image" content="https://isitsafetoswim.com/og.png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
 	<meta property="og:url" content={`https://isitsafetoswim.com/swim/${location.slug}`} />
 	<meta name="twitter:card" content="summary_large_image" />
 	<link rel="canonical" href={`https://isitsafetoswim.com/swim/${location.slug}`} />
