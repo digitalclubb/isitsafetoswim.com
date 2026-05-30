@@ -1,0 +1,9 @@
+/* Placeholder, replaced by the design-system foundations task. */
+:root {
+	color-scheme: light dark;
+}
+
+body {
+	margin: 0;
+	font-family: ui-sans-serif, system-ui, sans-serif;
+}
