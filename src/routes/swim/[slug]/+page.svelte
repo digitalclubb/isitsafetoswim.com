@@ -1,8 +1,11 @@
 <script lang="ts">
+	import { fade, slide } from 'svelte/transition';
+	import { cubicOut } from 'svelte/easing';
 	import DischargeList from '$lib/components/DischargeList.svelte';
 	import FactorList from '$lib/components/FactorList.svelte';
 	import LocationCard from '$lib/components/LocationCard.svelte';
 	import SampleSummary from '$lib/components/SampleSummary.svelte';
+	import SectionSkeleton from '$lib/components/SectionSkeleton.svelte';
 	import Verdict from '$lib/components/Verdict.svelte';
 	import { findNearestSlim } from '$lib/data/search-index';
 	import type { LiveLocationData } from '$lib/data/types';
@@ -19,6 +22,9 @@
 	let liveOverride = $state<LiveLocationData | null>(null);
 	let live = $derived<LiveLocationData>(liveOverride ?? data.live);
 
+	// The effect re-runs when the location id changes, so SPA navigation
+	// between two /swim/[slug] pages correctly reissues the live fetch and
+	// abandons the previous one through the AbortController cleanup.
 	$effect(() => {
 		const id = data.location.id;
 		liveOverride = null;
@@ -35,6 +41,10 @@
 
 		return () => controller.abort();
 	});
+
+	let factorSignature = $derived(
+		live.verdict.factors.map((f) => `${f.label}=${f.value}`).join('|')
+	);
 	let nearby = $derived(
 		findNearestSlim({ lat: location.lat, lon: location.lon }, 5)
 			.map((r) => r.location)
@@ -125,33 +135,72 @@
 			locationName={location.name}
 			country={location.country}
 			region={location.region}
+			hydrating={!liveOverride}
 		/>
 
 		<section class="block" aria-labelledby="why">
 			<h2 id="why">Why this verdict</h2>
-			<FactorList factors={live.verdict.factors} />
+			{#key factorSignature}
+				<div in:fade={{ duration: 240, easing: cubicOut }}>
+					<FactorList factors={live.verdict.factors} />
+				</div>
+			{/key}
 		</section>
 
-		{#if live.recentDischarges.length > 0}
-			<section class="block" aria-labelledby="discharges">
-				<h2 id="discharges">Recent sewage discharges nearby</h2>
+		{#if !liveOverride}
+			<section
+				class="block"
+				aria-labelledby="checking"
+				out:slide={{ duration: 200, easing: cubicOut }}
+			>
+				<h2 id="checking" class="muted-h">Checking for recent activity</h2>
+				<SectionSkeleton
+					label="Checking for recent sewage discharges and the latest sample"
+					lines={2}
+				/>
+			</section>
+		{:else if live.recentDischarges.length === 0 && !live.latestSample}
+			<section
+				class="block"
+				aria-labelledby="all-clear"
+				in:slide={{ duration: 280, delay: 200, easing: cubicOut }}
+			>
+				<h2 id="all-clear" class="muted-h">No recent activity</h2>
 				<p class="muted">
-					Storm overflows operated by {location.sewerageUndertaker ?? 'the local water company'}
-					within ten kilometres in the last 48 hours.
+					No storm-overflow discharges in the last 48 hours within ten kilometres of this
+					bathing water and no fresh sample yet.
 				</p>
-				<DischargeList discharges={live.recentDischarges} />
 			</section>
-		{/if}
+		{:else}
+			{#if live.recentDischarges.length > 0}
+				<section
+					class="block"
+					aria-labelledby="discharges"
+					in:slide={{ duration: 280, delay: 200, easing: cubicOut }}
+				>
+					<h2 id="discharges">Recent sewage discharges nearby</h2>
+					<p class="muted">
+						Storm overflows operated by {location.sewerageUndertaker ?? 'the local water company'}
+						within ten kilometres in the last 48 hours.
+					</p>
+					<DischargeList discharges={live.recentDischarges} />
+				</section>
+			{/if}
 
-		{#if live.latestSample}
-			<section class="block" aria-labelledby="sample">
-				<h2 id="sample">Latest bacteria reading</h2>
-				<SampleSummary sample={live.latestSample} />
-				<p class="muted small">
-					The regulator samples weekly during the bathing season. E. coli and intestinal
-					enterococci are the indicator organisms used in the official classification.
-				</p>
-			</section>
+			{#if live.latestSample}
+				<section
+					class="block"
+					aria-labelledby="sample"
+					in:slide={{ duration: 280, delay: 200, easing: cubicOut }}
+				>
+					<h2 id="sample">Latest bacteria reading</h2>
+					<SampleSummary sample={live.latestSample} />
+					<p class="muted small">
+						The regulator samples weekly during the bathing season. E. coli and intestinal
+						enterococci are the indicator organisms used in the official classification.
+					</p>
+				</section>
+			{/if}
 		{/if}
 
 		<section class="block" aria-labelledby="source">
@@ -205,6 +254,12 @@
 	.block h2 {
 		font-size: var(--text-xl);
 		margin-bottom: var(--space-4);
+	}
+
+	.muted-h {
+		color: var(--ink-soft);
+		font-size: var(--text-lg) !important;
+		font-weight: 500;
 	}
 
 	.small {
