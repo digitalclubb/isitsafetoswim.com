@@ -6,10 +6,10 @@
 //   - Scotland: SEPA ArcGIS MapServer
 //   - Northern Ireland: DAERA ArcGIS FeatureServer
 //
-// All four are live JSON APIs. If the build cannot reach at least three of
-// them we fall back to the previous on-disk index so a transient outage at
-// one regulator never blocks a deploy, but two or more concurrent failures
-// are treated as fatal. Override via env CACHE_ONLY=1 to skip the network.
+// All four are live JSON APIs. Any regulator the build cannot reach is
+// backfilled from the previous on-disk index so an outage never blocks a
+// deploy. The build only aborts when a regulator fails and the cache holds no
+// rows for its country. Override via env CACHE_ONLY=1 to skip the network.
 
 import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
@@ -40,6 +40,20 @@ const COUNTRY = {
 	WALES: 'Wales',
 	SCOTLAND: 'Scotland',
 	NI: 'Northern Ireland'
+};
+
+// England (EA) and Wales (NRW) are both served from environment.data.gov.uk,
+// which 403s datacentre IP ranges, so on Vercel they fail together. When a
+// regulator is unreachable we backfill its rows from the committed cache rather
+// than refusing the build: this index is the static catalogue (names, location,
+// annual classification), not the live verdict data, so cached rows cost no
+// freshness. The build only aborts if a regulator fails and the cache cannot
+// cover it.
+const FETCHER_COUNTRY = {
+	'England (EA)': COUNTRY.ENGLAND,
+	'Wales (NRW)': COUNTRY.WALES,
+	'Scotland (SEPA)': COUNTRY.SCOTLAND,
+	'Northern Ireland (DAERA)': COUNTRY.NI
 };
 
 async function fetchJson(url, options = {}) {
@@ -288,35 +302,37 @@ async function buildIndex() {
 		fetchers.map(([label, fn]) => withBudget(label, fn))
 	);
 
+	// Assemble in fetcher order regardless of fresh-or-cached source. Slug
+	// deduplication is order-sensitive: keeping each country's rows in one
+	// contiguous block preserves cross-country slug assignment, so a backfilled
+	// build produces the same URLs as a full live build. (Backfilled rows arrive
+	// in the cache's alphabetical order, so two same-country sites colliding on a
+	// base slug could in theory take different numeric suffixes; the data has no
+	// such collisions today.)
 	const collected = [];
 	const failures = [];
+	let cache = null;
 	for (let i = 0; i < results.length; i += 1) {
 		const [label] = fetchers[i];
 		const r = results[i];
 		if (r.status === 'fulfilled') {
 			console.log(`[build-location-index] ${label}: ${r.value.length} sites`);
 			collected.push(...r.value);
-		} else {
-			console.warn(`[build-location-index] ${label} failed: ${r.reason}`);
-			failures.push(label);
+			continue;
 		}
-	}
 
-	if (failures.length === fetchers.length) {
-		console.warn('[build-location-index] all fetchers failed, falling back to cache');
-		const cached = await loadCache();
-		if (cached) return cached;
-		throw new Error('all fetchers failed and no cache available');
-	}
-
-	if (failures.length >= 2) {
-		throw new Error(
-			`build refused: ${failures.length} regulators failed (${failures.join(', ')})`
+		console.warn(`[build-location-index] ${label} failed: ${r.reason}`);
+		failures.push(label);
+		if (!cache) cache = await loadCache();
+		const country = FETCHER_COUNTRY[label];
+		const backfill = cache?.locations?.filter((l) => l.country === country) ?? [];
+		if (backfill.length === 0) {
+			throw new Error(`build refused: ${label} unreachable and cache holds no ${country} records`);
+		}
+		console.warn(
+			`[build-location-index] ${label} backfilled from cache: ${backfill.length} ${country} records`
 		);
-	}
-
-	if (failures.length > 0) {
-		console.warn(`[build-location-index] partial build, missing: ${failures.join(', ')}`);
+		collected.push(...backfill);
 	}
 
 	dedupeSlugs(collected);

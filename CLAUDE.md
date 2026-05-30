@@ -111,7 +111,7 @@ Bathing season runs 15 May to 30 September. Outside that window the verdict adds
 
 Attribution is rendered per location page via `src/lib/live/attribution.ts`. Do not strip the attribution lines.
 
-Two or more concurrent regulator failures at build time are treated as fatal so a partial deploy never reaches production silently. A single transient outage falls through to the cached index in `scripts/.locations.cache.json`.
+Any regulator the build cannot reach is backfilled per country from the cached index in `scripts/.locations.cache.json`, so the catalogue stays complete rather than shipping a partial deploy. England (EA) and Wales (NRW) share the `environment.data.gov.uk` host, which 403s datacentre IPs, so both fail together on Vercel and are served from cache there. The build only aborts when a regulator fails and the cache holds no rows for its country.
 
 ## URL shape
 
