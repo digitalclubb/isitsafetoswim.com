@@ -68,7 +68,7 @@
 
 <section class="block container">
 	<div class="block-head">
-		<h2>What we check, and how</h2>
+		<h2>What we check and how</h2>
 	</div>
 	<div class="explain">
 		<article>
@@ -173,10 +173,6 @@
 	.stats strong {
 		color: var(--ink);
 		font-weight: 600;
-	}
-
-	.stats span:not(:last-child)::after {
-		content: '';
 	}
 
 	.block {

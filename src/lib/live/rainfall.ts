@@ -41,12 +41,17 @@ export async function fetchRainfall24h(
 		return null;
 	}
 	const items = readings.items ?? [];
-	if (items.length === 0) return 0;
+	// Empty readings array means the station is in range but is not reporting,
+	// which we cannot distinguish from a true zero. Treat as "no signal".
+	if (items.length === 0) return null;
 	let total = 0;
+	let counted = 0;
 	for (const r of items) {
-		if (typeof r.value === 'number' && Number.isFinite(r.value) && r.value > 0) {
-			total += r.value;
+		if (typeof r.value === 'number' && Number.isFinite(r.value)) {
+			if (r.value > 0) total += r.value;
+			counted += 1;
 		}
 	}
+	if (counted === 0) return null;
 	return Math.round(total * 10) / 10;
 }

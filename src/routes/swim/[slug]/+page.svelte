@@ -26,6 +26,13 @@
 
 	let metaDescription = $derived(`${live.verdict.headline} ${live.verdict.reason}`);
 
+	function safeJsonLd(value: unknown): string {
+		return JSON.stringify(value)
+			.replace(/</g, '\\u003c')
+			.replace(/>/g, '\\u003e')
+			.replace(/&/g, '\\u0026');
+	}
+
 	let jsonLd = $derived({
 		'@context': 'https://schema.org',
 		'@type': 'Place',
@@ -80,7 +87,7 @@
 	<meta property="og:url" content={`https://isitsafetoswim.com/swim/${location.slug}`} />
 	<meta name="twitter:card" content="summary_large_image" />
 	<link rel="canonical" href={`https://isitsafetoswim.com/swim/${location.slug}`} />
-	{@html `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`}
+	{@html `<script type="application/ld+json">${safeJsonLd(jsonLd)}</script>`}
 </svelte:head>
 
 <article class="page">

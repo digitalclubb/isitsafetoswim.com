@@ -33,16 +33,29 @@ const OVERFLOW_ENDPOINTS: Record<string, string> = {
 		'https://services3.arcgis.com/KLNF7YxtENPLYVey/arcgis/rest/services/DCWW_Storm_Overflow_Activity/FeatureServer/0/query'
 };
 
+function normaliseOperatorKey(input: string): string {
+	return input
+		.toLowerCase()
+		.replace(/\bwater\b/g, '')
+		.replace(/\bservices\b/g, '')
+		.replace(/\blimited\b|\bltd\b/g, '')
+		.replace(/cyfyngedig/g, '')
+		.replace(/[^a-z]+/g, '');
+}
+
+const NORMALISED_ENDPOINTS = new Map<string, string>();
+for (const [name, url] of Object.entries(OVERFLOW_ENDPOINTS)) {
+	NORMALISED_ENDPOINTS.set(normaliseOperatorKey(name), url);
+}
+
 function lookupEndpoint(name: string | undefined): string | undefined {
 	if (!name) return undefined;
 	const direct = OVERFLOW_ENDPOINTS[name];
 	if (direct) return direct;
-	const lower = name.toLowerCase();
-	for (const key of Object.keys(OVERFLOW_ENDPOINTS)) {
-		if (key.toLowerCase() === lower) return OVERFLOW_ENDPOINTS[key];
-	}
-	if (lower.includes('thames')) return undefined; // Thames Water uses an OAuth API and is handled separately.
-	return undefined;
+	const key = normaliseOperatorKey(name);
+	const fuzzy = NORMALISED_ENDPOINTS.get(key);
+	if (fuzzy) return fuzzy;
+	return undefined; // Thames Water uses an OAuth API and is handled separately.
 }
 
 interface FeatureCollection {
@@ -119,7 +132,13 @@ function buildEvent(
 		parseDate(props.StatusChange);
 	const endedAt =
 		parseDate(props.LatestEventEnd) ?? parseDate(props.end_time) ?? parseDate(props.StatusEnd);
-	if (!startedAt && !endedAt) return null;
+
+	// Without a real start timestamp we cannot reason about recency, so drop
+	// the event rather than synthesise a "now" fallback. Same for non-ongoing
+	// events with no end time — they cannot enter the horizon filter sensibly.
+	if (!startedAt) return null;
+	if (!ongoing && !endedAt) return null;
+
 	const outfallName =
 		readString(props, ['Id', 'OutfallName', 'Outfall_Name', 'SiteName', 'Asset_ID', 'name']) ??
 		'Outfall';
@@ -133,7 +152,7 @@ function buildEvent(
 		outfallName,
 		receivingWater,
 		distanceMetres: Math.round(haversineMetres(centre, { lat, lon })),
-		startedAt: startedAt ?? endedAt ?? new Date().toISOString(),
+		startedAt,
 		endedAt: ongoing ? undefined : endedAt,
 		ongoing
 	};

@@ -10,11 +10,11 @@ export const config = {
 	}
 };
 
-export const load: PageServerLoad = async ({ params, setHeaders }) => {
+export const load: PageServerLoad = async ({ params, setHeaders, request }) => {
 	const location = getLocationBySlug(params.slug);
 	if (!location) throw error(404, 'Unknown bathing water');
 
-	const live = await buildLiveData(location);
+	const live = await buildLiveData(location, request.signal);
 
 	setHeaders({
 		'cache-control': 'public, s-maxage=300, stale-while-revalidate=600'

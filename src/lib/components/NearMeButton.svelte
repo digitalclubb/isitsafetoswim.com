@@ -37,7 +37,7 @@
 	}
 </script>
 
-<button class="btn" type="button" onclick={locate} disabled={busy}>
+<button class="btn" type="button" onclick={locate} disabled={busy} aria-busy={busy}>
 	<svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18">
 		<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6" />
 		<circle cx="12" cy="12" r="2.4" fill="currentColor" />
@@ -47,7 +47,7 @@
 </button>
 
 {#if error}
-	<p class="error" role="alert">{error}</p>
+	<p class="error" role="alert" aria-live="polite">{error}</p>
 {/if}
 
 <style>

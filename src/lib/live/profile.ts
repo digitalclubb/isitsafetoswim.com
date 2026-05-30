@@ -46,6 +46,9 @@ function readNumber(value: unknown): number | undefined {
 function classify(raw: string | undefined): Classification | undefined {
 	if (!raw) return undefined;
 	const lower = raw.toLowerCase();
+	// Ordering is load-bearing: 'Sufficient' must be tested before 'Good' so
+	// that compound labels like "Sufficient (good in places)" do not silently
+	// downgrade to 'Good'.
 	if (lower.includes('excellent')) return 'Excellent';
 	if (lower.includes('sufficient')) return 'Sufficient';
 	if (lower.includes('good')) return 'Good';
@@ -56,6 +59,7 @@ function classify(raw: string | undefined): Classification | undefined {
 }
 
 export interface ProfileFetchResult {
+	ok: boolean;
 	classification: Classification | null;
 	latestSample: RecentSample | null;
 	riskForecast: RiskForecast | null;
@@ -158,8 +162,9 @@ function extractRisk(item: ItemShape): RiskForecast | null {
  * For Scotland and Northern Ireland we don't yet have a per-site live API,
  * so fall back to the classification captured in the index at build time.
  */
-function fallbackResult(location: Location): ProfileFetchResult {
+function fallbackResult(location: Location, ok: boolean): ProfileFetchResult {
 	return {
+		ok,
 		classification: location.classification === 'Unknown' ? null : location.classification,
 		latestSample: null,
 		riskForecast: null,
@@ -175,10 +180,18 @@ export async function fetchProfile(
 	signal?: AbortSignal
 ): Promise<ProfileFetchResult> {
 	const url = profileEndpoint(location);
-	if (!url) return fallbackResult(location);
-	const payload = await fetchJson<unknown>(url, { signal });
+	// Scotland and Northern Ireland do not have a per-site live API yet, so
+	// we return the index-time classification but flag the profile as "ok":
+	// the caller treats live-data unavailability separately from a fetch error.
+	if (!url) return fallbackResult(location, true);
+	let payload: unknown;
+	try {
+		payload = await fetchJson<unknown>(url, { signal });
+	} catch {
+		return fallbackResult(location, false);
+	}
 	const item = pickItem(payload);
-	if (!item) return fallbackResult(location);
+	if (!item) return fallbackResult(location, false);
 	const classification =
 		classify(readLabel(item.latestComplianceAssessment?.complianceClassification)) ?? null;
 
@@ -191,6 +204,7 @@ export async function fetchProfile(
 	}
 
 	return {
+		ok: true,
 		classification,
 		latestSample,
 		riskForecast: extractRisk(item),

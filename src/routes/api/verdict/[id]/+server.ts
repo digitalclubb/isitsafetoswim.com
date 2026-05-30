@@ -3,6 +3,8 @@ import { getLocationById, getLocationBySlug } from '$lib/data/locations';
 import { buildLiveData } from '$lib/live/verdict';
 import type { RequestHandler } from './$types';
 
+export const prerender = false;
+
 export const config = {
 	runtime: 'nodejs22.x'
 };
@@ -16,7 +18,8 @@ export const GET: RequestHandler = async ({ params, setHeaders, request }) => {
 
 	setHeaders({
 		'cache-control': 'public, s-maxage=300, stale-while-revalidate=600',
-		'content-type': 'application/json; charset=utf-8'
+		'content-type': 'application/json; charset=utf-8',
+		vary: 'Accept-Encoding'
 	});
 	return json(data);
 };

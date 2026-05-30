@@ -14,7 +14,8 @@ const config = {
 		},
 		prerender: {
 			handleHttpError: 'warn',
-			handleMissingId: 'warn'
+			handleMissingId: 'warn',
+			entries: ['*', '/sitemap.xml']
 		}
 	}
 };

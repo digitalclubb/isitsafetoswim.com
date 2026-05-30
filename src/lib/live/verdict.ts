@@ -14,6 +14,7 @@ export async function buildLiveData(location: Location, signal?: AbortSignal): P
 	]);
 
 	const profile = profileResult.status === 'fulfilled' ? profileResult.value : null;
+	const profileOk = profile?.ok ?? false;
 	const recentDischarges = dischargesResult.status === 'fulfilled' ? dischargesResult.value : [];
 	const rainfall24hMm = rainfallResult.status === 'fulfilled' ? rainfallResult.value : null;
 
@@ -21,8 +22,11 @@ export async function buildLiveData(location: Location, signal?: AbortSignal): P
 	const latestSample = profile?.latestSample ?? null;
 	const riskForecast = profile?.riskForecast ?? null;
 
+	const everythingFailed =
+		!profileOk && recentDischarges.length === 0 && rainfall24hMm === null;
+
 	let verdict: VerdictResult;
-	if (!profile && recentDischarges.length === 0 && rainfall24hMm === null) {
+	if (everythingFailed) {
 		verdict = emptyVerdict(
 			'We could not reach the live data sources for this site. Try again in a few minutes.',
 			now
@@ -37,7 +41,7 @@ export async function buildLiveData(location: Location, signal?: AbortSignal): P
 				rainfall24hMm,
 				now
 			},
-			profile ? 'fresh' : 'cached'
+			profileOk ? 'fresh' : 'cached'
 		);
 	}
 

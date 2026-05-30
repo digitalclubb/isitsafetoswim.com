@@ -16,6 +16,12 @@
 		return input.normalize('NFKD').replace(/[̀-ͯ]/g, '');
 	}
 
+	function isInsideContainer(target: EventTarget | null, container: HTMLElement | null): boolean {
+		return Boolean(target instanceof Node && container?.contains(target));
+	}
+
+	let containerRef = $state<HTMLDivElement | null>(null);
+
 	let results = $derived.by(() => {
 		const q = foldDiacritics(query.trim().toLowerCase());
 		if (q.length < 2) return [] as SearchLocation[];
@@ -29,7 +35,6 @@
 			else if (name.includes(q)) score = 30;
 			else if (region.includes(q)) score = 15;
 			if (score > 0) scored.push({ loc, score });
-			if (scored.length > 200) break;
 		}
 		scored.sort((a, b) => b.score - a.score || a.loc.name.localeCompare(b.loc.name, 'en-GB'));
 		return scored.slice(0, 8).map((r) => r.loc);
@@ -58,7 +63,7 @@
 	}
 </script>
 
-<div class="search">
+<div class="search" bind:this={containerRef}>
 	<label class="sr-only" for="bw-search">Search for a UK bathing water</label>
 	<input
 		id="bw-search"
@@ -68,7 +73,9 @@
 		bind:value={query}
 		onkeydown={handleKeydown}
 		onfocus={() => (focused = true)}
-		onblur={() => setTimeout(() => (focused = false), 120)}
+		onblur={(e) => {
+			if (!isInsideContainer(e.relatedTarget, containerRef)) focused = false;
+		}}
 		role="combobox"
 		aria-controls="bw-search-listbox"
 		aria-expanded={focused && results.length > 0}
@@ -94,10 +101,7 @@
 						role="option"
 						aria-selected={i === activeIndex}
 						class:active={i === activeIndex}
-						onmousedown={(e) => {
-							e.preventDefault();
-							select(loc);
-						}}
+						onclick={() => select(loc)}
 					>
 						<span class="loc-name">{loc.name}</span>
 						<span class="loc-meta">{loc.region ? `${loc.region} · ` : ''}{loc.country}</span>
