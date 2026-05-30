@@ -79,6 +79,13 @@ input:focus-visible,
 	border-radius: 2px;
 }
 
+/* Tactile defaults: no default mobile tap highlight, deliberate press states
+ * come from each component. */
+:where(a, button, [role='button'], [role='option']) {
+	-webkit-tap-highlight-color: transparent;
+	touch-action: manipulation;
+}
+
 img,
 svg,
 picture {

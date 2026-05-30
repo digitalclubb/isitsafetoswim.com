@@ -62,11 +62,18 @@
 		font-weight: 500;
 		font-size: var(--text-md);
 		border-radius: var(--radius);
-		transition: background-color 120ms ease;
+		transition:
+			background-color 120ms ease,
+			transform 120ms cubic-bezier(0.2, 0.8, 0.2, 1);
 	}
 
 	.btn:hover:not(:disabled) {
 		background: var(--link);
+	}
+
+	.btn:active:not(:disabled) {
+		transform: translateY(1px);
+		transition-duration: 60ms;
 	}
 
 	.btn:disabled {

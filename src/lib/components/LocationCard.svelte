@@ -44,12 +44,24 @@
 		border-radius: var(--radius);
 		text-decoration: none;
 		color: var(--ink);
-		transition: border-color 120ms ease, transform 120ms ease;
+		transition:
+			border-color 120ms ease,
+			transform 140ms cubic-bezier(0.2, 0.8, 0.2, 1),
+			box-shadow 140ms ease;
+		will-change: transform;
 	}
 
-	.card:hover {
-		border-color: var(--rule-strong);
-		transform: translateY(-1px);
+	@media (hover: hover) {
+		.card:hover {
+			border-color: var(--rule-strong);
+			transform: translateY(-1px);
+			box-shadow: 0 6px 18px -12px rgba(11, 31, 42, 0.18);
+		}
+	}
+
+	.card:active {
+		transform: translateY(1px);
+		transition-duration: 60ms;
 	}
 
 	.name {

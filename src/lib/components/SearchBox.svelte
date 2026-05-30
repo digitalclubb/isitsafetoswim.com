@@ -57,10 +57,6 @@
 			activeIndex = -1;
 		}
 	}
-
-	function select(loc: SearchLocation) {
-		goto(`/swim/${loc.slug}`);
-	}
 </script>
 
 <div class="search" bind:this={containerRef}>
@@ -80,6 +76,7 @@
 		aria-controls="bw-search-listbox"
 		aria-expanded={focused && results.length > 0}
 		aria-autocomplete="list"
+		aria-activedescendant={activeIndex >= 0 ? `bw-opt-${activeIndex}` : undefined}
 		{placeholder}
 	/>
 	<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -96,16 +93,18 @@
 		>
 			{#each results as loc, i (loc.id)}
 				<li role="presentation">
-					<button
-						type="button"
+					<a
+						id={`bw-opt-${i}`}
+						href={`/swim/${loc.slug}`}
 						role="option"
 						aria-selected={i === activeIndex}
 						class:active={i === activeIndex}
-						onclick={() => select(loc)}
+						data-sveltekit-preload-data="hover"
+						data-sveltekit-preload-code="tap"
 					>
 						<span class="loc-name">{loc.name}</span>
 						<span class="loc-meta">{loc.region ? `${loc.region} · ` : ''}{loc.country}</span>
-					</button>
+					</a>
 				</li>
 			{/each}
 		</ul>
@@ -160,7 +159,7 @@
 		z-index: 10;
 	}
 
-	.results button {
+	.results a {
 		width: 100%;
 		text-align: left;
 		padding: var(--space-3) var(--space-4);
@@ -169,11 +168,19 @@
 		gap: 2px;
 		border-radius: var(--radius);
 		cursor: pointer;
+		color: var(--ink);
+		text-decoration: none;
+		transition: background-color 80ms ease-out;
 	}
 
-	.results button:hover,
-	.results button.active {
+	.results a:hover,
+	.results a.active,
+	.results a:focus-visible {
 		background: var(--surface-sunken);
+	}
+
+	.results a:active {
+		background: var(--rule);
 	}
 
 	.loc-name {
