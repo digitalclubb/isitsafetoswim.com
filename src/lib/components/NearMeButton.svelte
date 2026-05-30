@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { findNearest } from '$lib/data/locations';
+	import { findNearestSlim } from '$lib/data/search-index';
 
 	let busy = $state(false);
 	let error = $state<string | null>(null);
@@ -15,7 +15,7 @@
 		busy = true;
 		navigator.geolocation.getCurrentPosition(
 			(position) => {
-				const nearest = findNearest(
+				const nearest = findNearestSlim(
 					{ lat: position.coords.latitude, lon: position.coords.longitude },
 					1
 				)[0];

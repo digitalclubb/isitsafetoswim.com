@@ -4,7 +4,7 @@
 	import LocationCard from '$lib/components/LocationCard.svelte';
 	import SampleSummary from '$lib/components/SampleSummary.svelte';
 	import Verdict from '$lib/components/Verdict.svelte';
-	import { findNearest } from '$lib/data/locations';
+	import { findNearestSlim } from '$lib/data/search-index';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -12,7 +12,7 @@
 	let location = $derived(data.location);
 	let live = $derived(data.live);
 	let nearby = $derived(
-		findNearest({ lat: location.lat, lon: location.lon }, 5)
+		findNearestSlim({ lat: location.lat, lon: location.lon }, 5)
 			.map((r) => r.location)
 			.filter((l) => l.id !== location.id)
 			.slice(0, 4)

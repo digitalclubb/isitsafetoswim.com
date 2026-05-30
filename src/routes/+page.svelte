@@ -35,7 +35,7 @@
 		</p>
 
 		<div class="finder">
-			<SearchBox locations={data.allLocations} />
+			<SearchBox locations={data.searchIndex} />
 			<div class="finder-or">
 				<span class="rule" aria-hidden="true"></span>
 				<span>or</span>

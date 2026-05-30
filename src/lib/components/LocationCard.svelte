@@ -1,7 +1,15 @@
 <script lang="ts">
-	import type { Classification, Location } from '$lib/data/types';
+	import type { Classification, Country } from '$lib/data/types';
 
-	let { location }: { location: Location } = $props();
+	interface CardLocation {
+		slug: string;
+		name: string;
+		region?: string;
+		country: Country;
+		classification: Classification;
+	}
+
+	let { location }: { location: CardLocation } = $props();
 
 	const TONE: Record<Classification, 'yes' | 'caution' | 'no' | 'neutral'> = {
 		Excellent: 'yes',

@@ -345,6 +345,27 @@ async function main() {
 	const json = `${JSON.stringify(index, null, 2)}\n`;
 	await writeFile(outFile, json);
 	await writeFile(cacheFile, json);
+
+	// Ship a slim client-friendly search index alongside the full one. The
+	// client only needs slug, name, country, region, classification and a
+	// coarse lat/lon for nearest-beach lookup.
+	const slimFile = resolve(repoRoot, 'src', 'data', 'search-index.json');
+	const slim = {
+		generatedAt: index.generatedAt,
+		count: index.count,
+		locations: index.locations.map((l) => ({
+			id: l.id,
+			slug: l.slug,
+			name: l.name,
+			country: l.country,
+			region: l.region,
+			classification: l.classification,
+			lat: Math.round(l.lat * 1e4) / 1e4,
+			lon: Math.round(l.lon * 1e4) / 1e4
+		}))
+	};
+	await writeFile(slimFile, `${JSON.stringify(slim)}\n`);
+
 	console.log(
 		`[build-location-index] wrote ${index.count} locations to ${outFile} (${Object.entries(
 			index.byCountry

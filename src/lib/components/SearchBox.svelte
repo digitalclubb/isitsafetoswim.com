@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import type { Location } from '$lib/data/types';
+	import type { SearchLocation } from '$lib/data/search-index';
 
 	let {
 		locations,
 		placeholder = 'Search a beach, lake or town'
-	}: { locations: readonly Location[]; placeholder?: string } = $props();
+	}: { locations: readonly SearchLocation[]; placeholder?: string } = $props();
 
 	let query = $state('');
 	let focused = $state(false);
@@ -18,8 +18,8 @@
 
 	let results = $derived.by(() => {
 		const q = foldDiacritics(query.trim().toLowerCase());
-		if (q.length < 2) return [] as Location[];
-		const scored: Array<{ loc: Location; score: number }> = [];
+		if (q.length < 2) return [] as SearchLocation[];
+		const scored: Array<{ loc: SearchLocation; score: number }> = [];
 		for (const loc of locations) {
 			const name = foldDiacritics(loc.name.toLowerCase());
 			const region = foldDiacritics((loc.region ?? '').toLowerCase());
@@ -53,7 +53,7 @@
 		}
 	}
 
-	function select(loc: Location) {
+	function select(loc: SearchLocation) {
 		goto(`/swim/${loc.slug}`);
 	}
 </script>
