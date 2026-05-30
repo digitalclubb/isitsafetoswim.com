@@ -5,6 +5,37 @@ import { fetchRecentDischarges } from './discharges';
 import { fetchProfile } from './profile';
 import { fetchRainfall24h } from './rainfall';
 
+/**
+ * Build an instant verdict from the build-time classification only — no
+ * network calls. Used to render the location page immediately so navigation
+ * never blocks on the regulator APIs. The live verdict hydrates afterwards
+ * via /api/verdict/[id].
+ */
+export function buildCachedData(location: Location): LiveLocationData {
+	const now = new Date();
+	const verdict = decideAt(
+		{
+			classification: location.classification,
+			latestSample: null,
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: null,
+			now
+		},
+		'cached'
+	);
+	return {
+		location,
+		classification: location.classification,
+		latestSample: null,
+		riskForecast: null,
+		recentDischarges: [],
+		rainfall24hMm: null,
+		verdict,
+		attribution: attributionFor(location.country, false)
+	};
+}
+
 export async function buildLiveData(location: Location, signal?: AbortSignal): Promise<LiveLocationData> {
 	const now = new Date();
 	const [profileResult, dischargesResult, rainfallResult] = await Promise.allSettled([

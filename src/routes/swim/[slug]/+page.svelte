@@ -5,12 +5,36 @@
 	import SampleSummary from '$lib/components/SampleSummary.svelte';
 	import Verdict from '$lib/components/Verdict.svelte';
 	import { findNearestSlim } from '$lib/data/search-index';
+	import type { LiveLocationData } from '$lib/data/types';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
 	let location = $derived(data.location);
-	let live = $derived(data.live);
+
+	// On first paint we render the cached verdict from the index — instant.
+	// As soon as the page is interactive we fetch the live verdict from
+	// /api/verdict/[id] and swap it in. The page is fully usable before this
+	// resolves, so navigation never blocks on the regulator APIs.
+	let liveOverride = $state<LiveLocationData | null>(null);
+	let live = $derived<LiveLocationData>(liveOverride ?? data.live);
+
+	$effect(() => {
+		const id = data.location.id;
+		liveOverride = null;
+		const controller = new AbortController();
+
+		fetch(`/api/verdict/${id}`, { signal: controller.signal })
+			.then((r) => (r.ok ? r.json() : null))
+			.then((fresh: LiveLocationData | null) => {
+				if (fresh && fresh.location?.id === id) liveOverride = fresh;
+			})
+			.catch(() => {
+				// Stay on the cached verdict if the live fetch fails.
+			});
+
+		return () => controller.abort();
+	});
 	let nearby = $derived(
 		findNearestSlim({ lat: location.lat, lon: location.lon }, 5)
 			.map((r) => r.location)

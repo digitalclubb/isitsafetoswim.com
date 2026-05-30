@@ -1,27 +1,31 @@
 import { error } from '@sveltejs/kit';
 import { getLocationBySlug } from '$lib/data/locations';
-import { buildLiveData } from '$lib/live/verdict';
+import { buildCachedData } from '$lib/live/verdict';
 import type { PageServerLoad } from './$types';
 
 export const config = {
 	runtime: 'nodejs22.x',
 	isr: {
-		expiration: 300
+		expiration: 3600
 	}
 };
 
-export const load: PageServerLoad = async ({ params, setHeaders, request }) => {
+/**
+ * The page renders instantly from the build-time index. The live verdict
+ * (sewage, rainfall, daily forecast, fresh sample) is fetched client-side
+ * from /api/verdict/[id] after first paint, so navigation never blocks on
+ * upstream regulator APIs.
+ */
+export const load: PageServerLoad = ({ params, setHeaders }) => {
 	const location = getLocationBySlug(params.slug);
 	if (!location) throw error(404, 'Unknown bathing water');
 
-	const live = await buildLiveData(location, request.signal);
-
 	setHeaders({
-		'cache-control': 'public, s-maxage=300, stale-while-revalidate=600'
+		'cache-control': 'public, s-maxage=3600, stale-while-revalidate=86400'
 	});
 
 	return {
 		location,
-		live
+		live: buildCachedData(location)
 	};
 };
