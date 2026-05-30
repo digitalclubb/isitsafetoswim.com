@@ -16,6 +16,9 @@
 	<meta property="og:title" content="Is it safe to swim?" />
 	<meta property="og:description" content="A plain-English verdict on UK water quality." />
 	<meta property="og:type" content="website" />
+	<meta property="og:image" content="https://isitsafetoswim.com/og.svg" />
+	<meta property="og:url" content="https://isitsafetoswim.com/" />
+	<meta name="twitter:card" content="summary_large_image" />
 	<link rel="canonical" href="https://isitsafetoswim.com/" />
 </svelte:head>
 
