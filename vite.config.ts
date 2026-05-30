@@ -46,7 +46,12 @@ export default defineConfig({
 				]
 			},
 			devOptions: {
-				enabled: false
+				// Serve the manifest in dev so the <link rel="manifest"> tag does
+				// not 404. The service worker still only matters in production.
+				enabled: true,
+				type: 'module',
+				suppressWarnings: true,
+				navigateFallback: '/'
 			}
 		})
 	],
