@@ -80,7 +80,7 @@
 				</p>
 			</div>
 		</li>
-		<li class="offset">
+		<li>
 			<span class="numeral" aria-hidden="true">ii</span>
 			<div class="body">
 				<h3>Today's pollution risk</h3>
@@ -101,7 +101,7 @@
 				</p>
 			</div>
 		</li>
-		<li class="offset">
+		<li>
 			<span class="numeral" aria-hidden="true">iv</span>
 			<div class="body">
 				<h3>Rainfall</h3>
@@ -229,10 +229,6 @@
 		align-items: baseline;
 	}
 
-	.methodology li.offset {
-		padding-left: clamp(0px, 8vw, 88px);
-	}
-
 	.numeral {
 		font-family: var(--font-serif);
 		font-style: italic;
@@ -262,9 +258,6 @@
 		.methodology li {
 			grid-template-columns: 56px minmax(0, 1fr);
 			gap: var(--space-3);
-		}
-		.methodology li.offset {
-			padding-left: 0;
 		}
 	}
 </style>
