@@ -17,7 +17,7 @@
 			"!build",
 			"!dist",
 			"!node_modules",
-			"!src/data/**.json",
+			"!src/data/**/*.json",
 			"!static/**"
 		]
 	},
