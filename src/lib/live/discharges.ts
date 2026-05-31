@@ -60,7 +60,7 @@ function lookupEndpoint(name: string | undefined): string | undefined {
 	return undefined; // Thames Water is on its own API, handled in fetchRecentDischarges.
 }
 
-function isThamesWater(name: string | undefined): boolean {
+export function isThamesWater(name: string | undefined): boolean {
 	return Boolean(name) && normaliseOperatorKey(name as string).includes('thames');
 }
 

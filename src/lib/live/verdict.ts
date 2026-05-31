@@ -1,7 +1,7 @@
 import type { LiveLocationData, Location, VerdictResult } from '$lib/data/types';
 import { decideAt, emptyVerdict } from '$lib/verdict/engine';
-import { attributionFor } from './attribution';
-import { fetchRecentDischarges } from './discharges';
+import { attributionFor, type OverflowSource } from './attribution';
+import { fetchRecentDischarges, isThamesWater } from './discharges';
 import { fetchProfile } from './profile';
 import { fetchRainfall24h } from './rainfall';
 
@@ -34,7 +34,7 @@ export function buildCachedData(location: Location): LiveLocationData {
 		recentDischarges: [],
 		rainfall24hMm: null,
 		verdict,
-		attribution: attributionFor(location.country, false)
+		attribution: attributionFor(location.country)
 	};
 }
 
@@ -57,6 +57,13 @@ export async function buildLiveData(
 	const classification = profile?.classification ?? location.classification;
 	const latestSample = profile?.latestSample ?? null;
 	const riskForecast = profile?.riskForecast ?? null;
+
+	const overflowSource: OverflowSource =
+		recentDischarges.length === 0
+			? 'none'
+			: isThamesWater(location.sewerageUndertaker)
+				? 'thames'
+				: 'ogl';
 
 	const everythingFailed = !profileOk && recentDischarges.length === 0 && rainfall24hMm === null;
 
@@ -90,6 +97,6 @@ export async function buildLiveData(
 		recentDischarges,
 		rainfall24hMm,
 		verdict,
-		attribution: attributionFor(location.country, recentDischarges.length > 0)
+		attribution: attributionFor(location.country, overflowSource)
 	};
 }
