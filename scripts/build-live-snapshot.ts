@@ -41,12 +41,15 @@ const locations = index.locations;
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /** Best-effort with exponential backoff. Returns null rather than throwing. */
-async function attempt<T>(fn: () => Promise<T>): Promise<T | null> {
+async function attempt<T>(fn: () => Promise<T>, label?: string): Promise<T | null> {
 	for (let i = 0; i <= RETRIES; i++) {
 		try {
 			return await fn();
-		} catch {
-			if (i === RETRIES) return null;
+		} catch (err) {
+			if (i === RETRIES) {
+				if (label) console.error(`  ${label} failed: ${(err as Error).message}`);
+				return null;
+			}
 			await sleep(400 * 2 ** i + Math.floor(Math.random() * 200));
 		}
 	}
@@ -86,8 +89,8 @@ async function snapshotSite(
 async function run(): Promise<void> {
 	console.log('Fetching bulk profiles (England + Wales)...');
 	const [ea, nrw] = await Promise.all([
-		attempt(() => fetchProfileList('ea')),
-		attempt(() => fetchProfileList('nrw'))
+		attempt(() => fetchProfileList('ea'), 'ea profile list'),
+		attempt(() => fetchProfileList('nrw'), 'nrw profile list')
 	]);
 	// England and Wales share the environment.data.gov.uk host, so a list failure
 	// is normally both or neither. Abort the whole run rather than upload a

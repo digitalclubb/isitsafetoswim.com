@@ -27,6 +27,13 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Probe regulator reachability
+        run: |
+          echo "runner public IP: $(curl -s --max-time 10 https://api.ipify.org)"
+          echo -n "EA bulk list status: "
+          curl -s -o /dev/null -w '%{http_code}\n' --max-time 20 \
+            -A 'isitsafetoswim/0.1 (+https://isitsafetoswim.com)' \
+            'https://environment.data.gov.uk/doc/bathing-water.json?_pageSize=1'
       - run: pnpm data:snapshot
         env:
           BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
