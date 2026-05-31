@@ -162,6 +162,7 @@ Documented for future sessions, not blocking launch:
 
 1. Thames Water CSO is wired in `src/lib/live/thames.ts` against the open v2 API (`api.thameswater.co.uk/opendata/v2/discharge/status`, no key, no OAuth). The old `client_id`/`client_secret` CloudHub API is retired. Done, no setup needed.
 2. Per-location OG share cards rendered at build time via @resvg/resvg-js.
-3. Postcode entry on the homepage alongside name search and geolocation.
+3. Done: postcode and outward-code entry resolve via postcodes.io to the `/near/[postcode]` results page, alongside name search and geolocation (`/near`).
 4. Done: the recent-sample trend sparkline (`SampleHistory.svelte`, fed by `src/lib/live/history.ts`) is on the location page. History is fetched live per verdict; it changes only weekly, so it is a candidate to bake in at build time if request cost ever matters.
 5. SEPA and DAERA do not expose a per-site daily risk forecast; verdicts for Scotland and NI rely on classification, rainfall and any directly observable CSO data. When those regulators ship a forecast feed, plumb it through `src/lib/live/profile.ts`.
+6. The SEPA branch in `build-location-index.mjs` hardcodes `waterType: 'coastal'`, so inland Scottish lochs get coastal sample thresholds and are not skipped by the sea-temperature fetch. They fail safe today (Open-Meteo returns null inland), but a name heuristic (loch, lake, reservoir, river) or a coast-distance check would classify them correctly.

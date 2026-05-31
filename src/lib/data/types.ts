@@ -86,6 +86,7 @@ export interface LiveLocationData {
 	recentDischarges: DischargeEvent[];
 	rainfall24hMm: number | null;
 	sampleHistory: RecentSample[];
+	seaTemperatureC: number | null;
 	verdict: VerdictResult;
 	attribution: string[];
 }

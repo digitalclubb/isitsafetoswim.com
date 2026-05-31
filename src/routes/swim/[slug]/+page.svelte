@@ -8,6 +8,7 @@
 	import SampleSummary from '$lib/components/SampleSummary.svelte';
 	import SectionSkeleton from '$lib/components/SectionSkeleton.svelte';
 	import Verdict from '$lib/components/Verdict.svelte';
+	import WaterTemperature from '$lib/components/WaterTemperature.svelte';
 	import { findNearestSlim } from '$lib/data/search-index';
 	import type { LiveLocationData } from '$lib/data/types';
 	import type { PageData } from './$types';
@@ -147,6 +148,17 @@
 				</div>
 			{/key}
 		</section>
+
+		{#if liveOverride && live.seaTemperatureC != null}
+			<section
+				class="block"
+				aria-labelledby="temperature"
+				in:slide={{ duration: 280, delay: 200, easing: cubicOut }}
+			>
+				<h2 id="temperature" class="muted-h">Water temperature</h2>
+				<WaterTemperature celsius={live.seaTemperatureC} />
+			</section>
+		{/if}
 
 		{#if !liveOverride}
 			<section

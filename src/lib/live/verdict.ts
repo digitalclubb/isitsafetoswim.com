@@ -5,6 +5,7 @@ import { fetchRecentDischarges, isThamesWater } from './discharges';
 import { fetchSampleHistory } from './history';
 import { fetchProfile } from './profile';
 import { fetchRainfall24h } from './rainfall';
+import { fetchSeaTemperature } from './temperature';
 
 /**
  * Build an instant verdict from the build-time classification only — no
@@ -35,6 +36,7 @@ export function buildCachedData(location: Location): LiveLocationData {
 		recentDischarges: [],
 		rainfall24hMm: null,
 		sampleHistory: [],
+		seaTemperatureC: null,
 		verdict,
 		attribution: attributionFor(location.country)
 	};
@@ -45,18 +47,21 @@ export async function buildLiveData(
 	signal?: AbortSignal
 ): Promise<LiveLocationData> {
 	const now = new Date();
-	const [profileResult, dischargesResult, rainfallResult, historyResult] = await Promise.allSettled([
-		fetchProfile(location, signal),
-		fetchRecentDischarges(location, signal),
-		fetchRainfall24h({ lat: location.lat, lon: location.lon }, signal),
-		fetchSampleHistory(location, signal)
-	]);
+	const [profileResult, dischargesResult, rainfallResult, historyResult, temperatureResult] =
+		await Promise.allSettled([
+			fetchProfile(location, signal),
+			fetchRecentDischarges(location, signal),
+			fetchRainfall24h({ lat: location.lat, lon: location.lon }, signal),
+			fetchSampleHistory(location, signal),
+			fetchSeaTemperature(location, signal)
+		]);
 
 	const profile = profileResult.status === 'fulfilled' ? profileResult.value : null;
 	const profileOk = profile?.ok ?? false;
 	const recentDischarges = dischargesResult.status === 'fulfilled' ? dischargesResult.value : [];
 	const rainfall24hMm = rainfallResult.status === 'fulfilled' ? rainfallResult.value : null;
 	const sampleHistory = historyResult.status === 'fulfilled' ? historyResult.value : [];
+	const seaTemperatureC = temperatureResult.status === 'fulfilled' ? temperatureResult.value : null;
 
 	const classification = profile?.classification ?? location.classification;
 	const latestSample = profile?.latestSample ?? null;
@@ -101,6 +106,7 @@ export async function buildLiveData(
 		recentDischarges,
 		rainfall24hMm,
 		sampleHistory,
+		seaTemperatureC,
 		verdict,
 		attribution: attributionFor(location.country, overflowSource)
 	};
