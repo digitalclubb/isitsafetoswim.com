@@ -2,6 +2,7 @@ import type { LiveLocationData, Location, VerdictResult } from '$lib/data/types'
 import { decideAt, emptyVerdict } from '$lib/verdict/engine';
 import { attributionFor, type OverflowSource } from './attribution';
 import { fetchRecentDischarges, isThamesWater } from './discharges';
+import { fetchSampleHistory } from './history';
 import { fetchProfile } from './profile';
 import { fetchRainfall24h } from './rainfall';
 
@@ -33,6 +34,7 @@ export function buildCachedData(location: Location): LiveLocationData {
 		riskForecast: null,
 		recentDischarges: [],
 		rainfall24hMm: null,
+		sampleHistory: [],
 		verdict,
 		attribution: attributionFor(location.country)
 	};
@@ -43,16 +45,18 @@ export async function buildLiveData(
 	signal?: AbortSignal
 ): Promise<LiveLocationData> {
 	const now = new Date();
-	const [profileResult, dischargesResult, rainfallResult] = await Promise.allSettled([
+	const [profileResult, dischargesResult, rainfallResult, historyResult] = await Promise.allSettled([
 		fetchProfile(location, signal),
 		fetchRecentDischarges(location, signal),
-		fetchRainfall24h({ lat: location.lat, lon: location.lon }, signal)
+		fetchRainfall24h({ lat: location.lat, lon: location.lon }, signal),
+		fetchSampleHistory(location, signal)
 	]);
 
 	const profile = profileResult.status === 'fulfilled' ? profileResult.value : null;
 	const profileOk = profile?.ok ?? false;
 	const recentDischarges = dischargesResult.status === 'fulfilled' ? dischargesResult.value : [];
 	const rainfall24hMm = rainfallResult.status === 'fulfilled' ? rainfallResult.value : null;
+	const sampleHistory = historyResult.status === 'fulfilled' ? historyResult.value : [];
 
 	const classification = profile?.classification ?? location.classification;
 	const latestSample = profile?.latestSample ?? null;
@@ -96,6 +100,7 @@ export async function buildLiveData(
 		riskForecast,
 		recentDischarges,
 		rainfall24hMm,
+		sampleHistory,
 		verdict,
 		attribution: attributionFor(location.country, overflowSource)
 	};

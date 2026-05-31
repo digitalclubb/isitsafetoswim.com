@@ -85,6 +85,7 @@ export interface LiveLocationData {
 	riskForecast: RiskForecast | null;
 	recentDischarges: DischargeEvent[];
 	rainfall24hMm: number | null;
+	sampleHistory: RecentSample[];
 	verdict: VerdictResult;
 	attribution: string[];
 }

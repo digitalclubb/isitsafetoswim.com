@@ -163,5 +163,5 @@ Documented for future sessions, not blocking launch:
 1. Thames Water CSO is wired in `src/lib/live/thames.ts` against the open v2 API (`api.thameswater.co.uk/opendata/v2/discharge/status`, no key, no OAuth). The old `client_id`/`client_secret` CloudHub API is retired. Done, no setup needed.
 2. Per-location OG share cards rendered at build time via @resvg/resvg-js.
 3. Postcode entry on the homepage alongside name search and geolocation.
-4. A 7-day classification or sample sparkline on the location page.
+4. Done: the recent-sample trend sparkline (`SampleHistory.svelte`, fed by `src/lib/live/history.ts`) is on the location page. History is fetched live per verdict; it changes only weekly, so it is a candidate to bake in at build time if request cost ever matters.
 5. SEPA and DAERA do not expose a per-site daily risk forecast; verdicts for Scotland and NI rely on classification, rainfall and any directly observable CSO data. When those regulators ship a forecast feed, plumb it through `src/lib/live/profile.ts`.

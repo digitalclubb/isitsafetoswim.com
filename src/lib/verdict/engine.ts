@@ -104,6 +104,24 @@ function worstSampleRisk(
 	return worst;
 }
 
+/**
+ * Band a single sample reading for one parameter against the water-type
+ * thresholds. Shared with the trend sparkline so its colours match the verdict.
+ */
+export function sampleBand(
+	value: number,
+	parameter: 'E. coli' | 'intestinal enterococci',
+	waterType: 'coastal' | 'inland' = 'coastal'
+): 'low' | 'elevated' | 'high' {
+	const limits = SAMPLE_THRESHOLDS[waterType][parameter];
+	return value >= limits.high ? 'high' : value >= limits.elevated ? 'elevated' : 'low';
+}
+
+/** The "high" E. coli cut-off, used to scale the trend sparkline consistently. */
+export function eColiScaleCeiling(waterType: 'coastal' | 'inland' = 'coastal'): number {
+	return SAMPLE_THRESHOLDS[waterType]['E. coli'].high;
+}
+
 export function bathingSeasonActive(d: Date): boolean {
 	// UK bathing season runs from 15 May to 30 September.
 	const month = d.getUTCMonth();

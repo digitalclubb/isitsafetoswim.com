@@ -4,6 +4,7 @@
 	import DischargeList from '$lib/components/DischargeList.svelte';
 	import FactorList from '$lib/components/FactorList.svelte';
 	import LocationCard from '$lib/components/LocationCard.svelte';
+	import SampleHistory from '$lib/components/SampleHistory.svelte';
 	import SampleSummary from '$lib/components/SampleSummary.svelte';
 	import SectionSkeleton from '$lib/components/SectionSkeleton.svelte';
 	import Verdict from '$lib/components/Verdict.svelte';
@@ -195,6 +196,7 @@
 				>
 					<h2 id="sample">Latest bacteria reading</h2>
 					<SampleSummary sample={live.latestSample} />
+					<SampleHistory samples={live.sampleHistory} waterType={location.waterType} />
 					<p class="muted small">
 						The regulator samples weekly during the bathing season. E. coli and intestinal
 						enterococci are the indicator organisms used in the official classification.
