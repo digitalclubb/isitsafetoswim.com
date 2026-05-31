@@ -1,13 +1,14 @@
 name: Refresh live snapshot
 
 # Snapshots profile and rainfall for every bathing water and uploads it to
-# Vercel Blob. environment.data.gov.uk 403s Vercel's egress IPs (and Vercel Cron
-# runs on those same IPs), so this has to run on GitHub's runners, which the
-# regulator host serves normally.
+# Vercel Blob.
+#
+# DISABLED schedule: environment.data.gov.uk geo-blocks non-UK IPs, and
+# GitHub-hosted runners are allocated US regions (observed: Azure West US ->
+# 403), so this cannot run here reliably. Kept for manual dispatch only while
+# the egress is moved to a UK location (Vercel lhr1). See the snapshot plan.
 
 on:
-  schedule:
-    - cron: '17 * * * *' # hourly at :17
   workflow_dispatch:
 
 # A slow regulator run should never stack on top of the next tick.
