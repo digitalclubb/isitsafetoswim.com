@@ -12,3 +12,4 @@ vite.config.ts.timestamp-*
 *.log
 .vscode
 .idea
+scripts/.live-snapshot.json

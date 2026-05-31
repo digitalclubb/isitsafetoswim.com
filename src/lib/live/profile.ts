@@ -126,7 +126,7 @@ function extractSample(sample: ItemShape['latestSampleAssessment']): RecentSampl
 	};
 }
 
-async function dereferenceSample(
+export async function dereferenceSample(
 	uri: string,
 	signal: AbortSignal | undefined
 ): Promise<RecentSample | null> {
@@ -137,7 +137,9 @@ async function dereferenceSample(
 		const payload = await fetchJson<unknown>(url, { signal, timeoutMs: 4_000 });
 		const inner = pickItem(payload);
 		if (!inner) return null;
-		return extractSample(inner.latestSampleAssessment ?? (inner as ItemShape['latestSampleAssessment']));
+		return extractSample(
+			inner.latestSampleAssessment ?? (inner as ItemShape['latestSampleAssessment'])
+		);
 	} catch {
 		return null;
 	}
@@ -173,6 +175,54 @@ function fallbackResult(location: Location, ok: boolean): ProfileFetchResult {
 				? 'https://apps.sepa.org.uk/bathingwaters/'
 				: 'https://www.daera-ni.gov.uk/articles/bathing-water-quality-dashboard'
 	};
+}
+
+export interface BulkProfileEntry {
+	classification: Classification | null;
+	riskForecast: RiskForecast | null;
+	sampleUri: string | null;
+}
+
+const LIST_ENDPOINT: Record<'ea' | 'nrw', string> = {
+	ea: 'https://environment.data.gov.uk/doc/bathing-water.json',
+	nrw: 'https://environment.data.gov.uk/wales/bathing-waters/doc/bathing-water.json'
+};
+
+interface ListItemShape extends ItemShape {
+	eubwidNotation?: unknown;
+}
+
+/**
+ * Fetch every England (or Wales) bathing water in one paginated request. The
+ * list carries the compliance classification and daily risk forecast inline,
+ * so the scheduled snapshot reads ~700 sites in a couple of requests rather
+ * than one per site, which the regulator host rate-limits. The latest sample is
+ * only a URI here, so callers dereference it per site if they want the counts.
+ * Keyed by eubwidNotation, which matches Location.source.sourceId.
+ */
+export async function fetchProfileList(
+	api: 'ea' | 'nrw',
+	signal?: AbortSignal
+): Promise<Map<string, BulkProfileEntry>> {
+	const url = `${LIST_ENDPOINT[api]}?_pageSize=2000`;
+	const payload = await fetchJson<{ result?: { items?: ListItemShape[] } }>(url, {
+		signal,
+		timeoutMs: 30_000
+	});
+	const items = payload.result?.items ?? [];
+	const map = new Map<string, BulkProfileEntry>();
+	for (const item of items) {
+		const eubwid = readLabel(item.eubwidNotation);
+		if (!eubwid) continue;
+		const sampleField = item.latestSampleAssessment;
+		map.set(eubwid, {
+			classification:
+				classify(readLabel(item.latestComplianceAssessment?.complianceClassification)) ?? null,
+			riskForecast: extractRisk(item),
+			sampleUri: typeof sampleField === 'string' ? sampleField : null
+		});
+	}
+	return map;
 }
 
 export async function fetchProfile(

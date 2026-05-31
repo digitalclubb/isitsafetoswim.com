@@ -15,10 +15,12 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "data:index": "node ./scripts/build-location-index.mjs",
-    "data:images": "node ./scripts/generate-images.mjs"
+    "data:images": "node ./scripts/generate-images.mjs",
+    "data:snapshot": "tsx ./scripts/build-live-snapshot.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.16",
+    "@vercel/blob": "^2.0.0",
     "@resvg/resvg-js": "^2.6.2",
     "@sveltejs/adapter-vercel": "^6.3.3",
     "@sveltejs/kit": "^2.61.1",
@@ -27,6 +29,7 @@
     "@vite-pwa/sveltekit": "^1.1.0",
     "svelte": "^5.56.0",
     "svelte-check": "^4.4.8",
+    "tsx": "^4.20.0",
     "typescript": "^6.0.3",
     "vite": "^8.0.14",
     "vite-plugin-pwa": "^1.3.0",
