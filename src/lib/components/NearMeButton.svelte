@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { findNearestSlim } from '$lib/data/search-index';
 
 	let busy = $state(false);
 	let error = $state<string | null>(null);
@@ -15,16 +14,12 @@
 		busy = true;
 		navigator.geolocation.getCurrentPosition(
 			(position) => {
-				const nearest = findNearestSlim(
-					{ lat: position.coords.latitude, lon: position.coords.longitude },
-					1
-				)[0];
 				busy = false;
-				if (!nearest) {
-					error = 'We could not find a bathing water near you.';
-					return;
-				}
-				goto(`/swim/${nearest.location.slug}`);
+				// 3dp (~110m) is ample to rank nearby sites and keeps the precise
+				// position out of the URL, history and any onward Referer.
+				const lat = position.coords.latitude.toFixed(3);
+				const lon = position.coords.longitude.toFixed(3);
+				goto(`/near?lat=${lat}&lon=${lon}`);
 			},
 			(err) => {
 				busy = false;
@@ -43,7 +38,7 @@
 		<circle cx="12" cy="12" r="2.4" fill="currentColor" />
 		<path d="M12 1v3M12 20v3M1 12h3M20 12h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
 	</svg>
-	<span>{busy ? 'Finding nearest beach' : 'Use my location'}</span>
+	<span>{busy ? 'Finding bathing waters near you' : 'Use my location'}</span>
 </button>
 
 {#if error}

@@ -1,16 +1,19 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { normalisePostcode } from '$lib/data/postcode';
 	import type { SearchLocation } from '$lib/data/search-index';
 
 	let {
 		locations,
-		placeholder = 'Search a beach, lake or town'
+		placeholder = 'Search a beach, town or postcode'
 	}: { locations: readonly SearchLocation[]; placeholder?: string } = $props();
 
 	let query = $state('');
 	let focused = $state(false);
 	let activeIndex = $state(-1);
 	let listbox = $state<HTMLUListElement | null>(null);
+
+	let postcode = $derived(normalisePostcode(query));
 
 	function foldDiacritics(input: string): string {
 		return input.normalize('NFKD').replace(/[̀-ͯ]/g, '');
@@ -41,6 +44,14 @@
 	});
 
 	function handleKeydown(e: KeyboardEvent) {
+		if (e.key === 'Enter') {
+			e.preventDefault();
+			const selected = activeIndex >= 0 ? results[activeIndex] : null;
+			if (selected) goto(`/swim/${selected.slug}`);
+			else if (postcode) goto(`/near/${postcode}`);
+			else if (results[0]) goto(`/swim/${results[0].slug}`);
+			return;
+		}
 		if (results.length === 0) return;
 		if (e.key === 'ArrowDown') {
 			e.preventDefault();
@@ -48,10 +59,6 @@
 		} else if (e.key === 'ArrowUp') {
 			e.preventDefault();
 			activeIndex = Math.max(activeIndex - 1, 0);
-		} else if (e.key === 'Enter') {
-			e.preventDefault();
-			const target = activeIndex >= 0 ? results[activeIndex] : results[0];
-			if (target) goto(`/swim/${target.slug}`);
 		} else if (e.key === 'Escape') {
 			query = '';
 			activeIndex = -1;
@@ -108,6 +115,12 @@
 				</li>
 			{/each}
 		</ul>
+	{/if}
+
+	{#if focused && postcode && results.length === 0}
+		<a class="postcode-cta" href={`/near/${postcode}`} data-sveltekit-preload-data="hover">
+			Find bathing waters near <strong>{postcode}</strong>
+		</a>
 	{/if}
 </div>
 
@@ -191,5 +204,27 @@
 	.loc-meta {
 		font-size: var(--text-sm);
 		color: var(--ink-soft);
+	}
+
+	.postcode-cta {
+		position: absolute;
+		top: calc(100% + 4px);
+		left: 0;
+		right: 0;
+		display: block;
+		padding: var(--space-3) var(--space-4);
+		background: var(--surface);
+		border: var(--rule-weight) solid var(--rule-strong);
+		border-radius: var(--radius);
+		box-shadow: var(--shadow-card);
+		font-size: var(--text-md);
+		color: var(--ink);
+		text-decoration: none;
+		z-index: 10;
+	}
+
+	.postcode-cta:hover,
+	.postcode-cta:focus-visible {
+		background: var(--surface-sunken);
 	}
 </style>

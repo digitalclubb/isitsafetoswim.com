@@ -9,7 +9,7 @@
 		classification: Classification;
 	}
 
-	let { location }: { location: CardLocation } = $props();
+	let { location, distanceMetres }: { location: CardLocation; distanceMetres?: number } = $props();
 
 	const TONE: Record<Classification, 'yes' | 'caution' | 'no' | 'neutral'> = {
 		Excellent: 'yes',
@@ -21,13 +21,20 @@
 		Unknown: 'neutral'
 	};
 
+	function formatKm(metres: number): string {
+		const km = metres / 1000;
+		return km < 10 ? `${km.toFixed(1)} km` : `${Math.round(km)} km`;
+	}
+
 	let tone = $derived(TONE[location.classification]);
+	let place = $derived(location.region ?? location.country);
+	let meta = $derived(distanceMetres != null ? `${place} · ${formatKm(distanceMetres)}` : place);
 </script>
 
 <a class="card" href={`/swim/${location.slug}`} data-tone={tone}>
 	<span class="badge">{location.classification}</span>
 	<span class="name">{location.name}</span>
-	<span class="meta">{location.region ?? location.country}</span>
+	<span class="meta">{meta}</span>
 </a>
 
 <style>
