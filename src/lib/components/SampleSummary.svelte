@@ -1,9 +1,11 @@
 <script lang="ts">
 	import type { RecentSample } from '$lib/data/types';
+	import { relativeDay } from '$lib/util/time';
 
 	let { sample }: { sample: RecentSample } = $props();
 
 	let formattedDate = $derived(formatDate(sample.sampledAt));
+	let recency = $derived(relativeDay(sample.sampledAt));
 
 	function formatDate(iso: string): string {
 		const t = Date.parse(iso);
@@ -17,7 +19,7 @@
 </script>
 
 <div class="sample">
-	<p class="kicker">Latest sample · {formattedDate}</p>
+	<p class="kicker">Latest sample · {formattedDate}{recency ? ` · ${recency}` : ''}</p>
 	<dl>
 		{#if sample.eColi !== undefined}
 			<div>
