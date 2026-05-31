@@ -4,7 +4,7 @@ export const prerender = true;
 
 const BASE = 'https://isitsafetoswim.com';
 
-function escape(value: string): string {
+function escapeXml(value: string): string {
 	return value
 		.replace(/&/g, '&amp;')
 		.replace(/</g, '&lt;')
@@ -23,7 +23,7 @@ export const GET = () => {
 
 	for (const loc of getAllLocations()) {
 		urls.push(
-			`<url><loc>${BASE}/swim/${escape(loc.slug)}</loc><lastmod>${lastmod}</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>`
+			`<url><loc>${BASE}/swim/${escapeXml(loc.slug)}</loc><lastmod>${lastmod}</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>`
 		);
 	}
 

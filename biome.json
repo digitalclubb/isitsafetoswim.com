@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
 	"vcs": {
 		"enabled": true,
 		"clientKind": "git",
@@ -11,14 +11,15 @@
 			"**/*.js",
 			"**/*.mjs",
 			"**/*.json",
-			"**/*.svelte",
 			"!.svelte-kit",
 			"!.vercel",
 			"!build",
 			"!dist",
 			"!node_modules",
+			"!.claude",
 			"!src/data/**/*.json",
-			"!static/**"
+			"!scripts/.locations.cache.json",
+			"!static"
 		]
 	},
 	"formatter": {

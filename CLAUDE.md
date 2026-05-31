@@ -11,7 +11,7 @@ Deployed to Vercel. ~700 designated bathing waters covered day one: England (EA)
 ## Stack (locked)
 
 - pnpm + SvelteKit 2 + Svelte 5 (runes) + TypeScript
-- Biome for lint and format. **No** ESLint, no Prettier.
+- Biome for lint and format, scoped to TS/JS/JSON. **No** ESLint, no Prettier. Biome does not lint `.svelte` files (its Svelte support is partial and flags template-used props as unused); `svelte-check` (`pnpm check`) validates those.
 - Vanilla CSS with custom properties. **No Tailwind.** No CSS-in-JS.
 - @vite-pwa/sveltekit for the manifest and service worker
 - Vitest for unit tests

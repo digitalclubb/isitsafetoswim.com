@@ -31,9 +31,5 @@ const tasks = [
 ];
 
 for (const task of tasks) {
-	await render(
-		resolve(staticDir, task.from),
-		resolve(staticDir, task.to),
-		task.width
-	);
+	await render(resolve(staticDir, task.from), resolve(staticDir, task.to), task.width);
 }

@@ -1,6 +1,6 @@
+import { getFeaturedLocations } from '$lib/data/featured';
 import { getIndexMeta } from '$lib/data/locations';
 import { getSearchIndex } from '$lib/data/search-index';
-import { getFeaturedLocations } from '$lib/data/featured';
 
 export const prerender = true;
 
