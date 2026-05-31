@@ -31,9 +31,8 @@
 			<span class="serif-large">Is it safe to swim<span class="punct">?</span></span>
 		</h1>
 		<p class="lede">
-			A live answer for every designated bathing water in the United Kingdom. We combine the
-			Environment Agency's classification, the latest sample and the official pollution forecast
-			with real-time sewage discharge data from the water companies.
+			A live answer for every designated bathing water in the UK, combining official
+			classifications, the latest samples and real-time sewage discharge data.
 		</p>
 
 		<div class="finder">
