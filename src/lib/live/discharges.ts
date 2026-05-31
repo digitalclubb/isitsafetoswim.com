@@ -1,5 +1,7 @@
 import type { DischargeEvent, Location } from '$lib/data/types';
+import { haversineMetres } from './geo';
 import { fetchJson } from './http';
+import { fetchThamesDischarges } from './thames';
 
 /**
  * Map an EA-reported sewerage undertaker to a public ArcGIS FeatureServer.
@@ -55,7 +57,11 @@ function lookupEndpoint(name: string | undefined): string | undefined {
 	const key = normaliseOperatorKey(name);
 	const fuzzy = NORMALISED_ENDPOINTS.get(key);
 	if (fuzzy) return fuzzy;
-	return undefined; // Thames Water uses an OAuth API and is handled separately.
+	return undefined; // Thames Water is on its own API, handled in fetchRecentDischarges.
+}
+
+function isThamesWater(name: string | undefined): boolean {
+	return Boolean(name) && normaliseOperatorKey(name as string).includes('thames');
 }
 
 interface FeatureCollection {
@@ -82,17 +88,6 @@ function bbox(centre: { lat: number; lon: number }, radiusMetres: number) {
 		minLon: centre.lon - dLon,
 		maxLon: centre.lon + dLon
 	};
-}
-
-function haversineMetres(a: { lat: number; lon: number }, b: { lat: number; lon: number }): number {
-	const R = 6_371_000;
-	const toRad = (d: number) => (d * Math.PI) / 180;
-	const dLat = toRad(b.lat - a.lat);
-	const dLon = toRad(b.lon - a.lon);
-	const lat1 = toRad(a.lat);
-	const lat2 = toRad(b.lat);
-	const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
-	return 2 * R * Math.asin(Math.sqrt(h));
 }
 
 function parseDate(value: unknown): string | undefined {
@@ -163,7 +158,12 @@ export async function fetchRecentDischarges(
 	signal?: AbortSignal
 ): Promise<DischargeEvent[]> {
 	const endpoint = lookupEndpoint(location.sewerageUndertaker);
-	if (!endpoint) return [];
+	if (!endpoint) {
+		if (isThamesWater(location.sewerageUndertaker)) {
+			return fetchThamesDischarges(location, signal);
+		}
+		return [];
+	}
 	const centre = { lat: location.lat, lon: location.lon };
 	const box = bbox(centre, 10_000);
 	const where = encodeURIComponent('1=1');
