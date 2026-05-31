@@ -5,8 +5,14 @@
 	import SiteFooter from '$lib/components/SiteFooter.svelte';
 	import { onNavigate } from '$app/navigation';
 	import { navigating, page } from '$app/state';
+	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 
 	let { children } = $props();
+
+	// Vercel Web Analytics: a ~1KB first-party script (/_vercel/insights), no
+	// cookies. mode 'auto' sends only from the Vercel production deployment and
+	// stays silent in dev. Speed Insights is deliberately not included.
+	injectAnalytics();
 
 	let current: '' | 'home' | 'about' = $derived(
 		page.url.pathname === '/'
