@@ -4,9 +4,48 @@ import {
 	dedupeSlugs,
 	extractLabel,
 	lastNonEmptyPathSegment,
+	readEaBoolean,
 	readSamplingPoint,
-	slugify
+	slugify,
+	waterTypeFromEaType
 } from './parsers.mjs';
+
+describe('waterTypeFromEaType', () => {
+	const uri = (leaf) => `http://environment.data.gov.uk/def/bathing-water/${leaf}`;
+
+	it('classes rivers and lakes as inland', () => {
+		expect(waterTypeFromEaType([uri('BathingWater'), uri('RiverBathingWater')])).toBe('inland');
+		expect(waterTypeFromEaType([uri('LakeBathingWater')])).toBe('inland');
+	});
+
+	it('classes coastal and transitional (estuarine) as coastal', () => {
+		expect(waterTypeFromEaType([uri('CoastalBathingWater')])).toBe('coastal');
+		expect(waterTypeFromEaType([uri('TransitionalBathingWater')])).toBe('coastal');
+	});
+
+	it('defaults unknown or missing type to coastal', () => {
+		expect(waterTypeFromEaType(undefined)).toBe('coastal');
+		expect(waterTypeFromEaType([])).toBe('coastal');
+	});
+});
+
+describe('readEaBoolean', () => {
+	it('reads a bare boolean', () => {
+		expect(readEaBoolean(false)).toBe(false);
+		expect(readEaBoolean(true)).toBe(true);
+	});
+
+	it('reads a wrapped value and a string', () => {
+		expect(readEaBoolean({ _value: true })).toBe(true);
+		expect(readEaBoolean('true')).toBe(true);
+		expect(readEaBoolean('false')).toBe(false);
+	});
+
+	it('returns undefined when absent', () => {
+		expect(readEaBoolean(undefined)).toBeUndefined();
+		expect(readEaBoolean(null)).toBeUndefined();
+	});
+});
 
 describe('slugify', () => {
 	it('lowercases and dashes ordinary names', () => {

@@ -19,8 +19,10 @@ import {
 	dedupeSlugs,
 	extractLabel,
 	lastNonEmptyPathSegment,
+	readEaBoolean,
 	readSamplingPoint,
-	slugify
+	slugify,
+	waterTypeFromEaType
 } from './lib/parsers.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -88,25 +90,6 @@ async function withBudget(label, fn, budgetMs = FETCHER_BUDGET_MS) {
 }
 
 // ---- England -----------------------------------------------------------
-
-/**
- * EA and NRW report the water body type as an array of RDF type URIs, for
- * example ".../CoastalBathingWater" or ".../RiverBathingWater". Rivers and lakes
- * are inland; everything else is treated as coastal.
- */
-function waterTypeFromEaType(type) {
-	const text = JSON.stringify(type ?? '').toLowerCase();
-	if (text.includes('river') || text.includes('lake') || text.includes('inland')) return 'inland';
-	return 'coastal';
-}
-
-/** Read an EA boolean field, which may be a bare boolean or a wrapped value. */
-function readEaBoolean(value) {
-	if (typeof value === 'boolean') return value;
-	if (value && typeof value === 'object' && '_value' in value) return readEaBoolean(value._value);
-	if (typeof value === 'string') return value.toLowerCase() === 'true';
-	return undefined;
-}
 
 async function fetchEngland() {
 	const base = 'https://environment.data.gov.uk/doc/bathing-water.json';

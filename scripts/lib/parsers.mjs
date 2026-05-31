@@ -92,3 +92,28 @@ export function dedupeSlugs(locations) {
 	}
 	return locations;
 }
+
+/**
+ * Derive water type from the EA/NRW `type` field, an array of RDF type URIs such
+ * as ".../CoastalBathingWater" or ".../RiverBathingWater". Rivers and lakes are
+ * inland; coastal and transitional (estuarine) waters use the coastal standard,
+ * as does anything unknown (the stricter, fail-safe default).
+ */
+export function waterTypeFromEaType(type) {
+	const tokens = Array.isArray(type) ? type : [type];
+	const text = tokens
+		.map((t) => String(t ?? ''))
+		.join(' ')
+		.toLowerCase();
+	if (text.includes('river') || text.includes('lake') || text.includes('inland')) return 'inland';
+	return 'coastal';
+}
+
+/** Read an EA boolean field, which may be a bare boolean, a wrapped {_value} or
+ *  a string. Returns undefined when absent so the caller can treat it as unknown. */
+export function readEaBoolean(value) {
+	if (typeof value === 'boolean') return value;
+	if (value && typeof value === 'object' && '_value' in value) return readEaBoolean(value._value);
+	if (typeof value === 'string') return value.toLowerCase() === 'true';
+	return undefined;
+}
