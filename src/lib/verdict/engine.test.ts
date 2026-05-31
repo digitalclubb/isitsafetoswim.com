@@ -244,9 +244,155 @@ describe('evaluateVerdict — Yes', () => {
 			rainfall24hMm: null,
 			now: summerNow
 		});
-		expect(result.factors.find((f) => f.label === 'Annual classification')?.value).toBe(
-			'Excellent'
-		);
+		expect(result.factors.find((f) => f.label === 'Annual classification')?.value).toBe('Excellent');
+	});
+});
+
+describe('evaluateVerdict — sample parameters and water type', () => {
+	it('returns No when intestinal enterococci is high at the coast', () => {
+		const result = evaluateVerdict({
+			classification: 'Good',
+			latestSample: { sampledAt: '2026-07-10', eColi: 50, intestinalEnterococci: 500 },
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			waterType: 'coastal',
+			now: summerNow
+		});
+		expect(result.verdict).toBe('no');
+		expect(result.reason).toMatch(/intestinal enterococci/);
+		expect(result.reason).toMatch(/500/);
+	});
+
+	it('returns Caution for elevated intestinal enterococci even when E. coli is clean', () => {
+		const result = evaluateVerdict({
+			classification: 'Good',
+			latestSample: { sampledAt: '2026-07-10', eColi: 20, intestinalEnterococci: 250 },
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			waterType: 'coastal',
+			now: summerNow
+		});
+		expect(result.verdict).toBe('caution');
+		expect(result.reason).toMatch(/enterococci/);
+	});
+
+	it('applies the more lenient inland thresholds for river and lake waters', () => {
+		// E. coli 700 cautions at the coast but sits within the inland Good boundary.
+		const coastal = evaluateVerdict({
+			classification: 'Good',
+			latestSample: { sampledAt: '2026-07-10', eColi: 700 },
+			riskForecast: { riskLevel: 'normal' },
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			waterType: 'coastal',
+			now: summerNow
+		});
+		const inland = evaluateVerdict({
+			classification: 'Good',
+			latestSample: { sampledAt: '2026-07-10', eColi: 700 },
+			riskForecast: { riskLevel: 'normal' },
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			waterType: 'inland',
+			now: summerNow
+		});
+		expect(coastal.verdict).toBe('caution');
+		expect(inland.verdict).toBe('yes');
+	});
+
+	it('treats E. coli 1500 as No at the coast but only Caution inland', () => {
+		const coastal = evaluateVerdict({
+			classification: 'Good',
+			latestSample: { sampledAt: '2026-07-10', eColi: 1500 },
+			riskForecast: { riskLevel: 'normal' },
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			waterType: 'coastal',
+			now: summerNow
+		});
+		const inland = evaluateVerdict({
+			classification: 'Good',
+			latestSample: { sampledAt: '2026-07-10', eColi: 1500 },
+			riskForecast: { riskLevel: 'normal' },
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			waterType: 'inland',
+			now: summerNow
+		});
+		expect(coastal.verdict).toBe('no');
+		expect(inland.verdict).toBe('caution');
+	});
+
+	it('defaults to coastal thresholds when water type is unknown', () => {
+		const result = evaluateVerdict({
+			classification: 'Good',
+			latestSample: { sampledAt: '2026-07-10', eColi: 700 },
+			riskForecast: { riskLevel: 'normal' },
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			now: summerNow
+		});
+		expect(result.verdict).toBe('caution');
+	});
+
+	it('reports both E. coli and intestinal enterococci as factors', () => {
+		const result = evaluateVerdict({
+			classification: 'Excellent',
+			latestSample: { sampledAt: '2026-07-10', eColi: 10, intestinalEnterococci: 15 },
+			riskForecast: { riskLevel: 'normal' },
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			waterType: 'coastal',
+			now: summerNow
+		});
+		expect(result.factors.find((f) => f.label === 'Latest E. coli')).toBeTruthy();
+		expect(result.factors.find((f) => f.label === 'Latest intestinal enterococci')).toBeTruthy();
+	});
+});
+
+describe('evaluateVerdict — rain susceptibility', () => {
+	it('does not raise a caution from rainfall when the site is not rain-impacted', () => {
+		const result = evaluateVerdict({
+			classification: 'Excellent',
+			latestSample: null,
+			riskForecast: { riskLevel: 'normal' },
+			recentDischarges: [],
+			rainfall24hMm: 20,
+			waterType: 'coastal',
+			rainImpacted: false,
+			now: summerNow
+		});
+		expect(result.verdict).toBe('yes');
+	});
+
+	it('still raises a caution from heavy rain when the rain-impact flag is unknown', () => {
+		const result = evaluateVerdict({
+			classification: 'Excellent',
+			latestSample: null,
+			riskForecast: { riskLevel: 'normal' },
+			recentDischarges: [],
+			rainfall24hMm: 20,
+			waterType: 'coastal',
+			now: summerNow
+		});
+		expect(result.verdict).toBe('caution');
+		expect(result.reason).toMatch(/rain/);
+	});
+
+	it('still raises a caution from heavy rain when the site is rain-impacted', () => {
+		const result = evaluateVerdict({
+			classification: 'Excellent',
+			latestSample: null,
+			riskForecast: { riskLevel: 'normal' },
+			recentDischarges: [],
+			rainfall24hMm: 20,
+			rainImpacted: true,
+			now: summerNow
+		});
+		expect(result.verdict).toBe('caution');
+		expect(result.reason).toMatch(/rain/);
 	});
 });
 

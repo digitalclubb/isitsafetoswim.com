@@ -24,6 +24,18 @@ export interface VerdictInputs {
 	riskForecast: RiskForecast | null;
 	recentDischarges: DischargeEvent[];
 	rainfall24hMm: number | null;
+	/**
+	 * Coastal and inland waters have different sample standards. Defaults to the
+	 * stricter coastal cut-offs when unknown.
+	 */
+	waterType?: 'coastal' | 'inland';
+	/**
+	 * EA flag: is this site's water quality degraded by heavy rain? When the EA
+	 * says no (false), rainfall is still reported but does not on its own raise a
+	 * caution. Unknown (null/undefined) is treated as "might be", so rainfall can
+	 * still caution.
+	 */
+	rainImpacted?: boolean | null;
 	now: Date;
 }
 
@@ -34,8 +46,63 @@ const RECOVERY_WINDOW_HOURS = 12;
 const RECENT_WINDOW_HOURS = 48;
 const HEAVY_RAIN_MM = 15;
 const NOTICEABLE_RAIN_MM = 8;
-const E_COLI_CAUTION = 500;
-const E_COLI_NO = 1_000;
+
+/**
+ * Single-sample risk cut-offs in cfu/100ml. There is no statutory single-sample
+ * standard (classification is a multi-year percentile), so these adopt the
+ * revised Bathing Water Directive percentile boundaries as proxy cut-offs:
+ * "elevated" at the Good 95th-percentile boundary, "high" at roughly twice it.
+ * Coastal and inland differ, and intestinal enterococci runs lower than E. coli
+ * and is often the limiting parameter at the coast, so the two are assessed
+ * separately and the worse result wins.
+ */
+const SAMPLE_THRESHOLDS = {
+	coastal: {
+		'E. coli': { elevated: 500, high: 1_000 },
+		'intestinal enterococci': { elevated: 200, high: 400 }
+	},
+	inland: {
+		'E. coli': { elevated: 1_000, high: 2_000 },
+		'intestinal enterococci': { elevated: 400, high: 800 }
+	}
+} as const;
+
+interface SampleRisk {
+	level: 'elevated' | 'high';
+	label: string;
+	value: number;
+}
+
+/**
+ * Assess the latest sample against both parameters and return the worse result,
+ * or null when the sample is clean or absent. Enterococci and E. coli have
+ * different thresholds, so a clean E. coli reading does not clear a high
+ * enterococci one.
+ */
+function worstSampleRisk(
+	sample: RecentSample | null,
+	waterType: 'coastal' | 'inland'
+): SampleRisk | null {
+	if (!sample) return null;
+	const t = SAMPLE_THRESHOLDS[waterType];
+	const params: Array<[string, number | undefined, { elevated: number; high: number }]> = [
+		['E. coli', sample.eColi, t['E. coli']],
+		['intestinal enterococci', sample.intestinalEnterococci, t['intestinal enterococci']]
+	];
+	let worst: SampleRisk | null = null;
+	for (const [label, value, limits] of params) {
+		if (value === undefined) continue;
+		const level = value >= limits.high ? 'high' : value >= limits.elevated ? 'elevated' : null;
+		if (!level) continue;
+		// Promote to the more severe level. When both parameters reach the same
+		// level we keep the first (E. coli), which is the more familiar figure to
+		// report; the verdict is identical either way.
+		if (!worst || (level === 'high' && worst.level === 'elevated')) {
+			worst = { level, label, value };
+		}
+	}
+	return worst;
+}
 
 export function bathingSeasonActive(d: Date): boolean {
 	// UK bathing season runs from 15 May to 30 September.
@@ -89,9 +156,13 @@ function fmtHours(h: number): string {
 	return days === 1 ? 'yesterday' : `${days} days ago`;
 }
 
-export function evaluateVerdict(inputs: VerdictInputs): Omit<VerdictResult, 'fetchedAt' | 'dataAge'> {
+export function evaluateVerdict(
+	inputs: VerdictInputs
+): Omit<VerdictResult, 'fetchedAt' | 'dataAge'> {
 	const { classification, latestSample, riskForecast, recentDischarges, rainfall24hMm, now } =
 		inputs;
+	const waterType = inputs.waterType ?? 'coastal';
+	const rainMatters = inputs.rainImpacted !== false;
 	const factors: VerdictFactor[] = [];
 	const inSeason = bathingSeasonActive(now);
 
@@ -102,14 +173,9 @@ export function evaluateVerdict(inputs: VerdictInputs): Omit<VerdictResult, 'fet
 		RECOVERY_WINDOW_HOURS,
 		now
 	);
-	const recentWider = recentNearby(
-		recentDischarges,
-		DISTANCE_WIDER_M,
-		RECENT_WINDOW_HOURS,
-		now
-	);
+	const recentWider = recentNearby(recentDischarges, DISTANCE_WIDER_M, RECENT_WINDOW_HOURS, now);
 	const rain = rainfall24hMm ?? null;
-	const ecoli = latestSample?.eColi ?? null;
+	const sampleRisk = worstSampleRisk(latestSample, waterType);
 
 	// ---- Hard NO ----------------------------------------------------------
 	if (ongoing) {
@@ -124,7 +190,7 @@ export function evaluateVerdict(inputs: VerdictInputs): Omit<VerdictResult, 'fet
 			verdict: 'no',
 			headline: 'No.',
 			reason: `Sewage being discharged ${fmtKm(ongoing.distanceMetres)} away right now.`,
-			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample)
+			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample, waterType)
 		};
 	}
 	if (justFinished) {
@@ -138,7 +204,7 @@ export function evaluateVerdict(inputs: VerdictInputs): Omit<VerdictResult, 'fet
 			verdict: 'no',
 			headline: 'No.',
 			reason: `Sewage discharged ${fmtKm(justFinished.distanceMetres)} away ${fmtHours(age)}.`,
-			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample)
+			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample, waterType)
 		};
 	}
 	if (classification === 'Closed') {
@@ -146,7 +212,7 @@ export function evaluateVerdict(inputs: VerdictInputs): Omit<VerdictResult, 'fet
 			verdict: 'no',
 			headline: 'No.',
 			reason: 'This bathing water is closed.',
-			factors: appendBaseFactors([], classification, riskForecast, rain, latestSample)
+			factors: appendBaseFactors([], classification, riskForecast, rain, latestSample, waterType)
 		};
 	}
 	if (classification === 'Poor' && inSeason) {
@@ -159,20 +225,20 @@ export function evaluateVerdict(inputs: VerdictInputs): Omit<VerdictResult, 'fet
 			verdict: 'no',
 			headline: 'No.',
 			reason: 'Annual classification is Poor and bathing is advised against.',
-			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample)
+			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample, waterType)
 		};
 	}
-	if (ecoli !== null && ecoli >= E_COLI_NO) {
+	if (sampleRisk?.level === 'high') {
 		factors.push({
-			label: 'Latest E. coli',
-			value: `${ecoli} cfu/100ml`,
+			label: `Latest ${sampleRisk.label}`,
+			value: `${sampleRisk.value} cfu/100ml`,
 			weight: 'negative'
 		});
 		return {
 			verdict: 'no',
 			headline: 'No.',
-			reason: `Latest sample showed ${ecoli} E. coli cfu/100ml.`,
-			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample)
+			reason: `Latest sample showed ${sampleRisk.value} ${sampleRisk.label} cfu/100ml.`,
+			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample, waterType)
 		};
 	}
 
@@ -196,14 +262,14 @@ export function evaluateVerdict(inputs: VerdictInputs): Omit<VerdictResult, 'fet
 			weight: 'negative'
 		});
 	}
-	if (rain !== null && rain >= HEAVY_RAIN_MM) {
+	if (rain !== null && rain >= HEAVY_RAIN_MM && rainMatters) {
 		cautions.push(`${Math.round(rain)}mm rain in the last 24 hours.`);
 		factors.push({
 			label: 'Rainfall (24h)',
 			value: `${Math.round(rain)}mm`,
 			weight: 'negative'
 		});
-	} else if (rain !== null && rain >= NOTICEABLE_RAIN_MM) {
+	} else if (rain !== null && rain >= NOTICEABLE_RAIN_MM && rainMatters) {
 		cautions.push(`${Math.round(rain)}mm rain in the last 24 hours may have flushed pollution.`);
 		factors.push({
 			label: 'Rainfall (24h)',
@@ -217,11 +283,11 @@ export function evaluateVerdict(inputs: VerdictInputs): Omit<VerdictResult, 'fet
 	if (classification === 'New' || classification === 'Unknown') {
 		cautions.push('No verified classification for this site yet.');
 	}
-	if (ecoli !== null && ecoli >= E_COLI_CAUTION && ecoli < E_COLI_NO) {
-		cautions.push(`Latest E. coli was elevated at ${ecoli} cfu/100ml.`);
+	if (sampleRisk?.level === 'elevated') {
+		cautions.push(`Latest ${sampleRisk.label} was elevated at ${sampleRisk.value} cfu/100ml.`);
 		factors.push({
-			label: 'Latest E. coli',
-			value: `${ecoli} cfu/100ml`,
+			label: `Latest ${sampleRisk.label}`,
+			value: `${sampleRisk.value} cfu/100ml`,
 			weight: 'negative'
 		});
 	}
@@ -239,19 +305,20 @@ export function evaluateVerdict(inputs: VerdictInputs): Omit<VerdictResult, 'fet
 			verdict: 'caution',
 			headline: 'Caution.',
 			reason: cautions[0],
-			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample)
+			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample, waterType)
 		};
 	}
 
 	// ---- Yes --------------------------------------------------------------
-	const yesReason = classification === 'Excellent'
-		? 'Excellent water quality and no sewage in the last 48 hours.'
-		: 'Good water quality and no sewage in the last 48 hours.';
+	const yesReason =
+		classification === 'Excellent'
+			? 'Excellent water quality and no sewage in the last 48 hours.'
+			: 'Good water quality and no sewage in the last 48 hours.';
 	return {
 		verdict: 'yes',
 		headline: 'Yes.',
 		reason: yesReason,
-		factors: appendBaseFactors([], classification, riskForecast, rain, latestSample)
+		factors: appendBaseFactors([], classification, riskForecast, rain, latestSample, waterType)
 	};
 }
 
@@ -260,10 +327,12 @@ function appendBaseFactors(
 	classification: Classification,
 	risk: RiskForecast | null,
 	rain: number | null,
-	sample: RecentSample | null
+	sample: RecentSample | null,
+	waterType: 'coastal' | 'inland'
 ): VerdictFactor[] {
 	const seen = new Set(existing.map((f) => f.label));
 	const out = [...existing];
+	const limits = SAMPLE_THRESHOLDS[waterType];
 	if (!seen.has('Annual classification')) {
 		out.push({
 			label: 'Annual classification',
@@ -274,7 +343,12 @@ function appendBaseFactors(
 	if (risk && !seen.has('Pollution risk forecast')) {
 		out.push({
 			label: 'Pollution risk forecast',
-			value: risk.riskLevel === 'normal' ? 'Normal' : risk.riskLevel === 'increased' ? 'Increased' : 'Not reported',
+			value:
+				risk.riskLevel === 'normal'
+					? 'Normal'
+					: risk.riskLevel === 'increased'
+						? 'Increased'
+						: 'Not reported',
 			weight: risk.riskLevel === 'increased' ? 'negative' : 'positive'
 		});
 	}
@@ -289,7 +363,17 @@ function appendBaseFactors(
 		out.push({
 			label: 'Latest E. coli',
 			value: `${sample.eColi} cfu/100ml`,
-			weight: sample.eColi >= E_COLI_CAUTION ? 'negative' : 'positive'
+			weight: sample.eColi >= limits['E. coli'].elevated ? 'negative' : 'positive'
+		});
+	}
+	if (sample?.intestinalEnterococci !== undefined && !seen.has('Latest intestinal enterococci')) {
+		out.push({
+			label: 'Latest intestinal enterococci',
+			value: `${sample.intestinalEnterococci} cfu/100ml`,
+			weight:
+				sample.intestinalEnterococci >= limits['intestinal enterococci'].elevated
+					? 'negative'
+					: 'positive'
 		});
 	}
 	return out;
@@ -321,7 +405,10 @@ export function emptyVerdict(reason: string, now: Date): VerdictResult {
 	};
 }
 
-export function decideAt(inputs: VerdictInputs, dataAge: VerdictResult['dataAge'] = 'fresh'): VerdictResult {
+export function decideAt(
+	inputs: VerdictInputs,
+	dataAge: VerdictResult['dataAge'] = 'fresh'
+): VerdictResult {
 	const decided = evaluateVerdict(inputs);
 	return {
 		...decided,
@@ -336,8 +423,7 @@ export const _internals = {
 	DISTANCE_WIDER_M,
 	HEAVY_RAIN_MM,
 	NOTICEABLE_RAIN_MM,
-	E_COLI_CAUTION,
-	E_COLI_NO
+	SAMPLE_THRESHOLDS
 };
 
 export type { Verdict };

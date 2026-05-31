@@ -90,10 +90,19 @@ In `src/lib/verdict/engine.ts`. Tuned via tests. Change with care.
 | `DISTANCE_WIDER_M` | 10 000 | Recent discharge → Caution |
 | `RECOVERY_WINDOW_HOURS` | 12 | A finished discharge inside this window still triggers No |
 | `RECENT_WINDOW_HOURS` | 48 | Anything older drops out of the verdict |
-| `HEAVY_RAIN_MM` | 15 | 24h rainfall → Caution |
+| `HEAVY_RAIN_MM` | 15 | 24h rainfall → Caution (only when the site is `rainImpacted`) |
 | `NOTICEABLE_RAIN_MM` | 8 | 24h rainfall → mentioned but neutral |
-| `E_COLI_CAUTION` | 500 | cfu/100ml → Caution |
-| `E_COLI_NO` | 1 000 | cfu/100ml → No |
+
+The latest sample is assessed on both E. coli and intestinal enterococci, taking the worse of the two, against `SAMPLE_THRESHOLDS` which differ by water type (cfu/100ml):
+
+| Water type | Parameter | Elevated → Caution | High → No |
+|---|---|---|---|
+| Coastal | E. coli | 500 | 1 000 |
+| Coastal | Intestinal enterococci | 200 | 400 |
+| Inland | E. coli | 1 000 | 2 000 |
+| Inland | Intestinal enterococci | 400 | 800 |
+
+There is no statutory single-sample standard (classification is a multi-year percentile), so these adopt the revised Bathing Water Directive percentile boundaries as proxy cut-offs: elevated at the Good 95th-percentile boundary, high at roughly twice it. Unknown water type defaults to the stricter coastal cut-offs.
 
 Bathing season runs 15 May to 30 September. Outside that window the verdict adds a Caution note that the official forecast is not in operation.
 

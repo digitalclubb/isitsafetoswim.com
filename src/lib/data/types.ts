@@ -28,6 +28,8 @@ export interface Location {
 	classification: Classification;
 	sewerageUndertaker?: string;
 	waterType?: 'coastal' | 'inland';
+	/** EA flag: is this site's water quality degraded by heavy rain? */
+	rainImpacted?: boolean;
 	source: LocationSource;
 }
 

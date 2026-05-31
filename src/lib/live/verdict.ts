@@ -20,6 +20,8 @@ export function buildCachedData(location: Location): LiveLocationData {
 			riskForecast: null,
 			recentDischarges: [],
 			rainfall24hMm: null,
+			waterType: location.waterType,
+			rainImpacted: location.rainImpacted,
 			now
 		},
 		'cached'
@@ -72,6 +74,8 @@ export async function buildLiveData(
 				riskForecast,
 				recentDischarges,
 				rainfall24hMm,
+				waterType: location.waterType,
+				rainImpacted: location.rainImpacted,
 				now
 			},
 			profileOk ? 'fresh' : 'cached'
