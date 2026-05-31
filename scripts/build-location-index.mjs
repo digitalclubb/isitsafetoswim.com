@@ -78,10 +78,7 @@ async function fetchJson(url, options = {}) {
 async function withBudget(label, fn, budgetMs = FETCHER_BUDGET_MS) {
 	let timer;
 	const budget = new Promise((_, reject) => {
-		timer = setTimeout(
-			() => reject(new Error(`${label} exceeded ${budgetMs}ms budget`)),
-			budgetMs
-		);
+		timer = setTimeout(() => reject(new Error(`${label} exceeded ${budgetMs}ms budget`)), budgetMs);
 	});
 	try {
 		return await Promise.race([fn(), budget]);
@@ -91,6 +88,25 @@ async function withBudget(label, fn, budgetMs = FETCHER_BUDGET_MS) {
 }
 
 // ---- England -----------------------------------------------------------
+
+/**
+ * EA and NRW report the water body type as an array of RDF type URIs, for
+ * example ".../CoastalBathingWater" or ".../RiverBathingWater". Rivers and lakes
+ * are inland; everything else is treated as coastal.
+ */
+function waterTypeFromEaType(type) {
+	const text = JSON.stringify(type ?? '').toLowerCase();
+	if (text.includes('river') || text.includes('lake') || text.includes('inland')) return 'inland';
+	return 'coastal';
+}
+
+/** Read an EA boolean field, which may be a bare boolean or a wrapped value. */
+function readEaBoolean(value) {
+	if (typeof value === 'boolean') return value;
+	if (value && typeof value === 'object' && '_value' in value) return readEaBoolean(value._value);
+	if (typeof value === 'string') return value.toLowerCase() === 'true';
+	return undefined;
+}
 
 async function fetchEngland() {
 	const base = 'https://environment.data.gov.uk/doc/bathing-water.json';
@@ -121,7 +137,8 @@ async function fetchEngland() {
 						extractLabel(item.latestComplianceAssessment)
 				),
 				sewerageUndertaker: extractLabel(item.appointedSewerageUndertaker),
-				waterType: undefined,
+				waterType: waterTypeFromEaType(item.type),
+				rainImpacted: readEaBoolean(item.waterQualityImpactedByHeavyRain),
 				source: {
 					api: 'ea',
 					sourceId,
@@ -155,11 +172,6 @@ async function fetchWales() {
 			if (!point) continue;
 			const sourceId = item.eubwidNotation ?? lastNonEmptyPathSegment(item._about);
 			if (!sourceId) continue;
-			const typeLabel = String(extractLabel(item.type) ?? '').toLowerCase();
-			const waterType =
-				typeLabel.includes('lake') || typeLabel.includes('river') || typeLabel.includes('inland')
-					? 'inland'
-					: 'coastal';
 			out.push({
 				id: `nrw-${sourceId}`,
 				name: name.trim(),
@@ -171,7 +183,8 @@ async function fetchWales() {
 				classification: classifyValue(
 					extractLabel(item.latestComplianceAssessment?.complianceClassification)
 				),
-				waterType,
+				waterType: waterTypeFromEaType(item.type),
+				rainImpacted: readEaBoolean(item.waterQualityImpactedByHeavyRain),
 				source: {
 					api: 'nrw',
 					sourceId,
@@ -298,9 +311,7 @@ async function buildIndex() {
 		['Northern Ireland (DAERA)', fetchNorthernIreland]
 	];
 
-	const results = await Promise.allSettled(
-		fetchers.map(([label, fn]) => withBudget(label, fn))
-	);
+	const results = await Promise.allSettled(fetchers.map(([label, fn]) => withBudget(label, fn)));
 
 	// Assemble in fetcher order regardless of fresh-or-cached source. Slug
 	// deduplication is order-sensitive: keeping each country's rows in one

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-30T20:11:41.000Z",
+  "generatedAt": "2026-05-31T13:00:49.587Z",
   "count": 701,
   "partialFor": [],
   "byCountry": {
@@ -19,6 +19,7 @@
       "lon": -3.8177,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1702-36800",
@@ -35,6 +36,7 @@
       "lon": -4.71125678076437,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39950",
@@ -96,6 +98,7 @@
       "lon": -4.055228853273,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39050",
@@ -112,6 +115,7 @@
       "lon": -4.0806,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39070",
@@ -128,6 +132,7 @@
       "lon": -5.2059,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38520",
@@ -144,6 +149,7 @@
       "lon": -4.46695404905732,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1100-39985",
@@ -160,6 +166,7 @@
       "lon": -3.58517281231346,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1301-40450",
@@ -176,6 +183,7 @@
       "lon": -5.0837,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38540",
@@ -192,6 +200,7 @@
       "lon": -4.54725266300541,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1402-38660",
@@ -208,6 +217,7 @@
       "lon": -4.49936567586873,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39900",
@@ -224,6 +234,7 @@
       "lon": -4.0859,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1402-38900",
@@ -240,6 +251,7 @@
       "lon": -4.08998414837595,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1402-38800",
@@ -271,6 +283,8 @@
       "lon": -3.063969846000971,
       "classification": "Sufficient",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd5300-41300",
@@ -287,6 +301,8 @@
       "lon": -3.434608476413831,
       "classification": "Good",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukd1101-46100",
@@ -303,6 +319,8 @@
       "lon": -1.552397954526308,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2101-04250",
@@ -319,6 +337,8 @@
       "lon": -1.57486180575255,
       "classification": "Unknown",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2100-04220",
@@ -335,6 +355,7 @@
       "lon": -4.6541,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-37900",
@@ -351,6 +372,8 @@
       "lon": 0.325520422539733,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukf3102-09400",
@@ -367,6 +390,8 @@
       "lon": -3.501093359202774,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4200-23501",
@@ -428,6 +453,8 @@
       "lon": -3.509412650912728,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4200-23400",
@@ -554,6 +581,8 @@
       "lon": -1.707902922897897,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2102-03700",
@@ -570,6 +599,8 @@
       "lon": -3.878814815030624,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-25700",
@@ -586,6 +617,7 @@
       "lon": -4.904,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38238",
@@ -617,6 +649,7 @@
       "lon": -4.06193668738756,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39300",
@@ -633,6 +666,8 @@
       "lon": -3.523518070527209,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4200-23700",
@@ -649,6 +684,8 @@
       "lon": -1.632288132669377,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2102-03900",
@@ -665,6 +702,8 @@
       "lon": -3.08988548959849,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4301-21700",
@@ -681,6 +720,8 @@
       "lon": -1.069670328823699,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj3400-18200",
@@ -697,6 +738,7 @@
       "lon": -4.21311421113223,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1100-40100",
@@ -713,6 +755,8 @@
       "lon": -3.017751052337732,
       "classification": "Good",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2302-35500",
@@ -729,6 +773,8 @@
       "lon": 0.470373139504789,
       "classification": "Sufficient",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj2205-14200",
@@ -745,6 +791,8 @@
       "lon": -3.896948022486347,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-25900",
@@ -761,6 +809,8 @@
       "lon": -3.895063665552046,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-25800",
@@ -777,6 +827,8 @@
       "lon": 0.200707746754768,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2201-14550",
@@ -793,6 +845,8 @@
       "lon": -3.054869767619019,
       "classification": "Good",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukd4200-42600",
@@ -809,6 +863,8 @@
       "lon": -3.056200177794543,
       "classification": "Sufficient",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukd4200-42300",
@@ -825,6 +881,8 @@
       "lon": -3.056569017332642,
       "classification": "Poor",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukd4200-42500",
@@ -841,6 +899,8 @@
       "lon": -3.60970754285821,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-24800",
@@ -857,6 +917,8 @@
       "lon": -3.059086159238381,
       "classification": "Sufficient",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukd4200-42100",
@@ -873,6 +935,8 @@
       "lon": -3.401200559800488,
       "classification": "Poor",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2305-35200",
@@ -889,6 +953,8 @@
       "lon": -1.496824471223949,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukc2103-04600",
@@ -905,6 +971,8 @@
       "lon": -0.691328567556921,
       "classification": "Poor",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj2402-15700",
@@ -921,6 +989,8 @@
       "lon": -0.669396152909609,
       "classification": "Sufficient",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj2402-15680",
@@ -937,6 +1007,8 @@
       "lon": -5.0258580848193,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3104-32750",
@@ -953,6 +1025,7 @@
       "lon": -4.054536,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1402-39000",
@@ -969,6 +1042,7 @@
       "lon": -4.58932514487515,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1100-39995",
@@ -985,6 +1059,8 @@
       "lon": 1.435294752968038,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4210-12660",
@@ -1001,6 +1077,8 @@
       "lon": -1.895402269211638,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2101-19160",
@@ -1017,6 +1095,8 @@
       "lon": -1.844020302357056,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2101-19060",
@@ -1033,6 +1113,8 @@
       "lon": -1.888741147744736,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2101-19150",
@@ -1049,6 +1131,8 @@
       "lon": -1.816860588485414,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2101-19030",
@@ -1065,6 +1149,8 @@
       "lon": -1.771081738193689,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2101-19000",
@@ -1081,6 +1167,8 @@
       "lon": -1.832274419945797,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2101-19050",
@@ -1097,6 +1185,8 @@
       "lon": -1.875860241218663,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2101-19100",
@@ -1113,6 +1203,8 @@
       "lon": -1.791710158585046,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2101-19020",
@@ -1129,6 +1221,8 @@
       "lon": -4.11952288011347,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-26300",
@@ -1145,6 +1239,8 @@
       "lon": -2.422236530165176,
       "classification": "Good",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2206-20400",
@@ -1161,6 +1257,7 @@
       "lon": -3.9785811626358,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1800-37000",
@@ -1177,6 +1274,8 @@
       "lon": -0.860538272557859,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2403-16000",
@@ -1193,6 +1292,8 @@
       "lon": -3.504510070091992,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4200-24500",
@@ -1209,6 +1310,8 @@
       "lon": -3.011650047268998,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2302-35600",
@@ -1225,6 +1328,8 @@
       "lon": -0.182688833790864,
       "classification": "Good",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "uke1200-08000",
@@ -1241,6 +1346,8 @@
       "lon": -0.198758284289504,
       "classification": "Sufficient",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "uke1200-08100",
@@ -1272,6 +1379,8 @@
       "lon": 1.01053773140046,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh3311-11700",
@@ -1288,6 +1397,8 @@
       "lon": -0.145844809909213,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2100-14950",
@@ -1304,6 +1415,8 @@
       "lon": -0.122123261573308,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2100-14900",
@@ -1320,6 +1433,7 @@
       "lon": -5.10262888533096,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38300",
@@ -1336,6 +1450,7 @@
       "lon": -4.9224,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38240",
@@ -1367,6 +1482,8 @@
       "lon": -3.554348268729958,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4200-24300",
@@ -1383,6 +1500,8 @@
       "lon": 1.4453279329694,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4210-12750",
@@ -1399,6 +1518,8 @@
       "lon": 1.442977096679106,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj4210-12800",
@@ -1462,6 +1583,8 @@
       "lon": -3.318248600635247,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4301-22100",
@@ -1493,6 +1616,7 @@
       "lon": -5.2536,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38460",
@@ -1509,6 +1633,8 @@
       "lon": 1.737438207333146,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1303-10350",
@@ -1525,6 +1651,8 @@
       "lon": -1.31814781758902,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3308-16900",
@@ -1541,6 +1669,8 @@
       "lon": 0.796375555008748,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2204-13900",
@@ -1557,6 +1687,8 @@
       "lon": 0.593096094324913,
       "classification": "Unknown",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh3304-11906",
@@ -1573,6 +1705,8 @@
       "lon": -5.464979857926979,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-31100",
@@ -1635,6 +1769,7 @@
       "lon": -4.6952,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38150",
@@ -1667,6 +1802,7 @@
       "lon": -4.0329,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1800-37300",
@@ -1683,6 +1819,8 @@
       "lon": -4.201377459873182,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3101-26530",
@@ -1699,6 +1837,8 @@
       "lon": -0.362946628988699,
       "classification": "Excellent",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uke2206-07500",
@@ -1715,6 +1855,7 @@
       "lon": -4.44918012038702,
       "classification": "Sufficient",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1100-40050",
@@ -1731,6 +1872,8 @@
       "lon": -3.897547609135589,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-26000",
@@ -1747,6 +1890,8 @@
       "lon": -5.234876016017111,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3102-31650",
@@ -1763,6 +1908,8 @@
       "lon": 0.339966925508284,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukf3102-09500",
@@ -1779,6 +1926,8 @@
       "lon": -4.755341206910302,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-27600",
@@ -1795,6 +1944,8 @@
       "lon": -2.904557604285713,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2205-21300",
@@ -1811,6 +1962,8 @@
       "lon": -1.733644685233053,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2201-18800",
@@ -1827,6 +1980,8 @@
       "lon": -1.662694516455852,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2201-17200",
@@ -1843,6 +1998,8 @@
       "lon": -1.729392227367008,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2201-18750",
@@ -1859,6 +2016,8 @@
       "lon": -1.714435887219141,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2201-18700",
@@ -1875,6 +2034,8 @@
       "lon": -1.742129795988796,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2201-18900",
@@ -1891,6 +2052,7 @@
       "lon": -4.55737626792857,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1100-40030",
@@ -1907,6 +2069,8 @@
       "lon": -5.267924543097124,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3103-29501",
@@ -1923,6 +2087,8 @@
       "lon": -2.428075266920466,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2206-20500",
@@ -1939,6 +2105,7 @@
       "lon": -4.4702,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1402-38685",
@@ -1955,6 +2122,8 @@
       "lon": 1.171319951192254,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukh3311-11500",
@@ -1971,6 +2140,8 @@
       "lon": 1.140095257455826,
       "classification": "Good",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukh3311-11650",
@@ -1987,6 +2158,7 @@
       "lon": -4.07981983209888,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1402-38920",
@@ -2003,6 +2175,8 @@
       "lon": -0.022231183047955,
       "classification": "Good",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "uke1301-09000",
@@ -2019,6 +2193,8 @@
       "lon": -2.861457654629344,
       "classification": "Good",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk1202-36000",
@@ -2035,6 +2211,8 @@
       "lon": -3.048077762204383,
       "classification": "Good",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukd4312-42800",
@@ -2067,6 +2245,8 @@
       "lon": -3.94699,
       "classification": "Poor",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-26050",
@@ -2083,6 +2263,7 @@
       "lon": -3.5017555,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl2202-36350",
@@ -2099,6 +2280,7 @@
       "lon": -3.29696407503933,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl2202-36300",
@@ -2145,6 +2327,8 @@
       "lon": -1.538450970988754,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj3400-17600",
@@ -2161,6 +2345,8 @@
       "lon": -1.098153763924492,
       "classification": "Excellent",
       "sewerageUndertaker": "Severn Trent Water Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukf1400-09750",
@@ -2177,6 +2363,7 @@
       "lon": -3.73279882926937,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1301-40400",
@@ -2193,6 +2380,7 @@
       "lon": -3.718497,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1301-40425",
@@ -2209,6 +2397,8 @@
       "lon": -4.038184203580404,
       "classification": "Sufficient",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4304-34700",
@@ -2225,6 +2415,8 @@
       "lon": -4.212462095656805,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4304-34410",
@@ -2241,6 +2433,8 @@
       "lon": -1.468299355173796,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3400-17400",
@@ -2257,6 +2451,8 @@
       "lon": -3.06608,
       "classification": "Sufficient",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd1230-45750",
@@ -2273,6 +2469,8 @@
       "lon": -3.09122,
       "classification": "Good",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd1230-45725",
@@ -2289,6 +2487,8 @@
       "lon": -3.05435,
       "classification": "Good",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd1230-45775",
@@ -2305,6 +2505,8 @@
       "lon": -5.022692244773718,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3104-32700",
@@ -2321,6 +2523,7 @@
       "lon": -4.6934,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-37980",
@@ -2337,6 +2540,8 @@
       "lon": -1.960909719962519,
       "classification": "Excellent",
       "sewerageUndertaker": "Thames Water Utilities Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk1302-11760",
@@ -2353,6 +2558,8 @@
       "lon": -5.097157134548582,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3103-29100",
@@ -2369,6 +2576,8 @@
       "lon": -1.309363422153536,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3400-17800",
@@ -2385,6 +2594,8 @@
       "lon": -4.633803990812524,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3104-33360",
@@ -2401,6 +2612,7 @@
       "lon": -4.17795351972472,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39600",
@@ -2448,6 +2660,8 @@
       "lon": -5.119221503916047,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-32100",
@@ -2480,6 +2694,7 @@
       "lon": -4.22755502261785,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39700",
@@ -2496,6 +2711,8 @@
       "lon": -1.248729788380296,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukc1404-05900",
@@ -2512,6 +2729,8 @@
       "lon": -4.733841447922212,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-27500",
@@ -2528,6 +2747,8 @@
       "lon": 1.302181256100388,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1305-10200",
@@ -2544,6 +2765,8 @@
       "lon": -4.554007949429832,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3104-33600",
@@ -2560,6 +2783,8 @@
       "lon": -4.238529434699125,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4304-34200",
@@ -2637,6 +2862,7 @@
       "lon": -5.1685534351217,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38260",
@@ -2653,6 +2879,8 @@
       "lon": -0.141857991604335,
       "classification": "Excellent",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uke1200-07950",
@@ -2669,6 +2897,8 @@
       "lon": -3.565498917213719,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-24700",
@@ -2685,6 +2915,8 @@
       "lon": -3.468548647670714,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4306-22600",
@@ -2701,6 +2933,8 @@
       "lon": -3.463693984082954,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4306-22500",
@@ -2717,6 +2951,8 @@
       "lon": -3.438940914543866,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4306-22400",
@@ -2733,6 +2969,8 @@
       "lon": -4.926484246445725,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3104-33200",
@@ -2749,6 +2987,8 @@
       "lon": 1.404925707974265,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj4204-13100",
@@ -2765,6 +3005,8 @@
       "lon": -3.14218,
       "classification": "Poor",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd1101-45800",
@@ -2796,6 +3038,8 @@
       "lon": -3.59721,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-24660",
@@ -2858,6 +3102,8 @@
       "lon": 1.273696364647091,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh3311-11100",
@@ -2874,6 +3120,8 @@
       "lon": -4.370798313705646,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3101-26700",
@@ -2906,6 +3154,7 @@
       "lon": -5.104,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38340",
@@ -2922,6 +3171,8 @@
       "lon": -1.568532719733309,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2104-04280",
@@ -2938,6 +3189,8 @@
       "lon": -1.543920718052364,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2104-04300",
@@ -2999,6 +3252,8 @@
       "lon": -3.426591495300738,
       "classification": "Poor",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2305-35100",
@@ -3015,6 +3270,8 @@
       "lon": -4.761868907753872,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-27700",
@@ -3031,6 +3288,8 @@
       "lon": -2.274144955206742,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2204-20100",
@@ -3047,6 +3306,8 @@
       "lon": -2.277113213563494,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2204-20200",
@@ -3063,6 +3324,7 @@
       "lon": -4.12596370189512,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39360",
@@ -3079,6 +3341,8 @@
       "lon": 0.996611814185222,
       "classification": "Poor",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj4208-13600",
@@ -3095,6 +3359,8 @@
       "lon": -2.761638166307538,
       "classification": "Unknown",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2207-20990",
@@ -3111,6 +3377,8 @@
       "lon": -1.283289967118494,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3400-17850",
@@ -3127,6 +3395,8 @@
       "lon": -4.451498081181772,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3101-27000",
@@ -3143,6 +3413,8 @@
       "lon": 1.275985967187263,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1305-10150",
@@ -3159,6 +3431,8 @@
       "lon": 0.288003,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj2201-14500",
@@ -3175,6 +3449,8 @@
       "lon": -1.045119146890172,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3100-16500",
@@ -3236,6 +3512,8 @@
       "lon": -3.401693565122055,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4301-22300",
@@ -3267,6 +3545,8 @@
       "lon": -2.78487992421657,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2205-21100",
@@ -3283,6 +3563,7 @@
       "lon": -4.05970268906097,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39200",
@@ -3299,6 +3580,8 @@
       "lon": 1.443042065642678,
       "classification": "Unknown",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1406-10712",
@@ -3315,6 +3598,8 @@
       "lon": 1.355028705384109,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukh1406-10900",
@@ -3331,6 +3616,8 @@
       "lon": 1.341507104744206,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1406-11000",
@@ -3347,6 +3634,8 @@
       "lon": -0.65254437647151,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj2402-15650",
@@ -3363,6 +3652,8 @@
       "lon": -0.284226049497505,
       "classification": "Good",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "uke2206-07600",
@@ -3409,6 +3700,8 @@
       "lon": -5.098537124652402,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-32200",
@@ -3425,6 +3718,8 @@
       "lon": -5.101542629662413,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-32150",
@@ -3441,6 +3736,8 @@
       "lon": -0.118415393137514,
       "classification": "Excellent",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uke1200-07900",
@@ -3457,6 +3754,8 @@
       "lon": -3.019972502286207,
       "classification": "Good",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukd4312-43000",
@@ -3473,6 +3772,8 @@
       "lon": 1.191314626866399,
       "classification": "Sufficient",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj4208-13300",
@@ -3489,6 +3790,7 @@
       "lon": -3.3649906,
       "classification": "Unknown",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl2202-36330",
@@ -3505,6 +3807,8 @@
       "lon": -3.106241432760207,
       "classification": "Excellent",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd5300-41200",
@@ -3521,6 +3825,8 @@
       "lon": -0.214020385991274,
       "classification": "Sufficient",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "uke1200-08300",
@@ -3567,6 +3873,8 @@
       "lon": -0.791803740453079,
       "classification": "Excellent",
       "sewerageUndertaker": "Thames Water Utilities Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2310-11945",
@@ -3583,6 +3891,7 @@
       "lon": -4.86531187913199,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38235",
@@ -3599,6 +3908,7 @@
       "lon": -5.0594,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38248",
@@ -3615,6 +3925,8 @@
       "lon": 0.73489,
       "classification": "Good",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1401-11051",
@@ -3631,6 +3943,8 @@
       "lon": 1.248339232765255,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukh3311-11300",
@@ -3692,6 +4006,7 @@
       "lon": -4.4033334807,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39790",
@@ -3708,6 +4023,8 @@
       "lon": -5.392071943188155,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-31450",
@@ -3724,6 +4041,8 @@
       "lon": -3.559497533654101,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4200-24200",
@@ -3740,6 +4059,8 @@
       "lon": -0.41537,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2407-15450",
@@ -3756,6 +4077,8 @@
       "lon": 1.73349731928401,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1303-10650",
@@ -3772,6 +4095,8 @@
       "lon": -4.787575467256791,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-28200",
@@ -3788,6 +4113,8 @@
       "lon": -5.076600418961373,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-32310",
@@ -3804,6 +4131,8 @@
       "lon": 1.742735668548983,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1303-10400",
@@ -3820,6 +4149,8 @@
       "lon": 1.739531699977325,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1303-10500",
@@ -3836,6 +4167,8 @@
       "lon": 1.738766857115263,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1303-10600",
@@ -3883,6 +4216,8 @@
       "lon": -1.325063587908411,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj3400-17700",
@@ -3899,6 +4234,8 @@
       "lon": -5.391930689924775,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-31400",
@@ -3915,6 +4252,8 @@
       "lon": -5.688927671042629,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-30750",
@@ -3931,6 +4270,8 @@
       "lon": -5.067404244295827,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3102-28600",
@@ -3947,6 +4288,8 @@
       "lon": -0.310741348239147,
       "classification": "Unknown",
       "sewerageUndertaker": "Thames Water Utilities Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uki2203-11942",
@@ -3963,6 +4306,8 @@
       "lon": -0.160094351971831,
       "classification": "Good",
       "sewerageUndertaker": "Thames Water Utilities Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uki1101-11910",
@@ -3979,6 +4324,8 @@
       "lon": -0.15662381451985,
       "classification": "Excellent",
       "sewerageUndertaker": "Thames Water Utilities Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uki1101-11920",
@@ -3995,6 +4342,8 @@
       "lon": -0.166252403338055,
       "classification": "Excellent",
       "sewerageUndertaker": "Thames Water Utilities Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uki1101-11930",
@@ -4011,6 +4360,7 @@
       "lon": -4.12912931308809,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39500",
@@ -4027,6 +4377,8 @@
       "lon": -4.997311029899912,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3104-32900",
@@ -4043,6 +4395,8 @@
       "lon": -4.533694568865084,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4307-33800",
@@ -4059,6 +4413,8 @@
       "lon": 0.5857954003092,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj2202-14100",
@@ -4075,6 +4431,8 @@
       "lon": -3.288806054188797,
       "classification": "Poor",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukd1103-44800",
@@ -4091,6 +4449,8 @@
       "lon": -5.417055620258719,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-31300",
@@ -4107,6 +4467,8 @@
       "lon": -0.989249185506088,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3307-16350",
@@ -4123,6 +4485,8 @@
       "lon": -1.001306696975126,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3307-16400",
@@ -4139,6 +4503,8 @@
       "lon": -0.967327158509046,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3307-16300",
@@ -4155,6 +4521,8 @@
       "lon": 0.471523847450913,
       "classification": "Sufficient",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukh1304-09800",
@@ -4202,6 +4570,8 @@
       "lon": 1.710110760866245,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1303-10325",
@@ -4218,6 +4588,8 @@
       "lon": -2.605706908746493,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk1100-36050",
@@ -4234,6 +4606,8 @@
       "lon": 1.139544400747574,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj4202-12200",
@@ -4250,6 +4624,8 @@
       "lon": 1.118548468494485,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj4202-12150",
@@ -4266,6 +4642,8 @@
       "lon": -1.698471256684587,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2201-17300",
@@ -4282,6 +4660,8 @@
       "lon": -1.225369966558602,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj3304-16850",
@@ -4298,6 +4678,8 @@
       "lon": -2.723226623461948,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2205-20970",
@@ -4314,6 +4696,8 @@
       "lon": 1.22584143875814,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukh3311-11350",
@@ -4330,6 +4714,8 @@
       "lon": -3.553524388097443,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4200-23900",
@@ -4346,6 +4732,8 @@
       "lon": -5.145540679817082,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3102-32000",
@@ -4362,6 +4750,8 @@
       "lon": -3.859125090603487,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-25400",
@@ -4378,6 +4768,8 @@
       "lon": -0.160484521899418,
       "classification": "Excellent",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uke1200-08700",
@@ -4394,6 +4786,8 @@
       "lon": -0.166684558773012,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2100-15000",
@@ -4410,6 +4804,8 @@
       "lon": 0.008374419031881,
       "classification": "Good",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "uke1301-09020",
@@ -4426,6 +4822,8 @@
       "lon": 0.496388660943862,
       "classification": "Good",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukh1304-09900",
@@ -4442,6 +4840,8 @@
       "lon": 0.48381224712594,
       "classification": "Good",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukh1304-09850",
@@ -4458,6 +4858,8 @@
       "lon": 0.318439111596705,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukf3102-09300",
@@ -4474,6 +4876,8 @@
       "lon": 1.081421889530718,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4208-13500",
@@ -4490,6 +4894,8 @@
       "lon": -4.097302527866871,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4304-34600",
@@ -4506,6 +4912,8 @@
       "lon": -4.127266087534065,
       "classification": "Closed",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4304-34450",
@@ -4522,6 +4930,8 @@
       "lon": 0.35387206214699,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukf3102-09600",
@@ -4568,6 +4978,7 @@
       "lon": -3.26328514212383,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl2202-36100",
@@ -4584,6 +4995,8 @@
       "lon": 1.112762317973562,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh3311-11600",
@@ -4600,6 +5013,8 @@
       "lon": 1.446142630132952,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4210-12700",
@@ -4616,6 +5031,8 @@
       "lon": -5.16361764652506,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3103-29200",
@@ -4648,6 +5065,8 @@
       "lon": -2.131407992731875,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2204-19900",
@@ -4694,6 +5113,8 @@
       "lon": -4.199395954504258,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3101-26520",
@@ -4725,6 +5146,7 @@
       "lon": -3.5255627,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1301-40500",
@@ -4756,6 +5178,8 @@
       "lon": -3.279552270381738,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4301-22000",
@@ -4772,6 +5196,8 @@
       "lon": -0.321921858737898,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj2401-15300",
@@ -4788,6 +5214,7 @@
       "lon": -4.0108147493204,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1800-37200",
@@ -4819,6 +5246,8 @@
       "lon": -1.204262010643014,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3305-16800",
@@ -4835,6 +5264,8 @@
       "lon": 0.652567904722018,
       "classification": "Good",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukh3100-11904",
@@ -4851,6 +5282,8 @@
       "lon": -1.354514214476178,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3308-17000",
@@ -4882,6 +5315,8 @@
       "lon": 0.921827823102863,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4209-12000",
@@ -4898,6 +5333,7 @@
       "lon": -3.98455421715647,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1800-37100",
@@ -4914,6 +5350,7 @@
       "lon": -5.108,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38295",
@@ -4930,6 +5367,8 @@
       "lon": -0.538835647163759,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj2402-15500",
@@ -4946,6 +5385,8 @@
       "lon": -1.42127,
       "classification": "Poor",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2204-05250",
@@ -4962,6 +5403,8 @@
       "lon": 0.96731518804359,
       "classification": "Poor",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4208-13800",
@@ -4978,6 +5421,7 @@
       "lon": -4.1287170040676,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39400",
@@ -4994,6 +5438,7 @@
       "lon": -4.15370070921,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1100-40140",
@@ -5010,6 +5455,7 @@
       "lon": -4.38842008034718,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1100-39980",
@@ -5025,7 +5471,8 @@
       "lat": 51.884504,
       "lon": -3.9859954,
       "classification": "Unknown",
-      "waterType": "coastal",
+      "waterType": "inland",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1401-37650",
@@ -5042,6 +5489,7 @@
       "lon": -3.82840499580298,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1301-40300",
@@ -5058,6 +5506,7 @@
       "lon": -3.85463758549329,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1301-40200",
@@ -5074,6 +5523,7 @@
       "lon": -3.98017521344466,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1301-40170",
@@ -5090,6 +5540,7 @@
       "lon": -4.4715,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1402-38680",
@@ -5105,7 +5556,8 @@
       "lat": 51.531213,
       "lon": -3.173303,
       "classification": "Excellent",
-      "waterType": "coastal",
+      "waterType": "inland",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl2201-36040",
@@ -5122,6 +5574,7 @@
       "lon": -4.1657,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1402-38750",
@@ -5137,7 +5590,8 @@
       "lat": 53.1259,
       "lon": -4.1327,
       "classification": "Excellent",
-      "waterType": "coastal",
+      "waterType": "inland",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39975",
@@ -5169,6 +5623,8 @@
       "lon": -5.505328,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-30300",
@@ -5215,6 +5671,8 @@
       "lon": -4.666359184479336,
       "classification": "Unknown",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3008-27080",
@@ -5231,6 +5689,8 @@
       "lon": -1.615516489199073,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2101-04000",
@@ -5262,6 +5722,8 @@
       "lon": 1.748783678636152,
       "classification": "Good",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1407-10750",
@@ -5278,6 +5740,8 @@
       "lon": 1.74519731039964,
       "classification": "Good",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1407-10800",
@@ -5294,6 +5758,8 @@
       "lon": -2.249333471476767,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2204-20000",
@@ -5355,6 +5821,8 @@
       "lon": -5.065007625612633,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-32330",
@@ -5371,6 +5839,7 @@
       "lon": -4.7596,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38220",
@@ -5387,6 +5856,8 @@
       "lon": -2.930321023052255,
       "classification": "Poor",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2205-21400",
@@ -5403,6 +5874,8 @@
       "lon": -2.937779284373491,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2205-21500",
@@ -5419,6 +5892,8 @@
       "lon": -3.824498121373426,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4304-34800",
@@ -5435,6 +5910,8 @@
       "lon": 0.26436524824349,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukf3102-09100",
@@ -5466,6 +5943,8 @@
       "lon": -5.093572395033213,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3102-28800",
@@ -5514,6 +5993,8 @@
       "lon": -3.513388073103245,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4200-23100",
@@ -5545,6 +6026,8 @@
       "lon": 1.06523,
       "classification": "Good",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh3311-11050",
@@ -5561,6 +6044,7 @@
       "lon": -4.80381895602902,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38230",
@@ -5577,6 +6061,8 @@
       "lon": -5.480789644537383,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-30200",
@@ -5593,6 +6079,8 @@
       "lon": 1.386538154257397,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj4210-12600",
@@ -5609,6 +6097,8 @@
       "lon": 1.375790552419346,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4210-12500",
@@ -5625,6 +6115,7 @@
       "lon": -3.5009,
       "classification": "Sufficient",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1302-40550",
@@ -5641,6 +6132,7 @@
       "lon": -5.21031727523785,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38280",
@@ -5657,6 +6149,8 @@
       "lon": -1.37659442703996,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukc2204-05400",
@@ -5673,6 +6167,8 @@
       "lon": -1.0170751447538,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukc1202-06650",
@@ -5689,6 +6185,8 @@
       "lon": -5.033433876076066,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-32500",
@@ -5705,6 +6203,8 @@
       "lon": -3.509220494924685,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4200-23600",
@@ -5721,6 +6221,8 @@
       "lon": -3.15972594419281,
       "classification": "Good",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukd5400-40800",
@@ -5737,6 +6239,8 @@
       "lon": -5.423798805885463,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-31250",
@@ -5753,6 +6257,8 @@
       "lon": -0.60390668831765,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2402-15600",
@@ -5769,6 +6275,8 @@
       "lon": -1.610597266739971,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3308-17100",
@@ -5785,6 +6293,8 @@
       "lon": -3.766960112097832,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-25100",
@@ -5801,6 +6311,8 @@
       "lon": -4.436327857389018,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3101-26900",
@@ -5848,6 +6360,8 @@
       "lon": -3.467058970405523,
       "classification": "Sufficient",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2305-35000",
@@ -5864,6 +6378,8 @@
       "lon": 1.283684806754969,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4210-12300",
@@ -5880,6 +6396,8 @@
       "lon": 0.805325503474074,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj4209-11975",
@@ -5926,6 +6444,8 @@
       "lon": -2.860727733701429,
       "classification": "Sufficient",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukd4305-43550",
@@ -5942,6 +6462,8 @@
       "lon": -2.876449196479144,
       "classification": "Good",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukd4305-43260",
@@ -5958,6 +6480,8 @@
       "lon": -3.119402914547438,
       "classification": "Good",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukd5400-40900",
@@ -5974,6 +6498,7 @@
       "lon": -4.33826738999066,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39970",
@@ -5990,6 +6515,7 @@
       "lon": -4.558811,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39960",
@@ -6021,6 +6547,8 @@
       "lon": -3.952775115720852,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-26100",
@@ -6037,6 +6565,8 @@
       "lon": -5.015483516396951,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3104-32800",
@@ -6053,6 +6583,8 @@
       "lon": 1.441775726252517,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1305-10300",
@@ -6085,6 +6617,7 @@
       "lon": -4.6407,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1402-38640",
@@ -6131,6 +6664,8 @@
       "lon": -3.498179275537058,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4306-23000",
@@ -6147,6 +6682,8 @@
       "lon": -3.038970802228123,
       "classification": "Unknown",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd7400-41100",
@@ -6163,6 +6700,7 @@
       "lon": -4.3575,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1402-38690",
@@ -6179,6 +6717,7 @@
       "lon": -4.3588,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1402-38688",
@@ -6195,6 +6734,8 @@
       "lon": -1.51032213701256,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2106-04400",
@@ -6211,6 +6752,8 @@
       "lon": -1.514786810240242,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2106-04500",
@@ -6243,6 +6786,7 @@
       "lon": -5.12339027166073,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38400",
@@ -6259,6 +6803,7 @@
       "lon": -4.83848877379457,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38600",
@@ -6275,6 +6820,8 @@
       "lon": -4.039859348122493,
       "classification": "Unknown",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-26150",
@@ -6291,6 +6838,8 @@
       "lon": -1.45145,
       "classification": "Poor",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uke2203-08903",
@@ -6307,6 +6856,7 @@
       "lon": -5.10838393023209,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38380",
@@ -6323,6 +6873,8 @@
       "lon": 0.386696038608708,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2205-14300",
@@ -6369,6 +6921,8 @@
       "lon": -4.556945819111498,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3104-33650",
@@ -6385,6 +6939,8 @@
       "lon": -3.514891159043062,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4200-23300",
@@ -6401,6 +6957,7 @@
       "lon": -3.6421093,
       "classification": "Poor",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl2202-36450",
@@ -6417,6 +6974,7 @@
       "lon": -4.16054435628538,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1800-37400",
@@ -6433,6 +6991,8 @@
       "lon": -0.736466764997683,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj2402-15800",
@@ -6449,6 +7009,8 @@
       "lon": -3.558848075399885,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4200-24100",
@@ -6465,6 +7027,8 @@
       "lon": -3.55619878157936,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4200-24000",
@@ -6481,6 +7045,8 @@
       "lon": -1.083940641648369,
       "classification": "Unknown",
       "sewerageUndertaker": "Thames Water Utilities Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj1102-11941",
@@ -6497,6 +7063,8 @@
       "lon": -4.692854628695517,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-27300",
@@ -6528,6 +7096,7 @@
       "lon": -4.3142341396851,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1401-37700",
@@ -6544,6 +7113,7 @@
       "lon": -4.715,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38210",
@@ -6560,6 +7130,7 @@
       "lon": -3.1682608,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl2202-36050",
@@ -6576,6 +7147,7 @@
       "lon": -4.4964,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1402-38675",
@@ -6592,6 +7164,7 @@
       "lon": -4.5532,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1401-37800",
@@ -6608,6 +7181,8 @@
       "lon": -4.94783256502555,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3102-28500",
@@ -6624,6 +7199,7 @@
       "lon": -3.92399121262887,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1301-40180",
@@ -6640,6 +7216,8 @@
       "lon": -4.782583402457527,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-27900",
@@ -6656,6 +7234,8 @@
       "lon": -5.5355728915244,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-30400",
@@ -6672,6 +7252,8 @@
       "lon": -5.155098900544113,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3102-31800",
@@ -6688,6 +7270,8 @@
       "lon": -5.151402771236902,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3102-31900",
@@ -6704,6 +7288,8 @@
       "lon": -5.44249847946612,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-30100",
@@ -6735,6 +7321,8 @@
       "lon": 0.350368683032284,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj2201-14400",
@@ -6751,6 +7339,8 @@
       "lon": -4.161237326373048,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4100-26510",
@@ -6767,6 +7357,8 @@
       "lon": -4.140895275468601,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4100-26400",
@@ -6783,6 +7375,8 @@
       "lon": -4.14553973374772,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4100-26500",
@@ -6799,6 +7393,8 @@
       "lon": -5.261297725976499,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3103-29500",
@@ -6815,6 +7411,8 @@
       "lon": -4.681518057926255,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-27200",
@@ -6831,6 +7429,8 @@
       "lon": -4.78420121717727,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-28000",
@@ -6847,6 +7447,8 @@
       "lon": -5.256277429751976,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3103-29400",
@@ -6863,6 +7465,8 @@
       "lon": -4.916442737581546,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3104-33300",
@@ -6879,6 +7483,8 @@
       "lon": -1.909943393969187,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2102-19170",
@@ -6895,6 +7501,8 @@
       "lon": -1.920502967848092,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2102-19190",
@@ -6911,6 +7519,8 @@
       "lon": -2.025252753585668,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2102-19400",
@@ -6927,6 +7537,8 @@
       "lon": -2.040129811985227,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2102-19450",
@@ -6943,6 +7555,8 @@
       "lon": -1.937369325612276,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2102-19350",
@@ -6959,6 +7573,8 @@
       "lon": -1.929361726434004,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2102-19200",
@@ -6975,6 +7591,7 @@
       "lon": -4.69976456176926,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1402-38630",
@@ -6991,6 +7608,8 @@
       "lon": -3.626267702315258,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2305-34900",
@@ -7007,6 +7626,7 @@
       "lon": -4.20855940049963,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1800-37500",
@@ -7039,6 +7659,8 @@
       "lon": -5.05702836579692,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-32340",
@@ -7055,6 +7677,7 @@
       "lon": -4.65222388161576,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1100-40010",
@@ -7071,6 +7694,7 @@
       "lon": -4.5305442,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39965",
@@ -7087,6 +7711,7 @@
       "lon": -4.552,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39920",
@@ -7103,6 +7728,8 @@
       "lon": -5.079319250900065,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3103-28900",
@@ -7119,6 +7746,8 @@
       "lon": -5.023542515803301,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3104-32550",
@@ -7135,6 +7764,8 @@
       "lon": -4.972549323471114,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3102-28550",
@@ -7151,6 +7782,8 @@
       "lon": -5.650440231086796,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-30600",
@@ -7167,6 +7800,8 @@
       "lon": -5.476692927688384,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-30900",
@@ -7183,6 +7818,8 @@
       "lon": -5.439418396508773,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-31200",
@@ -7199,6 +7836,8 @@
       "lon": -5.314853125567395,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3103-29800",
@@ -7215,6 +7854,8 @@
       "lon": -4.843300092072096,
       "classification": "Sufficient",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-28400",
@@ -7231,6 +7872,8 @@
       "lon": -5.483423953578554,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-30800",
@@ -7247,6 +7890,8 @@
       "lon": -5.476352469666611,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-31000",
@@ -7263,6 +7908,8 @@
       "lon": -5.064233762602137,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3103-29000",
@@ -7279,6 +7926,8 @@
       "lon": -4.765719191997011,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-27800",
@@ -7295,6 +7944,8 @@
       "lon": -5.242453199265106,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3102-31600",
@@ -7311,6 +7962,8 @@
       "lon": -2.459686889130563,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2206-20800",
@@ -7327,6 +7980,8 @@
       "lon": -2.463551833001375,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2206-20900",
@@ -7343,6 +7998,8 @@
       "lon": -4.785574720409609,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-28100",
@@ -7405,6 +8062,8 @@
       "lon": -5.293671282719442,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3103-31500",
@@ -7485,6 +8144,8 @@
       "lon": -4.307686824050995,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3101-26600",
@@ -7501,6 +8162,8 @@
       "lon": -5.378769187638989,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3103-29900",
@@ -7517,6 +8180,8 @@
       "lon": -5.390937537533112,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3103-30000",
@@ -7533,6 +8198,7 @@
       "lon": -3.41573147262792,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1302-40700",
@@ -7564,6 +8230,8 @@
       "lon": -4.220918668527864,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4304-34300",
@@ -7580,6 +8248,7 @@
       "lon": -4.422185718668,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39800",
@@ -7596,6 +8265,8 @@
       "lon": 1.424911174620844,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4210-12850",
@@ -7612,6 +8283,8 @@
       "lon": 1.406272751424865,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4210-12900",
@@ -7644,6 +8317,8 @@
       "lon": -4.645214976125489,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-27100",
@@ -7660,6 +8335,8 @@
       "lon": -1.081591150286448,
       "classification": "Good",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc1202-06300",
@@ -7676,6 +8353,8 @@
       "lon": -1.052274439805824,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukc1202-06500",
@@ -7692,6 +8371,8 @@
       "lon": -1.060760245168095,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukc1202-06400",
@@ -7708,6 +8389,8 @@
       "lon": -1.033971487256716,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc1202-06600",
@@ -7724,6 +8407,8 @@
       "lon": -0.249812947593646,
       "classification": "Good",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uke2206-07700",
@@ -7740,6 +8425,7 @@
       "lon": -3.72408813499148,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1701-36700",
@@ -7756,6 +8442,7 @@
       "lon": -4.51220921059881,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1100-39990",
@@ -7772,6 +8459,7 @@
       "lon": -4.29505144385271,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1800-37600",
@@ -7788,6 +8476,7 @@
       "lon": -3.50006591633662,
       "classification": "Sufficient",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1302-40600",
@@ -7804,6 +8493,7 @@
       "lon": -3.486893,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1302-40650",
@@ -7820,6 +8510,8 @@
       "lon": -2.351353705935561,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2206-20300",
@@ -7836,6 +8528,8 @@
       "lon": -1.78854,
       "classification": "Poor",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3308-19001",
@@ -7852,6 +8546,8 @@
       "lon": -1.802179259170573,
       "classification": "Unknown",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk1500-19002",
@@ -7868,6 +8564,8 @@
       "lon": 1.33273,
       "classification": "Good",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1406-10860",
@@ -7884,6 +8582,8 @@
       "lon": -2.28093,
       "classification": "Poor",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2301-36051",
@@ -7900,6 +8600,8 @@
       "lon": -2.41728,
       "classification": "Poor",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd4308-46501",
@@ -7916,6 +8618,8 @@
       "lon": -2.49179,
       "classification": "Poor",
       "sewerageUndertaker": "Severn Trent Water Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukg2100-36070",
@@ -7932,6 +8636,8 @@
       "lon": -2.7567062,
       "classification": "Poor",
       "sewerageUndertaker": "Severn Trent Water Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukg2200-36071",
@@ -7948,6 +8654,8 @@
       "lon": -2.72537,
       "classification": "Poor",
       "sewerageUndertaker": "Severn Trent Water Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukg2200-36060",
@@ -7964,6 +8672,8 @@
       "lon": -3.11285,
       "classification": "Poor",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2304-35201",
@@ -7980,6 +8690,8 @@
       "lon": -0.531866931933285,
       "classification": "Sufficient",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "uke2206-07200",
@@ -8011,6 +8723,8 @@
       "lon": -1.364919659939741,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2300-05600",
@@ -8057,6 +8771,8 @@
       "lon": -0.05673,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2100-14850",
@@ -8073,6 +8789,8 @@
       "lon": -0.748706406679334,
       "classification": "Good",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uke2206-06900",
@@ -8089,6 +8807,8 @@
       "lon": -0.61313993149942,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukf2208-09702",
@@ -8105,6 +8825,8 @@
       "lon": -0.631862,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukf2208-09701",
@@ -8121,6 +8843,8 @@
       "lon": -1.149793713177086,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj3400-17900",
@@ -8137,6 +8861,8 @@
       "lon": -3.780566590690735,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-25200",
@@ -8153,6 +8879,8 @@
       "lon": -3.783918780827058,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-25300",
@@ -8169,6 +8897,8 @@
       "lon": -0.969778459729026,
       "classification": "Good",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukc1202-06700",
@@ -8200,6 +8930,8 @@
       "lon": -0.041673206528577,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2100-14800",
@@ -8231,6 +8963,8 @@
       "lon": 1.145905463450204,
       "classification": "Unknown",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4208-13350",
@@ -8247,6 +8981,8 @@
       "lon": -1.150612952667514,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj3400-18400",
@@ -8263,6 +8999,8 @@
       "lon": -0.66735831817604,
       "classification": "Excellent",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "uke2206-07000",
@@ -8279,6 +9017,8 @@
       "lon": 1.379663263660137,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4204-13000",
@@ -8295,6 +9035,8 @@
       "lon": -3.368019840885045,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4301-22200",
@@ -8311,6 +9053,7 @@
       "lon": -3.6941,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1701-36600",
@@ -8327,6 +9070,7 @@
       "lon": -5.1008,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38255",
@@ -8343,6 +9087,8 @@
       "lon": -2.87006710945084,
       "classification": "Unknown",
       "sewerageUndertaker": "Dwr Cymru Cyfyngedig",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd6300-40752",
@@ -8374,6 +9120,8 @@
       "lon": -4.556801840988395,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3104-33700",
@@ -8390,6 +9138,7 @@
       "lon": -4.6976,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38000",
@@ -8406,6 +9155,8 @@
       "lon": -4.222372667722457,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4304-34100",
@@ -8422,6 +9173,8 @@
       "lon": -0.407209250068013,
       "classification": "Sufficient",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uke2206-07300",
@@ -8438,6 +9191,8 @@
       "lon": -0.395234352981026,
       "classification": "Poor",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uke2206-07400",
@@ -8454,6 +9209,8 @@
       "lon": 1.603939806618614,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1305-10310",
@@ -8470,6 +9227,8 @@
       "lon": 1.121803015201279,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4208-13400",
@@ -8486,6 +9245,8 @@
       "lon": -1.366294907696416,
       "classification": "Good",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukc2300-05500",
@@ -8517,6 +9278,8 @@
       "lon": 0.09501500163392,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2203-14600",
@@ -8533,6 +9296,8 @@
       "lon": -1.106853577320607,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj3400-18000",
@@ -8549,6 +9314,8 @@
       "lon": -1.338116445554125,
       "classification": "Good",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukc1404-05800",
@@ -8565,6 +9332,8 @@
       "lon": -1.341494769532371,
       "classification": "Good",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukc1404-05700",
@@ -8581,6 +9350,8 @@
       "lon": -1.666807530612919,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2102-03800",
@@ -8612,6 +9383,8 @@
       "lon": -3.489340855778572,
       "classification": "Good",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd1103-45600",
@@ -8628,6 +9401,8 @@
       "lon": -4.38643443196306,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3101-26800",
@@ -8644,6 +9419,8 @@
       "lon": -3.070515206918154,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4301-21600",
@@ -8660,6 +9437,8 @@
       "lon": -1.180725164551955,
       "classification": "Good",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukc1101-06100",
@@ -8676,6 +9455,8 @@
       "lon": -1.186040311789457,
       "classification": "Good",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukc1101-06000",
@@ -8692,6 +9473,8 @@
       "lon": -1.164659079919262,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukc1101-06200",
@@ -8708,6 +9491,8 @@
       "lon": -1.478296232612282,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukc2103-04700",
@@ -8724,6 +9509,8 @@
       "lon": -2.824817306435447,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2205-21200",
@@ -8740,6 +9527,8 @@
       "lon": -0.770298440368953,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2403-15900",
@@ -8756,6 +9545,8 @@
       "lon": -5.697623804417832,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-30700",
@@ -8787,6 +9578,8 @@
       "lon": -3.502375831944526,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4306-22900",
@@ -8803,6 +9596,8 @@
       "lon": -1.173158277125955,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj3400-18500",
@@ -8819,6 +9614,8 @@
       "lon": -4.259643504303614,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3101-26570",
@@ -8835,6 +9632,8 @@
       "lon": 0.11683,
       "classification": "Poor",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1201-09801",
@@ -8851,6 +9650,8 @@
       "lon": 0.760235343877594,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4209-11950",
@@ -8867,6 +9668,8 @@
       "lon": -1.948790956624016,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2204-19600",
@@ -8883,6 +9686,8 @@
       "lon": 1.20851236475474,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1305-10100",
@@ -8899,6 +9704,8 @@
       "lon": 0.803842239043013,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukh3100-11770",
@@ -8915,6 +9722,8 @@
       "lon": 0.774182218494224,
       "classification": "Good",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh3100-11780",
@@ -8931,6 +9740,8 @@
       "lon": -0.271301418312344,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2401-15200",
@@ -8947,6 +9758,8 @@
       "lon": -4.722965713318486,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-27400",
@@ -8963,6 +9776,8 @@
       "lon": -3.247920430683992,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4301-21900",
@@ -8979,6 +9794,8 @@
       "lon": -3.243033974073603,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4301-21800",
@@ -8995,6 +9812,8 @@
       "lon": -3.35108537499338,
       "classification": "Excellent",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd1103-45200",
@@ -9011,6 +9830,7 @@
       "lon": -4.56051903360282,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1100-39993",
@@ -9027,6 +9847,8 @@
       "lon": 0.349548479360714,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukf3102-09700",
@@ -9043,6 +9865,8 @@
       "lon": -0.19017729503645,
       "classification": "Closed",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uke1200-08600",
@@ -9059,6 +9883,8 @@
       "lon": -3.645075514028272,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-24900",
@@ -9075,6 +9901,8 @@
       "lon": -3.652114272074961,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-25000",
@@ -9091,6 +9919,8 @@
       "lon": -1.409085633008525,
       "classification": "Good",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2204-05300",
@@ -9107,6 +9937,8 @@
       "lon": 0.672951759736441,
       "classification": "Good",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukh3100-11902",
@@ -9123,6 +9955,8 @@
       "lon": 0.72328663806192,
       "classification": "Good",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukh3100-11830",
@@ -9139,6 +9973,8 @@
       "lon": 0.753632019781134,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh3100-11800",
@@ -9155,6 +9991,8 @@
       "lon": 0.71206117584268,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukh3100-11850",
@@ -9171,6 +10009,8 @@
       "lon": 0.686965498944973,
       "classification": "Good",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh3100-11900",
@@ -9187,6 +10027,7 @@
       "lon": -3.6063,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl2202-36400",
@@ -9218,6 +10059,8 @@
       "lon": -3.027283040613478,
       "classification": "Sufficient",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukd5300-41500",
@@ -9234,6 +10077,8 @@
       "lon": -1.079424297745562,
       "classification": "Poor",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj3100-16600",
@@ -9250,6 +10095,8 @@
       "lon": -0.235579708150519,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2401-15100",
@@ -9266,6 +10113,8 @@
       "lon": 1.678661081999749,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1407-10850",
@@ -9282,6 +10131,8 @@
       "lon": 1.686951566051651,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1407-10830",
@@ -9298,6 +10149,8 @@
       "lon": -1.988831300159957,
       "classification": "Good",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukc2102-03600",
@@ -9344,6 +10197,8 @@
       "lon": -3.040374437657318,
       "classification": "Sufficient",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukd4303-41800",
@@ -9360,6 +10215,8 @@
       "lon": -3.050875569413882,
       "classification": "Sufficient",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukd4303-41900",
@@ -9376,6 +10233,8 @@
       "lon": -3.608570305633333,
       "classification": "Good",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukd1103-45920",
@@ -9392,6 +10251,7 @@
       "lon": -4.20702300713469,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1100-40105",
@@ -9408,6 +10268,8 @@
       "lon": -1.098623643929827,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3400-18100",
@@ -9424,6 +10286,8 @@
       "lon": 0.551467017008555,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj2202-14150",
@@ -9440,6 +10304,8 @@
       "lon": 1.385739372031037,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4204-13200",
@@ -9456,6 +10322,8 @@
       "lon": -3.503618601249454,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4200-24600",
@@ -9472,6 +10340,8 @@
       "lon": 0.982304921293757,
       "classification": "Sufficient",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4208-13700",
@@ -9488,6 +10358,8 @@
       "lon": 1.342764656145183,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4210-12400",
@@ -9504,6 +10376,8 @@
       "lon": -3.67869,
       "classification": "Poor",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-24640",
@@ -9520,6 +10394,8 @@
       "lon": -3.62295,
       "classification": "Poor",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-24620",
@@ -9536,6 +10412,8 @@
       "lon": -1.150364175942044,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3305-16700",
@@ -9567,6 +10445,8 @@
       "lon": -1.952837307031449,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2204-19700",
@@ -9583,6 +10463,8 @@
       "lon": -4.552050639196887,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3104-33500",
@@ -9599,6 +10481,8 @@
       "lon": 0.283819652889238,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukf3102-09200",
@@ -9615,6 +10499,8 @@
       "lon": -1.734679072511629,
       "classification": "Unknown",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uke2204-08905",
@@ -9631,6 +10517,8 @@
       "lon": -1.957511535566838,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2204-19800",
@@ -9647,6 +10535,8 @@
       "lon": -5.075826818894453,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3102-28700",
@@ -9663,6 +10553,7 @@
       "lon": -3.96068419292259,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1800-36900",
@@ -9679,6 +10570,7 @@
       "lon": -4.10991209386774,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39350",
@@ -9695,6 +10587,8 @@
       "lon": 1.045826991432158,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj4202-12120",
@@ -9711,6 +10605,8 @@
       "lon": -3.47464131412136,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4306-22700",
@@ -9727,6 +10623,8 @@
       "lon": -3.493462511562593,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4306-22800",
@@ -9743,6 +10641,7 @@
       "lon": -4.7016,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38100",
@@ -9759,6 +10658,7 @@
       "lon": -4.7034,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38200",
@@ -9775,6 +10675,8 @@
       "lon": -0.169070691536189,
       "classification": "Good",
       "sewerageUndertaker": "Thames Water Utilities Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uki1106-11940",
@@ -9790,7 +10692,8 @@
       "lat": 52.076539,
       "lon": -3.1370779,
       "classification": "Sufficient",
-      "waterType": "coastal",
+      "waterType": "inland",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl2400-38620",
@@ -9822,6 +10725,8 @@
       "lon": -3.861806883994573,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-25600",
@@ -9838,6 +10743,8 @@
       "lon": -3.858161252047522,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-25500",
@@ -9869,6 +10776,8 @@
       "lon": -5.073472516392133,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-32320",
@@ -9885,6 +10794,8 @@
       "lon": -3.535992499539414,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4200-23800",
@@ -9901,6 +10812,8 @@
       "lon": -1.545669214184667,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3400-17500",
@@ -9917,6 +10830,8 @@
       "lon": -5.084326471601593,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-32300",
@@ -9933,6 +10848,7 @@
       "lon": -4.34713650486479,
       "classification": "Sufficient",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1402-38700",
@@ -9949,6 +10865,7 @@
       "lon": -4.25716648416566,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1100-40085",
@@ -9965,6 +10882,7 @@
       "lon": -4.61781599167821,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1100-40000",
@@ -9981,6 +10899,8 @@
       "lon": -4.761636038784498,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3104-33350",
@@ -9997,6 +10917,7 @@
       "lon": -3.6848,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1701-36500",
@@ -10013,6 +10934,8 @@
       "lon": -4.242879702830213,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3101-26560",
@@ -10029,6 +10952,7 @@
       "lon": -4.5178,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1402-38670",
@@ -10045,6 +10969,8 @@
       "lon": -5.201232297230354,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3102-31700",
@@ -10061,6 +10987,8 @@
       "lon": -4.977469481015343,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3104-33000",
@@ -10077,6 +11005,8 @@
       "lon": -5.022661275963966,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3104-32600",
@@ -10108,6 +11038,8 @@
       "lon": -1.431022555333661,
       "classification": "Poor",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukc2203-04900",
@@ -10124,6 +11056,8 @@
       "lon": -1.418995258941081,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2203-05200",
@@ -10140,6 +11074,8 @@
       "lon": -1.428675063333903,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2203-05000",
@@ -10156,6 +11092,8 @@
       "lon": -1.423274938092462,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2203-05100",
@@ -10188,6 +11126,7 @@
       "lon": -4.10211207061525,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1200-39100",
@@ -10204,6 +11143,8 @@
       "lon": -5.402911509386382,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-31350",
@@ -10220,6 +11161,8 @@
       "lon": -4.787649664814819,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-28300",
@@ -10236,6 +11179,8 @@
       "lon": -1.209947267658163,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3400-18600",
@@ -10252,6 +11197,8 @@
       "lon": -3.077281007983427,
       "classification": "Good",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd5400-41000",
@@ -10268,6 +11215,8 @@
       "lon": -1.12032,
       "classification": "Sufficient",
       "sewerageUndertaker": "Thames Water Utilities Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj1403-11947",
@@ -10284,6 +11233,8 @@
       "lon": -3.258361064821108,
       "classification": "Sufficient",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd1102-44200",
@@ -10300,6 +11251,8 @@
       "lon": -3.263165688451287,
       "classification": "Good",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd1102-44300",
@@ -10316,6 +11269,8 @@
       "lon": -3.271628121287912,
       "classification": "Sufficient",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd1102-44400",
@@ -10332,6 +11287,8 @@
       "lon": 1.399130061418621,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4210-12630",
@@ -10348,6 +11305,8 @@
       "lon": 1.273281114220594,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukh3311-11250",
@@ -10379,6 +11338,8 @@
       "lon": -3.57344,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-24680",
@@ -10395,6 +11356,8 @@
       "lon": -1.592797501571366,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2101-04200",
@@ -10427,6 +11390,7 @@
       "lon": -3.2860172,
       "classification": "Poor",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl2202-36325",
@@ -10443,6 +11407,8 @@
       "lon": -3.515298325303885,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4200-23200",
@@ -10475,6 +11441,8 @@
       "lon": -5.042622328517265,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3106-32400",
@@ -10491,6 +11459,8 @@
       "lon": 0.84908086480549,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1305-10000",
@@ -10507,6 +11477,8 @@
       "lon": -4.085168112667163,
       "classification": "Good",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4305-26200",
@@ -10523,6 +11495,7 @@
       "lon": -5.1067,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38250",
@@ -10539,6 +11512,8 @@
       "lon": -2.766537776781116,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk2205-21000",
@@ -10555,6 +11530,8 @@
       "lon": 1.33230604116729,
       "classification": "Sufficient",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj4210-12350",
@@ -10571,6 +11548,8 @@
       "lon": 1.011764270825496,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4202-12100",
@@ -10587,6 +11566,8 @@
       "lon": -3.193165228018245,
       "classification": "Sufficient",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd5400-40750",
@@ -10603,6 +11584,8 @@
       "lon": 0.930236739496514,
       "classification": "Good",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh3306-11750",
@@ -10619,6 +11602,8 @@
       "lon": 1.252784566705983,
       "classification": "Excellent",
       "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukh1305-10125",
@@ -10635,6 +11620,8 @@
       "lon": -0.912101831012926,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2403-16100",
@@ -10651,6 +11638,8 @@
       "lon": 1.363168673097685,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj4210-12450",
@@ -10667,6 +11656,8 @@
       "lon": -2.983376453172808,
       "classification": "Poor",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk1202-35800",
@@ -10683,6 +11674,8 @@
       "lon": -2.966090885973957,
       "classification": "Poor",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk1202-35900",
@@ -10699,6 +11692,8 @@
       "lon": -2.99031356730742,
       "classification": "Poor",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk1202-35700",
@@ -10715,6 +11710,8 @@
       "lon": -4.236176438537621,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk4307-33900",
@@ -10731,6 +11728,8 @@
       "lon": -2.452231804596249,
       "classification": "Good",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2206-20700",
@@ -10747,6 +11746,8 @@
       "lon": -2.442162623042448,
       "classification": "Excellent",
       "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk2206-20600",
@@ -10763,6 +11764,8 @@
       "lon": -1.816182633584011,
       "classification": "Poor",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uke4100-08901",
@@ -10779,6 +11782,8 @@
       "lon": -1.38542,
       "classification": "Poor",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uke4200-08904",
@@ -10795,6 +11800,8 @@
       "lon": -5.544900667001265,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk3105-30500",
@@ -10811,6 +11818,8 @@
       "lon": -0.624582951581293,
       "classification": "Excellent",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uke2206-07100",
@@ -10827,6 +11836,8 @@
       "lon": -1.094251144937834,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3400-18300",
@@ -10843,6 +11854,7 @@
       "lon": -5.29578489261019,
       "classification": "Excellent",
       "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-38500",
@@ -10874,6 +11886,8 @@
       "lon": -1.445143727316345,
       "classification": "Excellent",
       "sewerageUndertaker": "Northumbrian Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukc2203-04800",
@@ -10890,6 +11904,7 @@
       "lon": -3.27398156911712,
       "classification": "Good",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl2202-36200",
@@ -10906,6 +11921,8 @@
       "lon": -4.55763724415553,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukk3104-33400",
@@ -10922,6 +11939,8 @@
       "lon": -0.207501208719827,
       "classification": "Excellent",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "uke1200-08200",
@@ -10938,6 +11957,8 @@
       "lon": 0.718147800278008,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj2204-14000",
@@ -10954,6 +11975,8 @@
       "lon": -2.953765741222596,
       "classification": "Excellent",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd1203-45700",
@@ -10970,6 +11993,8 @@
       "lon": -2.961464279216157,
       "classification": "Excellent",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd1203-45625",
@@ -10986,6 +12011,8 @@
       "lon": -2.922541305375967,
       "classification": "Excellent",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd1203-45650",
@@ -11002,6 +12029,8 @@
       "lon": -2.922499452360544,
       "classification": "Excellent",
       "sewerageUndertaker": "United Utilities Water Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukd1203-45675",
@@ -11018,6 +12047,7 @@
       "lon": -4.6849,
       "classification": "Sufficient",
       "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "nrw",
         "sourceId": "ukl1403-37940",
@@ -11034,6 +12064,8 @@
       "lon": 0.036014677995315,
       "classification": "Excellent",
       "sewerageUndertaker": "Yorkshire Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "uke1200-08900",
@@ -11050,6 +12082,8 @@
       "lon": -1.295961521722681,
       "classification": "Poor",
       "sewerageUndertaker": "Thames Water Utilities Limited",
+      "waterType": "inland",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj1402-11946",
@@ -11066,6 +12100,8 @@
       "lon": -4.209713896735271,
       "classification": "Excellent",
       "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukk4304-34400",
@@ -11082,6 +12118,8 @@
       "lon": -0.384825087481915,
       "classification": "Good",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj2407-15400",
@@ -11098,6 +12136,8 @@
       "lon": -0.36086,
       "classification": "Poor",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
       "source": {
         "api": "ea",
         "sourceId": "ukj2407-15350",
@@ -11114,6 +12154,8 @@
       "lon": -1.133213855766716,
       "classification": "Excellent",
       "sewerageUndertaker": "Southern Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
       "source": {
         "api": "ea",
         "sourceId": "ukj3400-18350",
