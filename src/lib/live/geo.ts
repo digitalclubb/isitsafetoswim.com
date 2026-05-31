@@ -42,6 +42,7 @@ export function osgb36ToWgs84(easting: number, northing: number): LatLon {
 
 	let lat = lat0;
 	let m = 0;
+	let iterations = 0;
 	do {
 		lat = (northing - n0 - m) / (a * f0) + lat;
 		const ma = (1 + n + 1.25 * n2 + 1.25 * n3) * (lat - lat0);
@@ -49,7 +50,9 @@ export function osgb36ToWgs84(easting: number, northing: number): LatLon {
 		const mc = (1.875 * n2 + 1.875 * n3) * Math.sin(2 * (lat - lat0)) * Math.cos(2 * (lat + lat0));
 		const md = (35 / 24) * n3 * Math.sin(3 * (lat - lat0)) * Math.cos(3 * (lat + lat0));
 		m = b * f0 * (ma - mb + mc - md);
-	} while (Math.abs(northing - n0 - m) >= 0.00001);
+		iterations += 1;
+		// Cap iterations so a malformed (out-of-range) northing cannot spin forever.
+	} while (Math.abs(northing - n0 - m) >= 0.00001 && iterations < 30);
 
 	const sinLat = Math.sin(lat);
 	const cosLat = Math.cos(lat);

@@ -9,9 +9,9 @@ import { fetchJson } from './http';
  *
  * The v2 API is fully open: no key, no OAuth, a plain GET. It returns one record
  * per monitor for the whole region (no spatial query) with coordinates as OSGB36
- * easting/northing, which must be reprojected to WGS84. We fetch the set once,
- * keep only monitors active or recently active, cache them in memory for five
- * minutes, then reproject and distance-filter per site.
+ * easting/northing, which must be reprojected to WGS84. We fetch and parse the
+ * set once, cache it in memory for five minutes, then apply the distance and
+ * 48-hour recency gates per site.
  *
  *   https://docs.api.thameswater.co.uk/   (licence: data.thameswater.co.uk/s/terms-of-service)
  */
@@ -102,13 +102,6 @@ export function parseThamesRecord(raw: ThamesRecord): LocatedDischarge | null {
 	};
 }
 
-/** Keep only monitors discharging now or flagged active in the last 48 hours,
- *  so we reproject and cache a handful of records rather than every monitor. */
-function isRecent(raw: ThamesRecord): boolean {
-	if (isDischarging(str(pick(raw, ['alertStatus', 'AlertStatus'])))) return true;
-	return pick(raw, ['alertPast48Hours', 'AlertPast48Hours']) === true;
-}
-
 let cache: { at: number; located: LocatedDischarge[] } | null = null;
 let inflight: Promise<LocatedDischarge[]> | null = null;
 
@@ -119,20 +112,33 @@ async function loadThamesDischarges(signal?: AbortSignal): Promise<LocatedDischa
 	inflight = (async () => {
 		try {
 			const raw: ThamesRecord[] = [];
+			let truncated = true;
 			for (let page = 0; page < MAX_PAGES; page += 1) {
 				const url = `${STATUS_ENDPOINT}?limit=${PAGE_SIZE}&offset=${page * PAGE_SIZE}`;
-				const body = await fetchJson<{ items?: ThamesRecord[] }>(url, { signal });
-				const items = Array.isArray(body) ? (body as ThamesRecord[]) : (body.items ?? []);
+				const body = await fetchJson<unknown>(url, { signal });
+				const items = Array.isArray(body)
+					? (body as ThamesRecord[])
+					: Array.isArray((body as { items?: unknown }).items)
+						? (body as { items: ThamesRecord[] }).items
+						: null;
+				// A reshaped response (neither an array nor {items:[...]}) is an error,
+				// not an empty result: throwing keeps the last good snapshot rather than
+				// caching nothing and hiding real discharges.
+				if (items === null) throw new Error('unexpected Thames Water response shape');
 				raw.push(...items);
-				if (items.length < PAGE_SIZE) break;
+				if (items.length < PAGE_SIZE) {
+					truncated = false;
+					break;
+				}
 			}
-			const located = raw
-				.filter(isRecent)
-				.map(parseThamesRecord)
-				.filter((d): d is LocatedDischarge => d !== null);
+			if (truncated) console.warn(`[thames] hit MAX_PAGES=${MAX_PAGES}, results may be truncated`);
+			// No pre-filter: parseThamesRecord keeps only monitors with coordinates and
+			// usable timing, and fetchThamesDischarges applies the authoritative 48h gate.
+			const located = raw.map(parseThamesRecord).filter((d): d is LocatedDischarge => d !== null);
 			cache = { at: Date.now(), located };
 			return located;
-		} catch {
+		} catch (err) {
+			console.warn(`[thames] discharge fetch failed: ${(err as Error).message}`);
 			return cache?.located ?? [];
 		} finally {
 			inflight = null;
