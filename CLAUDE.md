@@ -115,7 +115,7 @@ Bathing season runs 15 May to 30 September. Outside that window the verdict adds
 | Scotland (SEPA) | `map.sepa.org.uk/server/rest/services/Open/Environmental_Monitoring/MapServer/1/query` | None | SEPA open data |
 | Northern Ireland (DAERA) | `services-eu1.arcgis.com/.../Bathing_Water_Monitoring_Points_Public_View_PRD/FeatureServer/0/query` | None | Crown copyright |
 | Storm overflows (9 English + Welsh water companies) | Stream / ArcGIS FeatureServer per company | None | OGL v3 |
-| Thames Water CSO | `prod-tw-opendata-app.uk-e1.cloudhub.io/data/STE/v1/DischargeCurrentStatus` | `client_id`/`client_secret` headers | OGL v3 |
+| Thames Water CSO | `api.thameswater.co.uk/opendata/v2/discharge/status` | None (open v2 API) | Thames Water open data terms |
 | Rainfall and river levels | `environment.data.gov.uk/flood-monitoring/...` | None | OGL v3 |
 
 Attribution is rendered per location page via `src/lib/live/attribution.ts`. Do not strip the attribution lines.
@@ -160,7 +160,7 @@ pnpm data:images        # regenerate PNG icons and OG card
 
 Documented for future sessions, not blocking launch:
 
-1. Thames Water CSO is wired in `src/lib/live/thames.ts` (gated on `THAMES_WATER_CLIENT_ID`/`THAMES_WATER_CLIENT_SECRET`, falls through to no discharges when unset). It is `client_id`/`client_secret` headers, not OAuth as once assumed. Once credentials are live, verify the response envelope and field casing against a real `DischargeCurrentStatus` response.
+1. Thames Water CSO is wired in `src/lib/live/thames.ts` against the open v2 API (`api.thameswater.co.uk/opendata/v2/discharge/status`, no key, no OAuth). The old `client_id`/`client_secret` CloudHub API is retired. Done, no setup needed.
 2. Per-location OG share cards rendered at build time via @resvg/resvg-js.
 3. Postcode entry on the homepage alongside name search and geolocation.
 4. A 7-day classification or sample sparkline on the location page.

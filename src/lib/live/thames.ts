@@ -5,33 +5,24 @@ import { fetchJson } from './http';
 /**
  * Thames Water is the only large English/Welsh sewerage undertaker not on the
  * shared ArcGIS storm-overflow feeds, so its combined sewer overflow data
- * (which covers London and the tidal Thames) comes from its own open data API.
+ * (covering London and the tidal Thames) comes from its own open data API.
  *
- * Unlike the ArcGIS feeds this one authenticates with static client_id /
- * client_secret headers (not OAuth), returns one record per monitor for the
- * whole region rather than a spatial query, and reports coordinates as OSGB36
- * easting/northing which must be reprojected to WGS84. The full recent-activity
- * set is fetched once and cached in memory, then distance-filtered per site.
+ * The v2 API is fully open: no key, no OAuth, a plain GET. It returns one record
+ * per monitor for the whole region (no spatial query) with coordinates as OSGB36
+ * easting/northing, which must be reprojected to WGS84. We fetch the set once,
+ * keep only monitors active or recently active, cache them in memory for five
+ * minutes, then reproject and distance-filter per site.
  *
- * Dormant until THAMES_WATER_CLIENT_ID and THAMES_WATER_CLIENT_SECRET are set;
- * with no credentials it returns no discharges, exactly as before.
+ *   https://docs.api.thameswater.co.uk/   (licence: data.thameswater.co.uk/s/terms-of-service)
  */
-const STATUS_ENDPOINT =
-	'https://prod-tw-opendata-app.uk-e1.cloudhub.io/data/STE/v1/DischargeCurrentStatus';
+const STATUS_ENDPOINT = 'https://api.thameswater.co.uk/opendata/v2/discharge/status';
+const PAGE_SIZE = 1000;
+const MAX_PAGES = 5;
 const MAX_DISTANCE_M = 10_000;
 const RECENT_WINDOW_MS = 48 * 60 * 60 * 1000;
 const TTL_MS = 5 * 60_000;
 
-interface ThamesRecord {
-	LocationName?: unknown;
-	ReceivingWaterCourse?: unknown;
-	X?: unknown;
-	Y?: unknown;
-	AlertStatus?: unknown;
-	MostRecentDischargeAlertStart?: unknown;
-	MostRecentDischargeAlertStop?: unknown;
-	StatusChange?: unknown;
-}
+type ThamesRecord = Record<string, unknown>;
 
 interface LocatedDischarge {
 	lat: number;
@@ -41,6 +32,14 @@ interface LocatedDischarge {
 	endedAt?: string;
 	outfallName: string;
 	receivingWater?: string;
+}
+
+function pick(raw: ThamesRecord, keys: string[]): unknown {
+	for (const k of keys) {
+		const v = raw[k];
+		if (v !== undefined && v !== null) return v;
+	}
+	return undefined;
 }
 
 function num(value: unknown): number | undefined {
@@ -56,25 +55,37 @@ function str(value: unknown): string | undefined {
 function iso(value: unknown): string | undefined {
 	const s = str(value);
 	if (!s) return undefined;
-	const t = Date.parse(s);
+	// Thames timestamps are UK local with no timezone. The verdict windows are
+	// coarse (12h recovery, 48h recency), so we parse them as UTC deterministically
+	// rather than pull in timezone handling; the sub-hour BST skew never changes a
+	// verdict. Only append Z when no offset is already present.
+	const normalised = /[zZ]|[+-]\d\d:?\d\d$/.test(s) ? s : `${s}Z`;
+	const t = Date.parse(normalised);
 	return Number.isFinite(t) ? new Date(t).toISOString() : undefined;
 }
 
+function isDischarging(status: string | undefined): boolean {
+	const s = status?.toLowerCase() ?? '';
+	return /discharg/.test(s) && !/not[\s-]*discharg/.test(s);
+}
+
 /**
- * Pure: normalise one DischargeCurrentStatus record into a located discharge,
+ * Pure: normalise one discharge/status record into a located discharge,
  * reprojecting its OSGB36 coordinates, or null when it lacks usable coordinates
- * or timing. Exported for unit testing.
+ * or timing. Reads the v2 camelCase fields and tolerates the legacy PascalCase.
+ * Exported for unit testing.
  */
 export function parseThamesRecord(raw: ThamesRecord): LocatedDischarge | null {
-	const x = num(raw.X);
-	const y = num(raw.Y);
+	const x = num(pick(raw, ['x', 'X']));
+	const y = num(pick(raw, ['y', 'Y']));
 	if (x === undefined || y === undefined) return null;
 	const { lat, lon } = osgb36ToWgs84(x, y);
 
-	const status = str(raw.AlertStatus)?.toLowerCase() ?? '';
-	const ongoing = /discharg/.test(status) && !/not[\s-]*discharg/.test(status);
-	const startedAt = iso(raw.MostRecentDischargeAlertStart) ?? iso(raw.StatusChange);
-	const endedAt = iso(raw.MostRecentDischargeAlertStop);
+	const ongoing = isDischarging(str(pick(raw, ['alertStatus', 'AlertStatus'])));
+	const startedAt =
+		iso(pick(raw, ['mostRecentDischargeAlertStart', 'MostRecentDischargeAlertStart'])) ??
+		iso(pick(raw, ['statusChanged', 'StatusChange', 'StatusChanged']));
+	const endedAt = iso(pick(raw, ['mostRecentDischargeAlertStop', 'MostRecentDischargeAlertStop']));
 	// Without a start we cannot reason about recency, and a finished event needs
 	// an end time to enter the horizon filter.
 	if (!startedAt) return null;
@@ -86,33 +97,39 @@ export function parseThamesRecord(raw: ThamesRecord): LocatedDischarge | null {
 		ongoing,
 		startedAt,
 		endedAt: ongoing ? undefined : endedAt,
-		outfallName: str(raw.LocationName) ?? 'Outfall',
-		receivingWater: str(raw.ReceivingWaterCourse)
+		outfallName: str(pick(raw, ['locationName', 'LocationName'])) ?? 'Outfall',
+		receivingWater: str(pick(raw, ['receivingWaterCourse', 'ReceivingWaterCourse']))
 	};
+}
+
+/** Keep only monitors discharging now or flagged active in the last 48 hours,
+ *  so we reproject and cache a handful of records rather than every monitor. */
+function isRecent(raw: ThamesRecord): boolean {
+	if (isDischarging(str(pick(raw, ['alertStatus', 'AlertStatus'])))) return true;
+	return pick(raw, ['alertPast48Hours', 'AlertPast48Hours']) === true;
 }
 
 let cache: { at: number; located: LocatedDischarge[] } | null = null;
 let inflight: Promise<LocatedDischarge[]> | null = null;
 
 async function loadThamesDischarges(signal?: AbortSignal): Promise<LocatedDischarge[]> {
-	const clientId = process.env.THAMES_WATER_CLIENT_ID;
-	const clientSecret = process.env.THAMES_WATER_CLIENT_SECRET;
-	if (!clientId || !clientSecret) return [];
-
 	if (cache && Date.now() - cache.at < TTL_MS) return cache.located;
 	if (inflight) return inflight;
 
 	inflight = (async () => {
 		try {
-			const url = `${STATUS_ENDPOINT}?col_1=AlertPast48Hours&operand_1=eq&value_1=true`;
-			const body = await fetchJson<unknown>(url, {
-				signal,
-				headers: { client_id: clientId, client_secret: clientSecret }
-			});
-			const items = Array.isArray(body)
-				? (body as ThamesRecord[])
-				: ((body as { items?: ThamesRecord[] }).items ?? []);
-			const located = items.map(parseThamesRecord).filter((d): d is LocatedDischarge => d !== null);
+			const raw: ThamesRecord[] = [];
+			for (let page = 0; page < MAX_PAGES; page += 1) {
+				const url = `${STATUS_ENDPOINT}?limit=${PAGE_SIZE}&offset=${page * PAGE_SIZE}`;
+				const body = await fetchJson<{ items?: ThamesRecord[] }>(url, { signal });
+				const items = Array.isArray(body) ? (body as ThamesRecord[]) : (body.items ?? []);
+				raw.push(...items);
+				if (items.length < PAGE_SIZE) break;
+			}
+			const located = raw
+				.filter(isRecent)
+				.map(parseThamesRecord)
+				.filter((d): d is LocatedDischarge => d !== null);
 			cache = { at: Date.now(), located };
 			return located;
 		} catch {
