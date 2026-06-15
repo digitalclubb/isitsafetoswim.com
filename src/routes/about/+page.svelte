@@ -70,7 +70,7 @@
 		</p>
 	</section>
 
-	<section>
+	<section id="cannot-tell-you">
 		<h2>What we cannot tell you</h2>
 		<p>
 			Bathing water classification measures bacteria. It does not measure chemicals, jellyfish,

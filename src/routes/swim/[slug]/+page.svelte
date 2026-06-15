@@ -140,6 +140,12 @@
 			hydrating={!liveOverride}
 		/>
 
+		<p class="caveat">
+			This is a water-quality verdict only. It does not account for tides, rip currents, cold
+			water or lifeguard cover. Always check local signs before you enter the water.
+			<a href="/about#cannot-tell-you">What we cannot tell you</a>.
+		</p>
+
 		<section class="block" aria-labelledby="why">
 			<h2 id="why">Why this verdict</h2>
 			{#key factorSignature}
@@ -254,6 +260,20 @@
 
 	.back a {
 		text-decoration: none;
+	}
+
+	.caveat {
+		margin: var(--space-4) 0 0;
+		padding-left: var(--space-4);
+		border-left: var(--rule-weight-strong) solid var(--rule-strong);
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		line-height: 1.5;
+		color: var(--ink-soft);
+	}
+
+	.caveat a {
+		color: inherit;
 	}
 
 	.block {
