@@ -32,7 +32,7 @@
 </script>
 
 <a class="card" href={`/swim/${location.slug}`} data-tone={tone}>
-	<span class="badge">{location.classification}</span>
+	<span class="badge"><span class="sr-only">Classification: </span>{location.classification}</span>
 	<span class="name">{location.name}</span>
 	<span class="meta">{meta}</span>
 </a>
