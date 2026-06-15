@@ -2,9 +2,29 @@
 	import LocationCard from '$lib/components/LocationCard.svelte';
 	import NearMeButton from '$lib/components/NearMeButton.svelte';
 	import SearchBox from '$lib/components/SearchBox.svelte';
+	import { safeJsonLd } from '$lib/seo/jsonLd';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+
+	const structuredData = [
+		{
+			'@context': 'https://schema.org',
+			'@type': 'WebSite',
+			name: 'Is it safe to swim?',
+			url: 'https://isitsafetoswim.com/'
+		},
+		{
+			'@context': 'https://schema.org',
+			'@type': 'Organization',
+			name: 'Is it safe to swim?',
+			url: 'https://isitsafetoswim.com/',
+			logo: 'https://isitsafetoswim.com/icon-512.png',
+			description:
+				'An independent service giving plain-English water-quality verdicts for every designated UK bathing water. Not affiliated with any regulator or water company.',
+			areaServed: 'United Kingdom'
+		}
+	];
 </script>
 
 <svelte:head>
@@ -22,6 +42,7 @@
 	<meta property="og:url" content="https://isitsafetoswim.com/" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<link rel="canonical" href="https://isitsafetoswim.com/" />
+	{@html `<script type="application/ld+json">${safeJsonLd(structuredData)}</script>`}
 </svelte:head>
 
 <section class="hero">

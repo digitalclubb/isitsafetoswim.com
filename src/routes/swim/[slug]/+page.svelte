@@ -11,6 +11,7 @@
 	import WaterTemperature from '$lib/components/WaterTemperature.svelte';
 	import { findNearestSlim } from '$lib/data/search-index';
 	import type { LiveLocationData } from '$lib/data/types';
+	import { safeJsonLd } from '$lib/seo/jsonLd';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -62,13 +63,6 @@
 
 	let verdictSentence = $derived(`${live.verdict.headline} ${live.verdict.reason}`);
 	let metaDescription = $derived(verdictSentence);
-
-	function safeJsonLd(value: unknown): string {
-		return JSON.stringify(value)
-			.replace(/</g, '\\u003c')
-			.replace(/>/g, '\\u003e')
-			.replace(/&/g, '\\u0026');
-	}
 
 	let jsonLd = $derived({
 		'@context': 'https://schema.org',
