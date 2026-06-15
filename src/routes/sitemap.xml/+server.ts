@@ -1,4 +1,5 @@
 import { getAllLocations, getIndexMeta } from '$lib/data/locations';
+import { getAllPlaces } from '$lib/data/places';
 
 export const prerender = true;
 
@@ -18,8 +19,15 @@ export const GET = () => {
 	const lastmod = new Date(meta.generatedAt).toISOString().slice(0, 10);
 	const urls = [
 		`<url><loc>${BASE}/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>`,
-		`<url><loc>${BASE}/about</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>`
+		`<url><loc>${BASE}/about</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>`,
+		`<url><loc>${BASE}/beaches</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>`
 	];
+
+	for (const place of getAllPlaces()) {
+		urls.push(
+			`<url><loc>${BASE}/beaches/${escapeXml(place.slug)}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>`
+		);
+	}
 
 	for (const loc of getAllLocations()) {
 		urls.push(

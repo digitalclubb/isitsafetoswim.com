@@ -295,6 +295,10 @@
 				</div>
 			</section>
 		{/if}
+
+		<p class="more">
+			<a href={`/beaches/${data.hub.slug}`}>See all bathing waters in {data.hub.name} →</a>
+		</p>
 	</div>
 </article>
 
@@ -309,6 +313,15 @@
 	}
 
 	.back a {
+		text-decoration: none;
+	}
+
+	.more {
+		margin: var(--space-6) 0 0;
+		font-size: var(--text-sm);
+	}
+
+	.more a {
 		text-decoration: none;
 	}
 

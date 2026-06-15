@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { getLocationBySlug } from '$lib/data/locations';
+import { getHubForLocation } from '$lib/data/places';
 import { buildCachedData } from '$lib/live/verdict';
 import type { PageServerLoad } from './$types';
 
@@ -24,8 +25,11 @@ export const load: PageServerLoad = ({ params, setHeaders }) => {
 		'cache-control': 'public, s-maxage=3600, stale-while-revalidate=86400'
 	});
 
+	const hub = getHubForLocation(location.country, location.region);
+
 	return {
 		location,
-		live: buildCachedData(location)
+		live: buildCachedData(location),
+		hub: { slug: hub.slug, name: hub.name }
 	};
 };

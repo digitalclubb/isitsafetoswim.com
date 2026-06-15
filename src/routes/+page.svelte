@@ -67,8 +67,10 @@
 		</div>
 
 		<p class="coverage">
-			Every designated bathing water in England, Wales, Scotland and Northern
-			Ireland. {data.meta.count} sites in total.
+			Every designated bathing water in <a href="/beaches/england">England</a>,
+			<a href="/beaches/wales">Wales</a>, <a href="/beaches/scotland">Scotland</a> and
+			<a href="/beaches/northern-ireland">Northern Ireland</a>. {data.meta.count} sites in total.
+			<a href="/beaches">Browse by area →</a>
 		</p>
 	</div>
 </section>
