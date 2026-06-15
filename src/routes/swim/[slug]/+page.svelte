@@ -60,7 +60,8 @@
 		}.`
 	);
 
-	let metaDescription = $derived(`${live.verdict.headline} ${live.verdict.reason}`);
+	let verdictSentence = $derived(`${live.verdict.headline} ${live.verdict.reason}`);
+	let metaDescription = $derived(verdictSentence);
 
 	function safeJsonLd(value: unknown): string {
 		return JSON.stringify(value)
@@ -92,7 +93,41 @@
 			{
 				'@type': 'PropertyValue',
 				name: 'Current verdict',
-				value: live.verdict.headline + ' ' + live.verdict.reason
+				value: verdictSentence
+			}
+		]
+	});
+
+	let faqLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: [
+			{
+				'@type': 'Question',
+				name: `Is it safe to swim at ${location.name}?`,
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: verdictSentence
+				}
+			}
+		]
+	});
+
+	let breadcrumbLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{
+				'@type': 'ListItem',
+				position: 1,
+				name: 'All bathing waters',
+				item: 'https://isitsafetoswim.com/'
+			},
+			{
+				'@type': 'ListItem',
+				position: 2,
+				name: location.name,
+				item: `https://isitsafetoswim.com/swim/${location.slug}`
 			}
 		]
 	});
@@ -125,7 +160,7 @@
 	<meta property="og:url" content={`https://isitsafetoswim.com/swim/${location.slug}`} />
 	<meta name="twitter:card" content="summary_large_image" />
 	<link rel="canonical" href={`https://isitsafetoswim.com/swim/${location.slug}`} />
-	{@html `<script type="application/ld+json">${safeJsonLd(jsonLd)}</script>`}
+	{@html `<script type="application/ld+json">${safeJsonLd([jsonLd, faqLd, breadcrumbLd])}</script>`}
 </svelte:head>
 
 <article class="page">
