@@ -1,0 +1,28 @@
+name: Weekly rebuild
+
+# Bathing-water classifications are republished about once a year, and the
+# area pages (cleanest beaches per region) are derived from them. A weekly
+# rebuild re-runs the production build so the catalogue and every derived page
+# stay current with no manual effort. Trigger it by hand from the Actions tab
+# whenever a fresh deploy is wanted.
+on:
+  schedule:
+    - cron: '0 6 * * 1' # 06:00 UTC every Monday
+  workflow_dispatch: {}
+
+permissions: {}
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Trigger Vercel deploy hook
+        env:
+          DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$DEPLOY_HOOK" ]; then
+            echo "VERCEL_DEPLOY_HOOK secret is not set. Add it in Settings > Secrets and variables > Actions." >&2
+            exit 1
+          fi
+          curl -fsS --retry 3 --retry-connrefused --max-time 30 -X POST "$DEPLOY_HOOK"
