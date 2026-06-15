@@ -48,6 +48,13 @@
 	let factorSignature = $derived(
 		live.verdict.factors.map((f) => `${f.label}=${f.value}`).join('|')
 	);
+
+	// England and Wales expose live daily forecasts, samples and storm-overflow
+	// feeds. Scotland (SEPA) and Northern Ireland (DAERA) do not, so their
+	// verdicts rest on the annual classification and we say so rather than
+	// implying we checked feeds that do not exist for those sites.
+	let liveSignals = $derived(location.country === 'England' || location.country === 'Wales');
+	let regulator = $derived(location.country === 'Scotland' ? 'SEPA' : 'DAERA');
 	let nearby = $derived(
 		findNearestSlim({ lat: location.lat, lon: location.lon }, 5)
 			.map((r) => r.location)
@@ -206,6 +213,20 @@
 					label="Checking for recent sewage discharges and the latest sample"
 					lines={2}
 				/>
+			</section>
+		{:else if !liveSignals && live.recentDischarges.length === 0 && !live.latestSample}
+			<section
+				class="block"
+				aria-labelledby="coverage"
+				in:slide={{ duration: 280, delay: 200, easing: cubicOut }}
+			>
+				<h2 id="coverage" class="muted-h">Coverage for this site</h2>
+				<p class="muted">
+					{regulator} does not publish a daily pollution-risk forecast or live storm-overflow
+					data for bathing waters in {location.country}, so this verdict reflects the most
+					recent annual classification rather than today's conditions. We show live forecasts,
+					sample readings and sewage-overflow alerts for England and Wales only.
+				</p>
 			</section>
 		{:else if live.recentDischarges.length === 0 && !live.latestSample}
 			<section
