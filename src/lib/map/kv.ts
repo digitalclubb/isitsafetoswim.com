@@ -1,8 +1,10 @@
 import { createClient } from 'redis';
 import { env } from '$env/dynamic/private';
+import type { ProfileCache } from './profiles';
 import type { MapColours } from './types';
 
-const KEY = 'map:colours';
+const COLOURS_KEY = 'map:colours';
+const PROFILES_KEY = 'map:profiles';
 
 // `createClient({ url })` infers a narrower type than `createClient`'s default
 // generics, so we take the type from this wrapper rather than from the bare
@@ -44,21 +46,26 @@ function connect(): RedisClient | null {
 	return client;
 }
 
-export async function readColours(): Promise<MapColours | null> {
+async function readJson<T>(key: string): Promise<T | null> {
 	const c = connect();
 	if (!c) return null;
 	try {
 		await ready;
-		const raw = await c.get(KEY);
-		return raw ? (JSON.parse(raw) as MapColours) : null;
+		const raw = await c.get(key);
+		return raw ? (JSON.parse(raw) as T) : null;
 	} catch {
 		return null;
 	}
 }
 
-export async function writeColours(blob: MapColours): Promise<void> {
+async function writeJson(key: string, value: unknown): Promise<void> {
 	const c = connect();
 	if (!c) throw new Error('REDIS_URL is not configured');
 	await ready;
-	await c.set(KEY, JSON.stringify(blob));
+	await c.set(key, JSON.stringify(value));
 }
+
+export const readColours = () => readJson<MapColours>(COLOURS_KEY);
+export const writeColours = (blob: MapColours) => writeJson(COLOURS_KEY, blob);
+export const readProfiles = () => readJson<ProfileCache>(PROFILES_KEY);
+export const writeProfiles = (cache: ProfileCache) => writeJson(PROFILES_KEY, cache);

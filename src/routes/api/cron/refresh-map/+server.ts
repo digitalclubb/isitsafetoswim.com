@@ -27,9 +27,9 @@ export const GET: RequestHandler = async ({ request }) => {
 	const now = new Date();
 	const { blob, computed, skipped, total } = await computeMapColours(now, request.signal);
 
-	// If a shared upstream host fails en masse (the EA and Wales profile host can
-	// fail together), most beaches drop out. Keep the previous good snapshot
-	// rather than overwriting it with a mostly-neutral one.
+	// A backstop: profiles now come from the daily cache so a profile outage no
+	// longer drops beaches, but a catastrophic failure (e.g. the whole compute)
+	// still should not overwrite a good snapshot with a mostly-neutral one.
 	if (computed < total * 0.5) {
 		return json({
 			ok: false,

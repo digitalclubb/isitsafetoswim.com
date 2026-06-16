@@ -1,6 +1,10 @@
 {
 	"crons": [
 		{
+			"path": "/api/cron/refresh-profiles",
+			"schedule": "0 5 * * *"
+		},
+		{
 			"path": "/api/cron/refresh-map",
 			"schedule": "0 * * * *"
 		}
