@@ -180,13 +180,17 @@
 		source?.setData(data);
 	});
 
-	// Centre on the user and drop a marker once they share their location.
+	// Centre on the user and drop a marker once they share their location. Read
+	// userLocation first so the effect always tracks it: map and maplibre are
+	// plain (non-reactive) variables, so guarding on them first would short
+	// circuit before userLocation is read and the effect would never re-run.
 	$effect(() => {
-		if (!map || !maplibre || !userLocation) return;
-		map.flyTo({ center: [userLocation.lon, userLocation.lat], zoom: 9 });
+		const here = userLocation;
+		if (!here || !map || !maplibre) return;
+		map.flyTo({ center: [here.lon, here.lat], zoom: 9 });
 		userMarker?.remove();
-		userMarker = new maplibre.Marker({ color: '#0b1f2a' })
-			.setLngLat([userLocation.lon, userLocation.lat])
+		userMarker = new maplibre.Marker({ color: '#1d4ed8' })
+			.setLngLat([here.lon, here.lat])
 			.addTo(map);
 	});
 </script>
