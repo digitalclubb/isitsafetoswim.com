@@ -1,4 +1,4 @@
-import type { LiveLocationData, Location, VerdictResult } from '$lib/data/types';
+import type { DischargeEvent, LiveLocationData, Location, VerdictResult } from '$lib/data/types';
 import { decideAt, emptyVerdict } from '$lib/verdict/engine';
 import { attributionFor, type OverflowSource } from './attribution';
 import { fetchRecentDischarges, isThamesWater } from './discharges';
@@ -42,6 +42,44 @@ export function buildCachedData(location: Location): LiveLocationData {
 	};
 }
 
+type Profile = Awaited<ReturnType<typeof fetchProfile>>;
+
+/**
+ * Reduce the live signals to a single verdict. Shared by the per-location page
+ * (through buildLiveData) and the map precompute so both produce exactly the
+ * same verdict from the same inputs. A site we could not reach at all returns
+ * the unavailable verdict, which the precompute treats as "no colour yet".
+ */
+export function deriveVerdict(
+	location: Location,
+	profile: Profile | null,
+	recentDischarges: DischargeEvent[],
+	rainfall24hMm: number | null,
+	now: Date
+): VerdictResult {
+	const profileOk = profile?.ok ?? false;
+	const everythingFailed = !profileOk && recentDischarges.length === 0 && rainfall24hMm === null;
+	if (everythingFailed) {
+		return emptyVerdict(
+			'We could not reach the live data sources for this site. Try again in a few minutes.',
+			now
+		);
+	}
+	return decideAt(
+		{
+			classification: profile?.classification ?? location.classification,
+			latestSample: profile?.latestSample ?? null,
+			riskForecast: profile?.riskForecast ?? null,
+			recentDischarges,
+			rainfall24hMm,
+			waterType: location.waterType,
+			rainImpacted: location.rainImpacted,
+			now
+		},
+		profileOk ? 'fresh' : 'cached'
+	);
+}
+
 export async function buildLiveData(
 	location: Location,
 	signal?: AbortSignal
@@ -57,7 +95,6 @@ export async function buildLiveData(
 		]);
 
 	const profile = profileResult.status === 'fulfilled' ? profileResult.value : null;
-	const profileOk = profile?.ok ?? false;
 	const recentDischarges = dischargesResult.status === 'fulfilled' ? dischargesResult.value : [];
 	const rainfall24hMm = rainfallResult.status === 'fulfilled' ? rainfallResult.value : null;
 	const sampleHistory = historyResult.status === 'fulfilled' ? historyResult.value : [];
@@ -74,29 +111,7 @@ export async function buildLiveData(
 				? 'thames'
 				: 'ogl';
 
-	const everythingFailed = !profileOk && recentDischarges.length === 0 && rainfall24hMm === null;
-
-	let verdict: VerdictResult;
-	if (everythingFailed) {
-		verdict = emptyVerdict(
-			'We could not reach the live data sources for this site. Try again in a few minutes.',
-			now
-		);
-	} else {
-		verdict = decideAt(
-			{
-				classification,
-				latestSample,
-				riskForecast,
-				recentDischarges,
-				rainfall24hMm,
-				waterType: location.waterType,
-				rainImpacted: location.rainImpacted,
-				now
-			},
-			profileOk ? 'fresh' : 'cached'
-		);
-	}
+	const verdict = deriveVerdict(location, profile, recentDischarges, rainfall24hMm, now);
 
 	return {
 		location,
