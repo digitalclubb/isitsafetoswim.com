@@ -60,12 +60,15 @@ isitsafetoswim.com/
 │   │   └── search-index.json       Slim client-friendly subset (~22 KB gz)
 │   │
 │   ├── lib/
-│   │   ├── data/                   Typed accessors over the JSON
-│   │   ├── verdict/engine.ts       Pure verdict engine. 46 unit tests cover every branch.
+│   │   ├── data/                   Typed accessors over the JSON (incl. places.ts for area pages)
+│   │   ├── verdict/engine.ts       Pure verdict engine. Unit tests cover every branch.
 │   │   ├── live/                   Server-side live data fetchers (EA profile, NRW profile,
 │   │   │                            ArcGIS CSO feeds, EA flood-monitoring rainfall) and
-│   │   │                            the buildLiveData orchestrator.
-│   │   ├── components/             Svelte components. Scoped <style> per file.
+│   │   │                            the buildLiveData orchestrator + deriveVerdict.
+│   │   ├── map/                    Map precompute: Redis store (kv.ts), hourly colour compute,
+│   │   │                            daily profile cache, nearest-safe, colour tokens.
+│   │   ├── components/             Svelte components. Scoped <style> per file (BeachMap.svelte = MapLibre).
+│   │   ├── util/                   Small shared helpers (pool.ts concurrency, time.ts)
 │   │   └── styles/
 │   │       ├── tokens.css          Design tokens (colour, type, space, containers, shadows)
 │   │       └── app.css             Base reset and shared utilities
@@ -75,8 +78,13 @@ isitsafetoswim.com/
 │       ├── +page.svelte            Homepage, prerendered
 │       ├── about/                  About page, prerendered
 │       ├── swim/[slug]/            Per-location page, Vercel ISR (5 min)
+│       ├── map/                    Interactive map + nearest-safe list
+│       ├── beaches/                Area hubs (/beaches, /beaches/[place])
+│       ├── near/                   Geolocation + postcode results
 │       ├── api/verdict/[id]/       JSON endpoint, edge-cacheable
-│       └── sitemap.xml/            Generated at build, all 703 URLs
+│       ├── api/map/                Precomputed colour blob
+│       ├── api/cron/               refresh-map (hourly), refresh-profiles (daily)
+│       └── sitemap.xml/            Generated at build, all locations + area + map pages
 ```
 
 ## Verdict engine thresholds
@@ -122,14 +130,35 @@ Attribution is rendered per location page via `src/lib/live/attribution.ts`. Do 
 
 Any regulator the build cannot reach is backfilled per country from the cached index in `scripts/.locations.cache.json`, so the catalogue stays complete rather than shipping a partial deploy. England (EA) and Wales (NRW) share the `environment.data.gov.uk` host, which 403s datacentre IPs, so both fail together on Vercel and are served from cache there. The build only aborts when a regulator fails and the cache holds no rows for its country.
 
+## Map and the verdict precompute
+
+`/map` shows every bathing water on a MapLibre map coloured by today's verdict, plus a "nearest safe beach" list. Pins and list read one precomputed snapshot so they never disagree, and the per-location page stays the live authority on click-through. Code lives in `src/lib/map/`.
+
+- **Colour blob.** A Vercel Cron (`/api/cron/refresh-map`, hourly) computes every beach's verdict and writes `{generatedAt, colours: {id: yes|caution|no}}` to Redis under `map:colours`. The map reads it via `/api/map` (edge-cached `s-maxage=1800`). `computeMapColours` in `src/lib/map/compute.ts` drives it.
+- **One verdict engine.** The precompute reuses `deriveVerdict`, extracted from `buildLiveData` in `src/lib/live/verdict.ts`, so the map verdict equals the page verdict from the same inputs. They may differ only by time, never by metric. Keep it that way.
+- **Profile cache.** Fetching ~600 EA and NRW profiles hourly rate-limits the shared `environment.data.gov.uk` host. A daily cron (`/api/cron/refresh-profiles`, 05:00 UTC) caches profiles in Redis under `map:profiles` with a keep-previous-on-failure merge; the hourly run reads them and falls back to the classification for any beach not yet cached, so coverage is always complete. Rainfall is fetched in one batch (`fetchRainfallByLocation`) for the same reason. The hourly run's only per-beach call is the discharge feed (ArcGIS, not rate-limited).
+- **Crons need `CRON_SECRET`.** Vercel sends it as a bearer token and the endpoints 401 without it. Either cron can be triggered by hand from the Vercel Cron tab.
+- **Basemap.** Grayscale land and coastline come from a self-hosted Protomaps extract at `static/uk.pmtiles`, served at `/uk.pmtiles` (the map's default, override with `PUBLIC_BASEMAP_URL`). Label layers are filtered out so no third-party fonts are fetched. Regenerate with: `pmtiles extract https://build.protomaps.com/<YYYYMMDD>.pmtiles static/uk.pmtiles --bbox=-8.65,49.9,1.77,60.86 --maxzoom=9`.
+
+Runtime env vars (Vercel): `REDIS_URL` (colour and profile store), `CRON_SECRET` (cron auth), `PUBLIC_BASEMAP_URL` (optional basemap override).
+
+## Area pages
+
+`/beaches` and `/beaches/[place]` rank the cleanest bathing waters per country and per region (at least five sites), derived entirely from the catalogue (`src/lib/data/places.ts`) so they never carry stale hand-written rankings. A weekly GitHub Action (`.github/workflows/refresh.yml`) pings a Vercel deploy hook (secret `VERCEL_DEPLOY_HOOK`) to rebuild and keep them current.
+
 ## URL shape
 
 - `/` homepage, prerendered
 - `/swim/[slug]` per-location page, Vercel ISR (5 min revalidation)
+- `/map` interactive map plus nearest-safe list, prerendered shell
+- `/beaches` and `/beaches/[place]` area hubs, prerendered
+- `/near` and `/near/[postcode]` geolocation and postcode results
 - `/api/verdict/[id]` JSON endpoint with `s-maxage=300, stale-while-revalidate=600`
+- `/api/map` precomputed colour blob, `s-maxage=1800`
+- `/api/cron/refresh-map` (hourly) and `/api/cron/refresh-profiles` (daily), CRON_SECRET-gated
 - `/about` prerendered
-- `/sitemap.xml` prerendered, 703 entries
-- `/robots.txt`, `/manifest.webmanifest`, `/icon-*.png`, `/og.png`, `/favicon.svg`
+- `/sitemap.xml` prerendered, all locations plus the area and map pages
+- `/robots.txt`, `/manifest.webmanifest`, `/icon-*.png`, `/og.png`, `/favicon.svg`, `/uk.pmtiles`
 
 ## Commands
 
@@ -138,7 +167,7 @@ pnpm dev                # vite dev server
 pnpm build              # build-location-index + generate-images + vite build
 pnpm preview            # preview the production build locally
 pnpm check              # svelte-check
-pnpm test               # vitest run (46 tests)
+pnpm test               # vitest run
 pnpm lint               # biome check
 pnpm lint:fix
 pnpm format             # biome format --write
