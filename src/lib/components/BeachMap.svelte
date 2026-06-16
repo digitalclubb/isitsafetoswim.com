@@ -16,9 +16,10 @@
 		userLocation?: { lat: number; lon: number } | null;
 	} = $props();
 
-	// Set PUBLIC_BASEMAP_URL to the hosted UK .pmtiles to add land and coastline.
-	// Until then the pins render on a plain background, which is still usable.
-	const basemapUrl = env.PUBLIC_BASEMAP_URL ?? '';
+	// The UK basemap is served from static/uk.pmtiles by default. Override with
+	// PUBLIC_BASEMAP_URL to point at a hosted file instead. Until the file exists
+	// the request 404s harmlessly and the pins render on a plain background.
+	const basemapUrl = env.PUBLIC_BASEMAP_URL || '/uk.pmtiles';
 
 	let container: HTMLDivElement;
 	// biome-ignore lint: the maplibre types are loaded dynamically below.
