@@ -120,7 +120,9 @@
 			map.addControl(new maplibre.NavigationControl({ showCompass: false }), 'top-right');
 			map.addControl(
 				new maplibre.AttributionControl({
-					customAttribution: basemapUrl ? '© OpenStreetMap, Protomaps' : ''
+					customAttribution: basemapUrl
+						? '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors, © <a href="https://protomaps.com" target="_blank" rel="noopener">Protomaps</a>'
+						: ''
 				})
 			);
 
