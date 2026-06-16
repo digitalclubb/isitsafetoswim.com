@@ -92,7 +92,7 @@
 					source: 'beaches',
 					filter: ['!', ['has', 'point_count']],
 					paint: {
-						'circle-radius': 6,
+						'circle-radius': 7,
 						'circle-stroke-width': 1.5,
 						'circle-stroke-color': '#fbfaf6',
 						'circle-color': [
@@ -132,27 +132,50 @@
 				map?.getSource('beaches')?.setData(collection());
 			});
 
-			map.on('click', 'clusters', (e: { point: [number, number] }) => {
-				const feature = map.queryRenderedFeatures(e.point, { layers: ['clusters'] })[0];
-				if (!feature) return;
-				map
-					.getSource('beaches')
-					.getClusterExpansionZoom(feature.properties.cluster_id)
-					.then((zoom: number) => {
-						map.easeTo({ center: feature.geometry.coordinates, zoom });
-					});
-			});
-
+			// A padded hit-test rather than binding clicks to the exact pin
+			// geometry: tapping a 6px circle precisely is hard on touch, so a tap
+			// near a pin often hit nothing and did nothing. Query a box around the
+			// tap, prefer the nearest pin, and fall back to expanding a cluster.
 			// biome-ignore lint: maplibre event payload.
-			map.on('click', 'unclustered', (e: any) => {
-				const feature = e.features[0];
-				const { name, slug, verdict } = feature.properties;
-				new maplibre.Popup({ closeButton: true, maxWidth: '240px' })
-					.setLngLat(feature.geometry.coordinates)
-					.setHTML(
-						`<strong>${escapeHtml(name)}</strong><br>${verdictLabel(verdict)}<br><a href="/swim/${escapeHtml(slug)}">See the live verdict</a>`
-					)
-					.addTo(map);
+			map.on('click', (e: any) => {
+				const pad = 14;
+				const box = [
+					[e.point.x - pad, e.point.y - pad],
+					[e.point.x + pad, e.point.y + pad]
+				];
+				const hits = map.queryRenderedFeatures(box, { layers: ['unclustered', 'clusters'] });
+				if (hits.length === 0) return;
+
+				// biome-ignore lint: maplibre feature payload.
+				const pins = hits.filter((f: any) => f.layer.id === 'unclustered');
+				if (pins.length > 0) {
+					// biome-ignore lint: maplibre feature payload.
+					const nearest = pins
+						.map((f: any) => {
+							const p = map.project(f.geometry.coordinates);
+							const dx = p.x - e.point.x;
+							const dy = p.y - e.point.y;
+							return { f, d: dx * dx + dy * dy };
+						})
+						.sort((a: { d: number }, b: { d: number }) => a.d - b.d)[0].f;
+					const { name, slug, verdict } = nearest.properties;
+					new maplibre.Popup({ closeButton: true, maxWidth: '240px' })
+						.setLngLat(nearest.geometry.coordinates)
+						.setHTML(
+							`<strong>${escapeHtml(name)}</strong><br>${verdictLabel(verdict)}<br><a href="/swim/${escapeHtml(slug)}">See the live verdict</a>`
+						)
+						.addTo(map);
+					return;
+				}
+
+				// biome-ignore lint: maplibre feature payload.
+				const cluster = hits.find((f: any) => f.layer.id === 'clusters');
+				if (cluster) {
+					map
+						.getSource('beaches')
+						.getClusterExpansionZoom(cluster.properties.cluster_id)
+						.then((zoom: number) => map.easeTo({ center: cluster.geometry.coordinates, zoom }));
+				}
 			});
 
 			for (const layer of ['clusters', 'unclustered']) {
