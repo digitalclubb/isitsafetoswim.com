@@ -15,6 +15,9 @@ const STYLES: Record<Verdict, VerdictStyle> = {
 	no: { hex: '#9b2c2c', label: 'No', meaning: 'Avoid swimming today' }
 };
 
+// Shown for beaches with no verdict computed yet (a neutral, non-verdict grey).
+export const UNKNOWN_HEX = '#9aa0a6';
+
 export function verdictHex(verdict: Verdict): string {
 	return STYLES[verdict].hex;
 }

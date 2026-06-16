@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { current = '' }: { current?: '' | 'home' | 'about' } = $props();
+	let { current = '' }: { current?: '' | 'home' | 'map' | 'about' } = $props();
 </script>
 
 <header class="masthead">
@@ -32,6 +32,7 @@
 		</a>
 		<nav aria-label="Primary">
 			<a href="/" aria-current={current === 'home' ? 'page' : undefined}>Find a beach</a>
+			<a href="/map" aria-current={current === 'map' ? 'page' : undefined}>Map</a>
 			<a href="/about" aria-current={current === 'about' ? 'page' : undefined}>About</a>
 		</nav>
 	</div>
