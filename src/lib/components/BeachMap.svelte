@@ -204,14 +204,53 @@
 		overflow: hidden;
 	}
 
+	/* MapLibre defaults the popup to white, so pin its colours to the brand
+	   tokens or the text is unreadable in dark mode (light ink on white). */
 	:global(.maplibregl-popup-content) {
+		background: var(--surface);
+		color: var(--ink);
 		font-family: var(--font-sans);
 		font-size: var(--text-sm);
 		padding: var(--space-3) var(--space-4);
+		box-shadow: var(--shadow, 0 6px 18px -12px rgba(11, 31, 42, 0.3));
 	}
 
 	:global(.maplibregl-popup-content strong) {
 		font-family: var(--font-serif);
 		font-size: var(--text-base);
+		color: var(--ink);
+	}
+
+	:global(.maplibregl-popup-content a) {
+		color: var(--ink);
+		text-decoration: underline;
+	}
+
+	:global(.maplibregl-popup-close-button) {
+		color: var(--ink-soft);
+		font-size: var(--text-lg);
+		padding: 0 var(--space-2);
+	}
+
+	/* The tip is a CSS triangle made from borders; recolour the visible side per
+	   anchor so it matches the surface rather than staying white. */
+	:global(.maplibregl-popup-anchor-top .maplibregl-popup-tip),
+	:global(.maplibregl-popup-anchor-top-left .maplibregl-popup-tip),
+	:global(.maplibregl-popup-anchor-top-right .maplibregl-popup-tip) {
+		border-bottom-color: var(--surface);
+	}
+
+	:global(.maplibregl-popup-anchor-bottom .maplibregl-popup-tip),
+	:global(.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip),
+	:global(.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip) {
+		border-top-color: var(--surface);
+	}
+
+	:global(.maplibregl-popup-anchor-left .maplibregl-popup-tip) {
+		border-right-color: var(--surface);
+	}
+
+	:global(.maplibregl-popup-anchor-right .maplibregl-popup-tip) {
+		border-left-color: var(--surface);
 	}
 </style>
