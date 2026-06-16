@@ -66,6 +66,12 @@
 			<NearMeButton />
 		</div>
 
+		<p class="map-link">
+			<a href="/map" data-sveltekit-preload-data="hover"
+				>Or see the safe beaches nearest you today →</a
+			>
+		</p>
+
 		<p class="coverage">
 			Every designated bathing water in <a href="/beaches/england">England</a>,
 			<a href="/beaches/wales">Wales</a>, <a href="/beaches/scotland">Scotland</a> and
@@ -195,6 +201,15 @@
 		flex: 1;
 		height: 1px;
 		background: var(--rule);
+	}
+
+	.map-link {
+		margin: var(--space-4) 0 0;
+		font-size: var(--text-sm);
+	}
+
+	.map-link a {
+		text-decoration: none;
 	}
 
 	.coverage {
