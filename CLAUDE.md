@@ -136,7 +136,7 @@ Any regulator the build cannot reach is backfilled per country from the cached i
 
 - **Colour blob.** A Vercel Cron (`/api/cron/refresh-map`, hourly) computes every beach's verdict and writes `{generatedAt, colours: {id: yes|caution|no}}` to Redis under `map:colours`. The map reads it via `/api/map` (edge-cached `s-maxage=1800`). `computeMapColours` in `src/lib/map/compute.ts` drives it.
 - **One verdict engine.** The precompute reuses `deriveVerdict`, extracted from `buildLiveData` in `src/lib/live/verdict.ts`, so the map verdict equals the page verdict from the same inputs. They may differ only by time, never by metric. Keep it that way.
-- **Profile cache.** Fetching ~600 EA and NRW profiles hourly rate-limits the shared `environment.data.gov.uk` host. A daily cron (`/api/cron/refresh-profiles`, 05:00 UTC) caches profiles in Redis under `map:profiles` with a keep-previous-on-failure merge; the hourly run reads them and falls back to the classification for any beach not yet cached, so coverage is always complete. Rainfall is fetched in one batch (`fetchRainfallByLocation`) for the same reason. The hourly run's only per-beach call is the discharge feed (ArcGIS, not rate-limited).
+- **Profile cache.** Fetching ~600 EA and NRW profiles at once rate-limits the shared `environment.data.gov.uk` host. An hourly cron (`/api/cron/refresh-profiles`, at :30) refreshes the least-recently-attempted batch into Redis under `map:profiles`, paced (`pacedMap`) under the host's per-minute limit and rotating on attempt time so a persistent block can never starve the rest; coverage converges over a few hours. The colour run reads the cache with a keep-previous-on-failure merge and falls back to the classification for any beach not yet cached, so map coverage is always complete. Rainfall is fetched in one batch (`fetchRainfallByLocation`) for the same reason. The colour run's only per-beach call is the discharge feed (ArcGIS, not rate-limited).
 - **Crons need `CRON_SECRET`.** Vercel sends it as a bearer token and the endpoints 401 without it. Either cron can be triggered by hand from the Vercel Cron tab.
 - **Basemap.** Grayscale land and coastline come from a self-hosted Protomaps extract at `static/uk.pmtiles`, served at `/uk.pmtiles` (the map's default, override with `PUBLIC_BASEMAP_URL`). Label layers are filtered out so no third-party fonts are fetched. Regenerate with: `pmtiles extract https://build.protomaps.com/<YYYYMMDD>.pmtiles static/uk.pmtiles --bbox=-8.65,49.9,1.77,60.86 --maxzoom=9`.
 
@@ -155,7 +155,7 @@ Runtime env vars (Vercel): `REDIS_URL` (colour and profile store), `CRON_SECRET`
 - `/near` and `/near/[postcode]` geolocation and postcode results
 - `/api/verdict/[id]` JSON endpoint with `s-maxage=300, stale-while-revalidate=600`
 - `/api/map` precomputed colour blob, `s-maxage=1800`
-- `/api/cron/refresh-map` (hourly) and `/api/cron/refresh-profiles` (daily), CRON_SECRET-gated
+- `/api/cron/refresh-map` (hourly, on the hour) and `/api/cron/refresh-profiles` (hourly, at :30), CRON_SECRET-gated
 - `/about` prerendered
 - `/sitemap.xml` prerendered, all locations plus the area and map pages
 - `/robots.txt`, `/manifest.webmanifest`, `/icon-*.png`, `/og.png`, `/favicon.svg`, `/uk.pmtiles`
