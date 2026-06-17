@@ -12,3 +12,6 @@ vite.config.ts.timestamp-*
 *.log
 .vscode
 .idea
+
+# Generated per-page social cards (built by generate-images.mjs)
+static/og/
