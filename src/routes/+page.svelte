@@ -72,6 +72,10 @@
 			>
 		</p>
 
+		<p class="map-link">
+			<a href="/spills" data-sveltekit-preload-data="hover">Sewage spills happening now →</a>
+		</p>
+
 		<p class="coverage">
 			Every designated bathing water in <a href="/beaches/england">England</a>,
 			<a href="/beaches/wales">Wales</a>, <a href="/beaches/scotland">Scotland</a> and

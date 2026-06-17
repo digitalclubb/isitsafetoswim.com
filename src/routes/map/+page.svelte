@@ -121,6 +121,8 @@
 			</li>
 		</ul>
 
+		<p class="more"><a href="/spills">See sewage spills happening now →</a></p>
+
 		<div class="locate">
 			<button type="button" onclick={locate} disabled={busy}>
 				{busy ? 'Finding your location' : 'Use my location'}
@@ -209,6 +211,15 @@
 		display: flex;
 		align-items: center;
 		gap: var(--space-2);
+	}
+
+	.more {
+		margin: var(--space-4) 0 0;
+		font-size: var(--text-sm);
+	}
+
+	.more a {
+		text-decoration: none;
 	}
 
 	.locate {

@@ -253,6 +253,9 @@
 						within ten kilometres in the last 48 hours.
 					</p>
 					<DischargeList discharges={live.recentDischarges} />
+					<p class="more">
+						<a href="/spills">See every spill happening now across the UK →</a>
+					</p>
 				</section>
 			{/if}
 

@@ -63,6 +63,7 @@
 					? ` Updated ${updatedLabel(data.generatedAt)}.`
 					: ''}
 			</p>
+			<p class="more"><a href="/map">See today's verdict for every beach on the map →</a></p>
 		</header>
 
 		{#if ongoing.length > 0}
@@ -165,6 +166,15 @@
 		color: var(--ink-soft);
 		max-width: 60ch;
 		margin: 0;
+	}
+
+	.more {
+		margin: var(--space-4) 0 0;
+		font-size: var(--text-sm);
+	}
+
+	.more a {
+		text-decoration: none;
 	}
 
 	.block {

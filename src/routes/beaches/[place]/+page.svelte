@@ -140,6 +140,8 @@
 			<p class="updated">Updated {updatedLabel}</p>
 		</header>
 
+		<p class="more"><a href="/map">See the live UK beach map →</a></p>
+
 		{#if data.cleanest.length > 0}
 			<section class="block" aria-labelledby="cleanest">
 				<h2 id="cleanest">The cleanest beaches in {place.name}</h2>
@@ -201,6 +203,15 @@
 	}
 
 	.back a {
+		text-decoration: none;
+	}
+
+	.more {
+		margin: var(--space-4) 0 0;
+		font-size: var(--text-sm);
+	}
+
+	.more a {
 		text-decoration: none;
 	}
 
