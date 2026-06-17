@@ -59,6 +59,9 @@ export interface DischargeEvent {
 	startedAt: string;
 	endedAt?: string;
 	ongoing: boolean;
+	/** The outfall's own coordinates, used to identify it across beaches. */
+	lat?: number;
+	lon?: number;
 }
 
 export type Verdict = 'yes' | 'caution' | 'no';

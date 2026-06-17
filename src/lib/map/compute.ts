@@ -1,5 +1,5 @@
 import { getAllLocations } from '$lib/data/locations';
-import type { Location, Verdict } from '$lib/data/types';
+import type { DischargeEvent, Location, Verdict } from '$lib/data/types';
 import { fetchRecentDischarges } from '$lib/live/discharges';
 import type { ProfileFetchResult } from '$lib/live/profile';
 import { fetchRainfallByLocation } from '$lib/live/rainfall';
@@ -8,7 +8,8 @@ import { mapPool } from '$lib/util/pool';
 import { readProfiles } from './kv';
 import { assembleColours } from './precompute';
 import type { ProfileCache } from './profiles';
-import type { MapColours } from './types';
+import { aggregateSpills, type SpillSource } from './spills';
+import type { MapColours, Spill } from './types';
 
 // Per-beach fetches in flight at once. With profiles cached and rainfall
 // batched, the only per-beach call is the discharge feed (ArcGIS, not the
@@ -16,10 +17,11 @@ import type { MapColours } from './types';
 const CONCURRENCY = 8;
 const RETRY_PAUSE_MS = 3000;
 
-type Computed = { id: string; verdict: Verdict } | null;
+type Computed = { id: string; verdict: Verdict; discharges: DischargeEvent[] } | null;
 
 export interface ComputeResult {
 	blob: MapColours;
+	spills: Spill[];
 	computed: number;
 	skipped: number;
 	total: number;
@@ -52,7 +54,7 @@ async function computeOne(
 		const recentDischarges = await fetchRecentDischarges(location, signal).catch(() => []);
 		const verdict = deriveVerdict(location, profile, recentDischarges, rainfall24hMm, now);
 		if (verdict.dataAge === 'unavailable') return null;
-		return { id: location.id, verdict: verdict.verdict };
+		return { id: location.id, verdict: verdict.verdict, discharges: recentDischarges };
 	} catch {
 		return null;
 	}
@@ -94,9 +96,31 @@ export async function computeMapColours(now: Date, signal?: AbortSignal): Promis
 		});
 	}
 
-	const usable = results.filter((v): v is { id: string; verdict: Verdict } => v !== null);
+	const usable = results.filter((v): v is NonNullable<Computed> => v !== null);
+
+	// Reuse the discharges already fetched to build the national spills list:
+	// each was found within range of its beach, so it is "near a bathing water"
+	// by construction.
+	const sources: SpillSource[] = [];
+	results.forEach((result, i) => {
+		if (result && result.discharges.length > 0) {
+			const loc = locations[i];
+			sources.push({
+				slug: loc.slug,
+				name: loc.name,
+				region: loc.region,
+				country: loc.country,
+				lat: loc.lat,
+				lon: loc.lon,
+				company: loc.sewerageUndertaker,
+				discharges: result.discharges
+			});
+		}
+	});
+
 	return {
 		blob: assembleColours(usable, now.toISOString()),
+		spills: aggregateSpills(sources),
 		computed: usable.length,
 		skipped: locations.length - usable.length,
 		total: locations.length

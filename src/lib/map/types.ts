@@ -20,3 +20,25 @@ export interface MapPoint {
 	lat: number;
 	lon: number;
 }
+
+/** A storm-overflow discharge near a designated bathing water. */
+export interface Spill {
+	outfallName: string;
+	receivingWater?: string;
+	ongoing: boolean;
+	startedAt: string;
+	endedAt?: string;
+	beachSlug: string;
+	beachName: string;
+	region?: string;
+	country: Country;
+	lat: number;
+	lon: number;
+	distanceMetres: number;
+}
+
+/** The precomputed national spills snapshot the /spills page reads. */
+export interface SpillsBlob {
+	generatedAt: string;
+	spills: Spill[];
+}

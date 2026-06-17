@@ -149,7 +149,9 @@ function buildEvent(
 		distanceMetres: Math.round(haversineMetres(centre, { lat, lon })),
 		startedAt,
 		endedAt: ongoing ? undefined : endedAt,
-		ongoing
+		ongoing,
+		lat,
+		lon
 	};
 }
 

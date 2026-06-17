@@ -1,7 +1,7 @@
 import { error, json } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 import { computeMapColours } from '$lib/map/compute';
-import { writeColours } from '$lib/map/kv';
+import { writeColours, writeSpills } from '$lib/map/kv';
 import type { RequestHandler } from './$types';
 
 export const prerender = false;
@@ -25,7 +25,7 @@ export const GET: RequestHandler = async ({ request }) => {
 	}
 
 	const now = new Date();
-	const { blob, computed, skipped, total } = await computeMapColours(now, request.signal);
+	const { blob, spills, computed, skipped, total } = await computeMapColours(now, request.signal);
 
 	// A backstop: profiles now come from the daily cache so a profile outage no
 	// longer drops beaches, but a catastrophic failure (e.g. the whole compute)
@@ -40,6 +40,17 @@ export const GET: RequestHandler = async ({ request }) => {
 		});
 	}
 
+	// Spills share the colours guard deliberately: both are written only on a
+	// healthy run, so a partial outage keeps the last good snapshot of each
+	// rather than a mostly-empty one.
 	await writeColours(blob);
-	return json({ ok: true, generatedAt: blob.generatedAt, computed, skipped, total });
+	await writeSpills({ generatedAt: blob.generatedAt, spills });
+	return json({
+		ok: true,
+		generatedAt: blob.generatedAt,
+		computed,
+		skipped,
+		total,
+		spills: spills.length
+	});
 };

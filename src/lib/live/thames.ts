@@ -168,7 +168,9 @@ export async function fetchThamesDischarges(
 			distanceMetres,
 			startedAt: d.startedAt,
 			endedAt: d.ongoing ? undefined : d.endedAt,
-			ongoing: d.ongoing
+			ongoing: d.ongoing,
+			lat: d.lat,
+			lon: d.lon
 		});
 	}
 	events.sort((a, b) => a.distanceMetres - b.distanceMetres);

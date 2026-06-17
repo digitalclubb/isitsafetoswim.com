@@ -1,10 +1,11 @@
 import { createClient } from 'redis';
 import { env } from '$env/dynamic/private';
 import type { ProfileCache } from './profiles';
-import type { MapColours } from './types';
+import type { MapColours, SpillsBlob } from './types';
 
 const COLOURS_KEY = 'map:colours';
 const PROFILES_KEY = 'map:profiles';
+const SPILLS_KEY = 'map:spills';
 
 // `createClient({ url })` infers a narrower type than `createClient`'s default
 // generics, so we take the type from this wrapper rather than from the bare
@@ -69,3 +70,5 @@ export const readColours = () => readJson<MapColours>(COLOURS_KEY);
 export const writeColours = (blob: MapColours) => writeJson(COLOURS_KEY, blob);
 export const readProfiles = () => readJson<ProfileCache>(PROFILES_KEY);
 export const writeProfiles = (cache: ProfileCache) => writeJson(PROFILES_KEY, cache);
+export const readSpills = () => readJson<SpillsBlob>(SPILLS_KEY);
+export const writeSpills = (blob: SpillsBlob) => writeJson(SPILLS_KEY, blob);

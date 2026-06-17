@@ -21,7 +21,8 @@ export const GET = () => {
 		`<url><loc>${BASE}/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>`,
 		`<url><loc>${BASE}/about</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>`,
 		`<url><loc>${BASE}/beaches</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>`,
-		`<url><loc>${BASE}/map</loc><changefreq>daily</changefreq><priority>0.7</priority></url>`
+		`<url><loc>${BASE}/map</loc><changefreq>daily</changefreq><priority>0.7</priority></url>`,
+		`<url><loc>${BASE}/spills</loc><changefreq>hourly</changefreq><priority>0.8</priority></url>`
 	];
 
 	for (const place of getAllPlaces()) {

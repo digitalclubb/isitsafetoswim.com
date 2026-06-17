@@ -5,7 +5,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Resvg } from '@resvg/resvg-js';
-import { buildAreaCard, buildLocationCard } from './lib/og-card.mjs';
+import { buildAreaCard, buildHeadlineCard, buildLocationCard } from './lib/og-card.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, '..');
@@ -102,6 +102,14 @@ for (const loc of locations) {
 for (const place of places) {
 	await renderCard(buildAreaCard(place), resolve(staticDir, 'og/beaches', `${place.slug}.png`));
 }
+
+await renderCard(
+	buildHeadlineCard({
+		title: 'Sewage spills',
+		subtitle: 'Storm overflows discharging near UK bathing waters'
+	}),
+	resolve(staticDir, 'og/spills.png')
+);
 
 console.log(
 	`[generate-images] ${iconTasks.length} brand images, ${locations.length} location cards, ${places.length} area cards`
