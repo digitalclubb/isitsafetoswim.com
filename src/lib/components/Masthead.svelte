@@ -67,6 +67,10 @@
 		font-feature-settings: 'kern' 1, 'liga' 1;
 	}
 
+	.wordmark {
+		white-space: nowrap;
+	}
+
 	.punct {
 		display: inline-block;
 		transform: translateY(-0.04em);
@@ -124,8 +128,25 @@
 		.bar {
 			padding-block: var(--space-3);
 		}
+
+		/* Icon-only brand on phones: clip the wordmark (matching .sr-only in
+		 * app.css) so it stays in the DOM and accessibility tree, keeping the home
+		 * link's name and crawlable text while freeing the row for the nav items.
+		 * A static class can't be used here because .sr-only would hide it at every
+		 * width. white-space: nowrap is inherited from the base .wordmark rule. */
 		.wordmark {
-			font-size: var(--text-md);
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			border: 0;
+		}
+
+		nav a {
+			padding-inline: var(--space-2);
 		}
 	}
 </style>
