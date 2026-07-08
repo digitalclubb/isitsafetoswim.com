@@ -6,11 +6,9 @@
 	import LocationCard from '$lib/components/LocationCard.svelte';
 	import SampleHistory from '$lib/components/SampleHistory.svelte';
 	import SampleSummary from '$lib/components/SampleSummary.svelte';
-	import SectionSkeleton from '$lib/components/SectionSkeleton.svelte';
 	import Verdict from '$lib/components/Verdict.svelte';
 	import WaterTemperature from '$lib/components/WaterTemperature.svelte';
 	import { findNearestSlim } from '$lib/data/search-index';
-	import type { LiveLocationData } from '$lib/data/types';
 	import { safeJsonLd } from '$lib/seo/jsonLd';
 	import type { PageData } from './$types';
 
@@ -18,32 +16,9 @@
 
 	let location = $derived(data.location);
 
-	// On first paint we render the cached verdict from the index — instant.
-	// As soon as the page is interactive we fetch the live verdict from
-	// /api/verdict/[id] and swap it in. The page is fully usable before this
-	// resolves, so navigation never blocks on the regulator APIs.
-	let liveOverride = $state<LiveLocationData | null>(null);
-	let live = $derived<LiveLocationData>(liveOverride ?? data.live);
-
-	// The effect re-runs when the location id changes, so SPA navigation
-	// between two /swim/[slug] pages correctly reissues the live fetch and
-	// abandons the previous one through the AbortController cleanup.
-	$effect(() => {
-		const id = data.location.id;
-		liveOverride = null;
-		const controller = new AbortController();
-
-		fetch(`/api/verdict/${id}`, { signal: controller.signal })
-			.then((r) => (r.ok ? r.json() : null))
-			.then((fresh: LiveLocationData | null) => {
-				if (fresh && fresh.location?.id === id) liveOverride = fresh;
-			})
-			.catch(() => {
-				// Stay on the cached verdict if the live fetch fails.
-			});
-
-		return () => controller.abort();
-	});
+	// The live verdict is built on the server and cached by ISR, so the page
+	// ships with today's real answer already in place. No client-side swap.
+	let live = $derived(data.live);
 
 	let factorSignature = $derived(
 		live.verdict.factors.map((f) => `${f.label}=${f.value}`).join('|')
@@ -173,7 +148,6 @@
 			locationName={location.name}
 			country={location.country}
 			region={location.region}
-			hydrating={!liveOverride}
 		/>
 
 		<p class="caveat">
@@ -191,30 +165,14 @@
 			{/key}
 		</section>
 
-		{#if liveOverride && live.seaTemperatureC != null}
-			<section
-				class="block"
-				aria-labelledby="temperature"
-				in:slide={{ duration: 280, delay: 200, easing: cubicOut }}
-			>
+		{#if live.seaTemperatureC != null}
+			<section class="block" aria-labelledby="temperature">
 				<h2 id="temperature" class="muted-h">Water temperature</h2>
 				<WaterTemperature celsius={live.seaTemperatureC} />
 			</section>
 		{/if}
 
-		{#if !liveOverride}
-			<section
-				class="block"
-				aria-labelledby="checking"
-				out:slide={{ duration: 200, easing: cubicOut }}
-			>
-				<h2 id="checking" class="muted-h">Checking for recent activity</h2>
-				<SectionSkeleton
-					label="Checking for recent sewage discharges and the latest sample"
-					lines={2}
-				/>
-			</section>
-		{:else if !liveSignals && live.recentDischarges.length === 0 && !live.latestSample}
+		{#if !liveSignals && live.recentDischarges.length === 0 && !live.latestSample}
 			<section
 				class="block"
 				aria-labelledby="coverage"

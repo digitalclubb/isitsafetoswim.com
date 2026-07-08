@@ -5,14 +5,12 @@
 		verdict,
 		locationName,
 		country,
-		region,
-		hydrating = false
+		region
 	}: {
 		verdict: VerdictResult;
 		locationName: string;
 		country: string;
 		region?: string;
-		hydrating?: boolean;
 	} = $props();
 
 	let tone = $derived(
@@ -65,12 +63,7 @@
 
 	<p class="updated">
 		Updated {formattedTime}
-		{#if hydrating}
-			<span class="badge live">
-				<span class="pip" aria-hidden="true"></span>
-				refreshing
-			</span>
-		{:else if verdict.dataAge === 'cached'}
+		{#if verdict.dataAge === 'cached'}
 			<span class="badge">cached</span>
 		{:else if verdict.dataAge === 'unavailable'}
 			<span class="badge warn">live data unavailable</span>
@@ -205,39 +198,6 @@
 	.badge.warn {
 		background: var(--caution-soft);
 		color: var(--caution);
-	}
-
-	.badge.live {
-		background: var(--surface-sunken);
-		color: var(--ink-soft);
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-	}
-
-	.pip {
-		display: inline-block;
-		width: 6px;
-		height: 6px;
-		border-radius: 50%;
-		background: var(--ink-soft);
-		animation: pip-pulse 1200ms ease-in-out infinite;
-	}
-
-	@keyframes pip-pulse {
-		0%,
-		100% {
-			opacity: 0.35;
-		}
-		50% {
-			opacity: 1;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.pip {
-			animation: none;
-		}
 	}
 
 	@media (max-width: 540px) {
