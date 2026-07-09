@@ -9,6 +9,7 @@
 	import Verdict from '$lib/components/Verdict.svelte';
 	import WaterTemperature from '$lib/components/WaterTemperature.svelte';
 	import { findNearestSlim } from '$lib/data/search-index';
+	import type { RecentSample } from '$lib/data/types';
 	import { safeJsonLd } from '$lib/seo/jsonLd';
 	import type { PageData } from './$types';
 
@@ -16,9 +17,36 @@
 
 	let location = $derived(data.location);
 
-	// The live verdict is built on the server and cached by ISR, so the page
-	// ships with today's real answer already in place. No client-side swap.
+	// The verdict is built on the server and cached by ISR, so the page ships
+	// with today's real answer already in place. No client-side swap.
 	let live = $derived(data.live);
+
+	// The sample-history sparkline and sea temperature are decoration that does
+	// not affect the verdict, so the server render skips the slow fetches for
+	// them and we pull them in after paint. The effect re-runs on the location
+	// id so SPA navigation reissues the fetch and abandons the previous one.
+	let enrichment = $state<{ sampleHistory: RecentSample[]; seaTemperatureC: number | null } | null>(
+		null
+	);
+	let sampleHistory = $derived(enrichment?.sampleHistory ?? []);
+	let seaTemperatureC = $derived(enrichment?.seaTemperatureC ?? null);
+
+	$effect(() => {
+		const id = data.location.id;
+		enrichment = null;
+		const controller = new AbortController();
+
+		fetch(`/api/enrichment/${id}`, { signal: controller.signal })
+			.then((r) => (r.ok ? r.json() : null))
+			.then((fresh) => {
+				if (fresh) enrichment = fresh;
+			})
+			.catch(() => {
+				// Decoration only, so a failure just leaves these sections hidden.
+			});
+
+		return () => controller.abort();
+	});
 
 	let factorSignature = $derived(
 		live.verdict.factors.map((f) => `${f.label}=${f.value}`).join('|')
@@ -165,10 +193,14 @@
 			{/key}
 		</section>
 
-		{#if live.seaTemperatureC != null}
-			<section class="block" aria-labelledby="temperature">
+		{#if seaTemperatureC != null}
+			<section
+				class="block"
+				aria-labelledby="temperature"
+				in:slide={{ duration: 280, easing: cubicOut }}
+			>
 				<h2 id="temperature" class="muted-h">Water temperature</h2>
-				<WaterTemperature celsius={live.seaTemperatureC} />
+				<WaterTemperature celsius={seaTemperatureC} />
 			</section>
 		{/if}
 
@@ -225,7 +257,9 @@
 				>
 					<h2 id="sample">Latest bacteria reading</h2>
 					<SampleSummary sample={live.latestSample} />
-					<SampleHistory samples={live.sampleHistory} waterType={location.waterType} />
+					{#if sampleHistory.length > 0}
+						<SampleHistory samples={sampleHistory} waterType={location.waterType} />
+					{/if}
 					<p class="muted small">
 						The regulator samples weekly during the bathing season. E. coli and intestinal
 						enterococci are the indicator organisms used in the official classification.
