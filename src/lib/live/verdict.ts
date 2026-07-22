@@ -126,36 +126,48 @@ export function pickProfile(
 	return live;
 }
 
+/** The precomputed signals the page reads rather than fetching for itself. */
+export interface CachedSignals {
+	profile: ProfileFetchResult | null;
+	rainfall24hMm: number | null;
+}
+
 /**
  * The payload for the per-location page. The daily forecast and latest sample
  * are fetched live so the safety verdict reflects today, falling back to the
  * precomputed profile cache only when the live fetch fails, so a slow or blocked
  * regulator host degrades to the last good reading rather than blocking the
- * render. Discharges and rainfall stay live too, so the page is the authority
- * on today's spills. The sample-history sparkline and sea temperature are
- * decoration that cannot change the verdict, so they are left empty here and
- * hydrated after paint.
+ * render. Discharges stay live, so the page is the authority on today's spills.
+ *
+ * Rainfall comes from the hourly precompute instead. Resolving the nearest
+ * flood-monitoring station takes anywhere from 0.1s to 15s, which dominated the
+ * render, and a rolling 24h total moves far too slowly to be worth that. The
+ * cache is passed in as a promise so it is awaited here, alongside the live
+ * fetches, rather than ahead of them. The sample-history sparkline and sea
+ * temperature are decoration that cannot change the verdict, so they are left
+ * empty here and hydrated after paint.
  */
 export async function buildPageData(
 	location: Location,
-	cachedProfile: ProfileFetchResult | null,
+	cached: Promise<CachedSignals>,
 	signal?: AbortSignal
 ): Promise<LiveLocationData> {
 	const now = new Date();
-	const [profileResult, dischargesResult, rainfallResult] = await Promise.allSettled([
+	const [profileResult, dischargesResult, cachedResult] = await Promise.allSettled([
 		fetchProfile(location, signal),
 		fetchRecentDischarges(location, signal),
-		fetchRainfall24h({ lat: location.lat, lon: location.lon }, signal)
+		cached
 	]);
 
+	const signals: CachedSignals =
+		cachedResult.status === 'fulfilled' ? cachedResult.value : { profile: null, rainfall24hMm: null };
 	const live = profileResult.status === 'fulfilled' ? profileResult.value : null;
-	const profile = pickProfile(live, cachedProfile);
 
 	return assemble(
 		location,
-		profile,
+		pickProfile(live, signals.profile),
 		dischargesResult.status === 'fulfilled' ? dischargesResult.value : [],
-		rainfallResult.status === 'fulfilled' ? rainfallResult.value : null,
+		signals.rainfall24hMm,
 		[],
 		null,
 		now

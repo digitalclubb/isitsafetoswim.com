@@ -1,7 +1,7 @@
 import { error, json } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 import { computeMapColours } from '$lib/map/compute';
-import { writeColours, writeSpills } from '$lib/map/kv';
+import { writeColours, writeRainfall, writeSpills } from '$lib/map/kv';
 import type { RequestHandler } from './$types';
 
 export const prerender = false;
@@ -25,7 +25,23 @@ export const GET: RequestHandler = async ({ request }) => {
 	}
 
 	const now = new Date();
-	const { blob, spills, computed, skipped, total } = await computeMapColours(now, request.signal);
+	const { blob, spills, rainfall, computed, skipped, total } = await computeMapColours(
+		now,
+		request.signal
+	);
+
+	// Rainfall is written ahead of the colours guard because the location page
+	// reads it instead of calling the flood-monitoring host itself, so it must
+	// not be withheld by an unrelated verdict failure. A null blob means the
+	// batch was too thin to replace the stored one. The write is caught because
+	// it is the first of three: a Redis hiccup here must not abort the run and
+	// leave the map and spills unrefreshed as well.
+	const rainfallWritten = rainfall
+		? await writeRainfall(rainfall).then(
+				() => true,
+				() => false
+			)
+		: false;
 
 	// A backstop: profiles now come from the daily cache so a profile outage no
 	// longer drops beaches, but a catastrophic failure (e.g. the whole compute)
@@ -36,7 +52,8 @@ export const GET: RequestHandler = async ({ request }) => {
 			reason: 'too few beaches computed, keeping the previous snapshot',
 			computed,
 			skipped,
-			total
+			total,
+			rainfallWritten
 		});
 	}
 
@@ -51,6 +68,7 @@ export const GET: RequestHandler = async ({ request }) => {
 		computed,
 		skipped,
 		total,
-		spills: spills.length
+		spills: spills.length,
+		rainfallWritten
 	});
 };

@@ -42,3 +42,15 @@ export interface SpillsBlob {
 	generatedAt: string;
 	spills: Spill[];
 }
+
+/**
+ * The precomputed 24h rainfall totals in mm, keyed by location id. The flood
+ * monitoring station lookup is the slowest call the location page can make and
+ * its latency is wildly variable, so the hourly run batches it for the whole
+ * catalogue and the page reads the result instead of calling the host itself.
+ * Locations with no station in range or no reading are simply absent.
+ */
+export interface RainfallBlob {
+	generatedAt: string;
+	rainfall: Record<string, number>;
+}

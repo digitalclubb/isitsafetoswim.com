@@ -5,11 +5,11 @@ import type { ProfileFetchResult } from '$lib/live/profile';
 import { fetchRainfallByLocation } from '$lib/live/rainfall';
 import { deriveVerdict } from '$lib/live/verdict';
 import { mapPool } from '$lib/util/pool';
-import { readProfiles } from './kv';
-import { assembleColours } from './precompute';
+import { readProfiles, readRainfall } from './kv';
+import { assembleColours, assembleRainfall, hasUsableCoverage, rainfallFrom } from './precompute';
 import type { ProfileCache } from './profiles';
 import { aggregateSpills, type SpillSource } from './spills';
-import type { MapColours, Spill } from './types';
+import type { MapColours, RainfallBlob, Spill } from './types';
 
 // Per-beach fetches in flight at once. With profiles cached and rainfall
 // batched, the only per-beach call is the discharge feed (ArcGIS, not the
@@ -22,6 +22,8 @@ type Computed = { id: string; verdict: Verdict; discharges: DischargeEvent[] } |
 export interface ComputeResult {
 	blob: MapColours;
 	spills: Spill[];
+	/** The batch to store, or null when it was too thin to replace the last one. */
+	rainfall: RainfallBlob | null;
 	computed: number;
 	skipped: number;
 	total: number;
@@ -71,16 +73,26 @@ async function computeOne(
  */
 export async function computeMapColours(now: Date, signal?: AbortSignal): Promise<ComputeResult> {
 	const locations = getAllLocations();
-	const [rainfall, profileCache] = await Promise.all([
+	const [batched, profileCache, storedRainfall] = await Promise.all([
 		fetchRainfallByLocation(locations, signal),
-		readProfiles()
+		readProfiles(),
+		readRainfall()
 	]);
+
+	// This run and the location page must read one rainfall figure, so the run
+	// settles on a single blob and the cron stores exactly what it used. A batch
+	// too thin to trust (the rate-limited flood-monitoring host failing most of
+	// its per-station reads) is discarded in favour of the last stored blob
+	// rather than overwriting it, which is also what the page would fall back to.
+	const batch = assembleRainfall(batched, now.toISOString());
+	const useBatch = hasUsableCoverage(batch, locations.length);
+	const rainfall = useBatch ? batch : storedRainfall;
 
 	const run = (location: Location) =>
 		computeOne(
 			location,
 			profileFor(location, profileCache),
-			rainfall.get(location.id) ?? null,
+			rainfallFrom(rainfall, location.id, now),
 			now,
 			signal
 		);
@@ -121,6 +133,7 @@ export async function computeMapColours(now: Date, signal?: AbortSignal): Promis
 	return {
 		blob: assembleColours(usable, now.toISOString()),
 		spills: aggregateSpills(sources),
+		rainfall: useBatch ? batch : null,
 		computed: usable.length,
 		skipped: locations.length - usable.length,
 		total: locations.length

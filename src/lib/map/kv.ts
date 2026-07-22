@@ -1,11 +1,12 @@
 import { createClient } from 'redis';
 import { env } from '$env/dynamic/private';
 import type { ProfileCache } from './profiles';
-import type { MapColours, SpillsBlob } from './types';
+import type { MapColours, RainfallBlob, SpillsBlob } from './types';
 
 const COLOURS_KEY = 'map:colours';
 const PROFILES_KEY = 'map:profiles';
 const SPILLS_KEY = 'map:spills';
+const RAINFALL_KEY = 'map:rainfall';
 
 // `createClient({ url })` infers a narrower type than `createClient`'s default
 // generics, so we take the type from this wrapper rather than from the bare
@@ -48,9 +49,12 @@ function connect(): RedisClient | null {
 }
 
 async function readJson<T>(key: string): Promise<T | null> {
-	const c = connect();
-	if (!c) return null;
+	// connect() is inside the try because createClient throws synchronously on a
+	// malformed REDIS_URL. Reads must never reject: callers treat null as "no
+	// cached value" and carry on with whatever they can fetch live.
 	try {
+		const c = connect();
+		if (!c) return null;
 		await ready;
 		const raw = await c.get(key);
 		return raw ? (JSON.parse(raw) as T) : null;
@@ -72,3 +76,5 @@ export const readProfiles = () => readJson<ProfileCache>(PROFILES_KEY);
 export const writeProfiles = (cache: ProfileCache) => writeJson(PROFILES_KEY, cache);
 export const readSpills = () => readJson<SpillsBlob>(SPILLS_KEY);
 export const writeSpills = (blob: SpillsBlob) => writeJson(SPILLS_KEY, blob);
+export const readRainfall = () => readJson<RainfallBlob>(RAINFALL_KEY);
+export const writeRainfall = (blob: RainfallBlob) => writeJson(RAINFALL_KEY, blob);
