@@ -1,5 +1,7 @@
 <script lang="ts">
-	import type { Classification, Country } from '$lib/data/types';
+	import { isAdverseRating, ratingLabel } from '$lib/data/rating';
+	import type { Classification, Country, Verdict } from '$lib/data/types';
+	import { verdictLabel } from '$lib/map/colours';
 
 	interface CardLocation {
 		slug: string;
@@ -9,30 +11,37 @@
 		classification: Classification;
 	}
 
-	let { location, distanceMetres }: { location: CardLocation; distanceMetres?: number } = $props();
-
-	const TONE: Record<Classification, 'yes' | 'caution' | 'no' | 'neutral'> = {
-		Excellent: 'yes',
-		Good: 'yes',
-		Sufficient: 'caution',
-		Poor: 'no',
-		Closed: 'no',
-		New: 'neutral',
-		Unknown: 'neutral'
-	};
+	let {
+		location,
+		distanceMetres,
+		verdict
+	}: { location: CardLocation; distanceMetres?: number; verdict?: Verdict } = $props();
 
 	function formatKm(metres: number): string {
 		const km = metres / 1000;
 		return km < 10 ? `${km.toFixed(1)} km` : `${Math.round(km)} km`;
 	}
 
-	let tone = $derived(TONE[location.classification]);
 	let place = $derived(location.region ?? location.country);
 	let meta = $derived(distanceMetres != null ? `${place} · ${formatKm(distanceMetres)}` : place);
+	let rating = $derived(ratingLabel(location.classification));
 </script>
 
-<a class="card" href={`/swim/${location.slug}`} data-tone={tone}>
-	<span class="badge"><span class="sr-only">Classification: </span>{location.classification}</span>
+<!--
+	Only a verdict may wear the verdict palette. The classification is a
+	multi-year percentile that says nothing about today, so it renders as quiet
+	text and a site rated Excellent can sit under a Caution without appearing to
+	contradict it. data-tone is the verdict itself, so a card cannot reach a
+	coloured branch without one.
+-->
+<a class="card" href={`/swim/${location.slug}`} data-tone={verdict}>
+	{#if verdict}
+		<span class="badge"><span class="sr-only">Verdict today: </span>{verdictLabel(verdict)}</span>
+	{:else}
+		<span class="rating" class:adverse={isAdverseRating(location.classification)}
+			aria-label={rating.announced}>{rating.label}</span
+		>
+	{/if}
 	<span class="name">{location.name}</span>
 	<span class="meta">{meta}</span>
 </a>
@@ -84,11 +93,15 @@
 		color: var(--ink-soft);
 	}
 
-	.badge {
+	.badge,
+	.rating {
 		grid-area: badge;
 		align-self: start;
 		justify-self: end;
 		font-size: var(--text-xs);
+	}
+
+	.badge {
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
@@ -96,6 +109,20 @@
 		border-radius: 999px;
 		background: var(--surface-sunken);
 		color: var(--ink-soft);
+	}
+
+	/* Deliberately not a pill: the rating must not read as a verdict badge. */
+	.rating {
+		color: var(--ink-soft);
+		text-align: right;
+		text-wrap: balance;
+	}
+
+	/* Poor and Closed have to stay legible as warnings without reaching for the
+	   verdict palette, so they gain weight and contrast rather than colour. */
+	.rating.adverse {
+		color: var(--ink);
+		font-weight: 600;
 	}
 
 	.card[data-tone='yes'] .badge {
