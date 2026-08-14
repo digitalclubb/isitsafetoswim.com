@@ -1,3 +1,7 @@
+<script lang="ts">
+	import SupportNote from '$lib/components/SupportNote.svelte';
+</script>
+
 <svelte:head>
 	<title>How the verdict is decided · Is it safe to swim?</title>
 	<meta
@@ -94,6 +98,29 @@
 			same public APIs; we just present it in plain English so you can decide whether to swim.
 		</p>
 	</section>
+
+	<section id="privacy">
+		<h2>What this site records</h2>
+		<p>
+			There are no adverts, no cookies and no sign-in. Nothing here is sold or shared.
+		</p>
+		<p>
+			Page views are counted through Vercel Web Analytics so I can see which beaches people
+			actually look up and where the site is falling short. Each view records the page, the
+			referring site, a country-level location and the browser and device type. It sets no
+			cookies, stores no IP address and cannot follow you to another website. The temporary
+			identifier it uses is discarded after 24 hours.
+		</p>
+		<p>
+			If you search by postcode, the postcode is stripped out before anything is recorded, so the
+			count shows that the postcode search was used without showing which postcode. Looking up a
+			postcode sends it to <a href="https://postcodes.io" rel="noopener">postcodes.io</a> to turn
+			it into coordinates. If you use the "near me" button instead, your coordinates stay in your
+			browser and are never sent here.
+		</p>
+	</section>
+
+	<SupportNote variant="full" />
 
 	<section>
 		<h2>Get in touch</h2>

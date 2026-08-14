@@ -1,5 +1,8 @@
 <script lang="ts">
-	let { attribution = [] as string[] }: { attribution?: string[] } = $props();
+	let {
+		attribution = [] as string[],
+		support = true
+	}: { attribution?: string[]; support?: boolean } = $props();
 </script>
 
 <footer class="footer">
@@ -11,6 +14,13 @@
 					A plain-English verdict on water quality for UK bathing waters. Built by an
 					independent developer, not affiliated with any regulator or water company.
 				</p>
+				{#if support}
+					<p class="muted small support">
+						Free, with no adverts. <a href="https://ko-fi.com/digitalclubb" rel="external"
+							>Buy me a coffee</a
+						> if it helped.
+					</p>
+				{/if}
 			</div>
 			<div>
 				<h3 class="hdg">Browse</h3>
@@ -85,6 +95,12 @@
 
 	.small {
 		font-size: var(--text-sm);
+	}
+
+	.support {
+		margin-top: var(--space-3);
+		padding-top: var(--space-3);
+		border-top: var(--rule-weight) solid var(--rule);
 	}
 
 	.hdg {

@@ -6,6 +6,7 @@
 	import LocationCard from '$lib/components/LocationCard.svelte';
 	import SampleHistory from '$lib/components/SampleHistory.svelte';
 	import SampleSummary from '$lib/components/SampleSummary.svelte';
+	import SupportNote from '$lib/components/SupportNote.svelte';
 	import Verdict from '$lib/components/Verdict.svelte';
 	import WaterTemperature from '$lib/components/WaterTemperature.svelte';
 	import { findNearestSlim } from '$lib/data/search-index';
@@ -327,6 +328,8 @@
 		<p class="more">
 			<a href={`/beaches/${data.hub.slug}`}>Cleanest beaches in {data.hub.name} →</a>
 		</p>
+
+		<SupportNote />
 	</div>
 </article>
 
