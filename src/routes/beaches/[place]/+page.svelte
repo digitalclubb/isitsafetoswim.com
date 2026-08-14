@@ -78,22 +78,6 @@
 					item: c.url
 				}))
 			},
-			{
-				'@context': 'https://schema.org',
-				'@type': 'FAQPage',
-				mainEntity: [
-					{
-						'@type': 'Question',
-						name: `Which beach is cleanest in ${place.name}?`,
-						acceptedAnswer: { '@type': 'Answer', text: cleanestAnswer }
-					},
-					{
-						'@type': 'Question',
-						name: `How many bathing waters are in ${place.name}?`,
-						acceptedAnswer: { '@type': 'Answer', text: countAnswer }
-					}
-				]
-			},
 			data.cleanest.length > 0
 				? {
 						'@context': 'https://schema.org',

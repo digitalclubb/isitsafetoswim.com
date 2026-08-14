@@ -11,6 +11,7 @@
 	import { findNearestSlim } from '$lib/data/search-index';
 	import type { RecentSample } from '$lib/data/types';
 	import { safeJsonLd } from '$lib/seo/jsonLd';
+	import { londonClock, londonDayAndMonth, londonIsoDateTime, newestTimestamp } from '$lib/util/time';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -72,11 +73,58 @@
 	);
 
 	let verdictSentence = $derived(`${live.verdict.headline} ${live.verdict.reason}`);
-	let metaDescription = $derived(verdictSentence);
+
+	// The demand behind this page is explicitly time-bound ("...water quality
+	// today"), so the snippet leads with when the check ran. The tail is kept
+	// short enough that the location name still lands inside the roughly 155
+	// characters Google renders, rather than being the first thing cut.
+	let checkedLabel = $derived(
+		londonClock(live.verdict.fetchedAt) &&
+			`${londonClock(live.verdict.fetchedAt)} on ${londonDayAndMonth(live.verdict.fetchedAt)}`
+	);
+	let metaDescription = $derived(
+		checkedLabel
+			? `Checked ${checkedLabel}. ${verdictSentence} Live sewage alerts and bacteria readings for ${location.name}.`
+			: verdictSentence
+	);
+
+	let placeId = $derived(`https://isitsafetoswim.com/swim/${location.slug}#place`);
+
+	let contentModifiedAt = $derived(
+		newestTimestamp(
+			[
+				live.latestSample?.sampledAt,
+				...live.recentDischarges.flatMap((d) => [d.startedAt, d.endedAt])
+			],
+			live.verdict.fetchedAt
+		)
+	);
+
+	// dateModified belongs on a CreativeWork, not a Place, so the freshness
+	// signal rides on a WebPage that references the Place by id rather than
+	// restating it as a second, emptier node.
+	let pageLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		'@id': `https://isitsafetoswim.com/swim/${location.slug}`,
+		url: `https://isitsafetoswim.com/swim/${location.slug}`,
+		name: metaTitle,
+		description: verdictSentence,
+		dateModified: londonIsoDateTime(contentModifiedAt),
+		inLanguage: 'en-GB',
+		about: { '@id': placeId },
+		isPartOf: {
+			'@type': 'WebSite',
+			'@id': 'https://isitsafetoswim.com/#website',
+			name: 'Is it safe to swim?',
+			url: 'https://isitsafetoswim.com/'
+		}
+	});
 
 	let jsonLd = $derived({
 		'@context': 'https://schema.org',
 		'@type': 'Place',
+		'@id': placeId,
 		name: location.name,
 		address: {
 			'@type': 'PostalAddress',
@@ -98,21 +146,6 @@
 				'@type': 'PropertyValue',
 				name: 'Current verdict',
 				value: verdictSentence
-			}
-		]
-	});
-
-	let faqLd = $derived({
-		'@context': 'https://schema.org',
-		'@type': 'FAQPage',
-		mainEntity: [
-			{
-				'@type': 'Question',
-				name: `Is it safe to swim at ${location.name}?`,
-				acceptedAnswer: {
-					'@type': 'Answer',
-					text: verdictSentence
-				}
 			}
 		]
 	});
@@ -164,7 +197,7 @@
 	<meta property="og:url" content={`https://isitsafetoswim.com/swim/${location.slug}`} />
 	<meta name="twitter:card" content="summary_large_image" />
 	<link rel="canonical" href={`https://isitsafetoswim.com/swim/${location.slug}`} />
-	{@html `<script type="application/ld+json">${safeJsonLd([jsonLd, faqLd, breadcrumbLd])}</script>`}
+	{@html `<script type="application/ld+json">${safeJsonLd([pageLd, jsonLd, breadcrumbLd])}</script>`}
 </svelte:head>
 
 <article class="page">

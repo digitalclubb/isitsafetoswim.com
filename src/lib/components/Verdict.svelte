@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { VerdictResult } from '$lib/data/types';
+	import { londonClock, londonDate, londonIsoDate, londonIsoDateTime } from '$lib/util/time';
 
 	let {
 		verdict,
@@ -17,30 +18,14 @@
 		verdict.verdict === 'yes' ? 'yes' : verdict.verdict === 'caution' ? 'caution' : 'no'
 	);
 
-	let formattedTime = $derived(formatRelative(verdict.fetchedAt));
-	let formattedDate = $derived(formatDate(verdict.fetchedAt));
-
-	function formatRelative(iso: string): string {
-		const t = Date.parse(iso);
-		if (!Number.isFinite(t)) return '';
-		const diffMins = Math.max(0, Math.round((Date.now() - t) / 60000));
-		if (diffMins < 1) return 'just now';
-		if (diffMins < 60) return `${diffMins} minute${diffMins === 1 ? '' : 's'} ago`;
-		const hours = Math.round(diffMins / 60);
-		if (hours < 24) return `${hours} hour${hours === 1 ? '' : 's'} ago`;
-		const days = Math.round(hours / 24);
-		return `${days} day${days === 1 ? '' : 's'} ago`;
-	}
-
-	function formatDate(iso: string): string {
-		const t = Date.parse(iso);
-		if (!Number.isFinite(t)) return '';
-		return new Date(t).toLocaleDateString('en-GB', {
-			weekday: 'long',
-			day: 'numeric',
-			month: 'long'
-		});
-	}
+	// An absolute clock time rather than "just now". The page is cached by ISR
+	// for five minutes and served stale for longer, so a relative phrase is
+	// already wrong by the time most visitors read it, and computing one during
+	// render made the server and client HTML disagree.
+	let formattedTime = $derived(londonClock(verdict.fetchedAt));
+	let formattedDate = $derived(londonDate(verdict.fetchedAt));
+	let isoDate = $derived(londonIsoDate(verdict.fetchedAt));
+	let isoDateTime = $derived(londonIsoDateTime(verdict.fetchedAt));
 </script>
 
 <section class="verdict" data-tone={tone} aria-labelledby="verdict-head">
@@ -49,7 +34,7 @@
 			<span class="dot" aria-hidden="true"></span>
 			<span>{country}{region ? ` · ${region}` : ''}</span>
 		</p>
-		<p class="dateline">{formattedDate}</p>
+		<p class="dateline"><time datetime={isoDate}>{formattedDate}</time></p>
 	</header>
 
 	<h1 class="name">{locationName}</h1>
@@ -62,7 +47,9 @@
 	<div class="rule" aria-hidden="true"></div>
 
 	<p class="updated">
-		Updated {formattedTime}
+		<!-- One flex item, so the row gap separates the phrase from the badge
+		     rather than opening up between the label and the time. -->
+		<span>Checked <time datetime={isoDateTime}>{formattedTime}</time> UK time</span>
 		{#if verdict.dataAge === 'cached'}
 			<span class="badge">cached</span>
 		{:else if verdict.dataAge === 'unavailable'}
