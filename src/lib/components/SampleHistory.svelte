@@ -55,7 +55,7 @@
 
 <style>
 	.trend {
-		margin: 0;
+		margin: var(--space-5) 0 0;
 	}
 
 	figcaption {
