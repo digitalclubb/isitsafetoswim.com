@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-31T13:00:49.587Z",
+  "generatedAt": "2026-08-14T19:27:17.567Z",
   "count": 701,
   "partialFor": [],
   "byCountry": {
@@ -1534,7 +1534,7 @@
       "region": "Ards and North Down Borough Council",
       "lat": 54.6677727613727,
       "lon": -5.68445956927381,
-      "classification": "Good",
+      "classification": "Excellent",
       "waterType": "coastal",
       "source": {
         "api": "daera",
@@ -4183,7 +4183,7 @@
       "region": "Ards and North Down Borough Council",
       "lat": 54.675296100301,
       "lon": -5.61149751995466,
-      "classification": "Unknown",
+      "classification": "Excellent",
       "waterType": "coastal",
       "source": {
         "api": "daera",
