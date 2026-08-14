@@ -30,7 +30,10 @@ export function extractLabel(value) {
 		return value;
 	}
 	if (Array.isArray(value)) {
-		const labels = value.map(extractLabel).filter(Boolean);
+		// The EA lists a district under both its own name and its county's, which
+		// for a unitary authority are the same word. Joining them unfiltered gave
+		// regions called "South Hams, South Hams" and split one area hub in two.
+		const labels = [...new Set(value.map(extractLabel).filter(Boolean))];
 		return labels.length ? labels.join(', ') : undefined;
 	}
 	if (typeof value === 'object') {

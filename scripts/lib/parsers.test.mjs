@@ -118,6 +118,24 @@ describe('extractLabel', () => {
 		expect(extractLabel(node)).toBe('Llanishen Reservoir');
 	});
 
+	// A unitary authority is listed as both the district and the county, which
+	// produced regions named "South Hams, South Hams" and split an area hub.
+	it('collapses a label the EA repeats for a unitary authority', () => {
+		const district = [
+			{ name: { _value: 'South Hams', _lang: 'en' } },
+			{ name: { _value: 'South Hams', _lang: 'en' } }
+		];
+		expect(extractLabel(district)).toBe('South Hams');
+	});
+
+	it('still joins genuinely different labels', () => {
+		const district = [
+			{ name: { _value: 'Bournemouth', _lang: 'en' } },
+			{ name: { _value: 'Christchurch', _lang: 'en' } }
+		];
+		expect(extractLabel(district)).toBe('Bournemouth, Christchurch');
+	});
+
 	it('returns plain strings unchanged', () => {
 		expect(extractLabel('Plain string')).toBe('Plain string');
 	});
