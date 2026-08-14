@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-14T19:27:17.567Z",
+  "generatedAt": "2026-08-14T20:38:50.008Z",
   "count": 701,
   "partialFor": [],
   "byCountry": {
@@ -308,6 +308,25 @@
         "sourceId": "ukd1101-46100",
         "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukd1101-46100"
       }
+    },
+    {
+      "id": "ea-ukk2101-19160",
+      "name": "Alum Chine, Bournemouth",
+      "slug": "bournemouth-alum-chine",
+      "country": "England",
+      "region": "Bournemouth, Christchurch and Poole",
+      "lat": 50.711113986161706,
+      "lon": -1.895402269211638,
+      "classification": "Excellent",
+      "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
+      "source": {
+        "api": "ea",
+        "sourceId": "ukk2101-19160",
+        "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukk2101-19160"
+      },
+      "officialName": "Bournemouth Alum Chine"
     },
     {
       "id": "ea-ukc2101-04250",
@@ -1068,24 +1087,6 @@
       }
     },
     {
-      "id": "ea-ukk2101-19160",
-      "name": "Bournemouth Alum Chine",
-      "slug": "bournemouth-alum-chine",
-      "country": "England",
-      "region": "Bournemouth, Christchurch and Poole",
-      "lat": 50.711113986161706,
-      "lon": -1.895402269211638,
-      "classification": "Excellent",
-      "sewerageUndertaker": "Wessex Water Services Limited",
-      "waterType": "coastal",
-      "rainImpacted": false,
-      "source": {
-        "api": "ea",
-        "sourceId": "ukk2101-19160",
-        "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukk2101-19160"
-      }
-    },
-    {
       "id": "ea-ukk2101-19060",
       "name": "Bournemouth Boscombe Pier",
       "slug": "bournemouth-boscombe-pier",
@@ -1119,24 +1120,6 @@
         "api": "ea",
         "sourceId": "ukk2101-19150",
         "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukk2101-19150"
-      }
-    },
-    {
-      "id": "ea-ukk2101-19030",
-      "name": "Bournemouth Fisherman`s Walk",
-      "slug": "bournemouth-fisherman-s-walk",
-      "country": "England",
-      "region": "Bournemouth, Christchurch and Poole",
-      "lat": 50.72070320194038,
-      "lon": -1.816860588485414,
-      "classification": "Excellent",
-      "sewerageUndertaker": "Wessex Water Services Limited",
-      "waterType": "coastal",
-      "rainImpacted": false,
-      "source": {
-        "api": "ea",
-        "sourceId": "ukk2101-19030",
-        "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukk2101-19030"
       }
     },
     {
@@ -1191,24 +1174,6 @@
         "api": "ea",
         "sourceId": "ukk2101-19100",
         "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukk2101-19100"
-      }
-    },
-    {
-      "id": "ea-ukk2101-19020",
-      "name": "Bournemouth Southbourne",
-      "slug": "bournemouth-southbourne",
-      "country": "England",
-      "region": "Bournemouth, Christchurch and Poole",
-      "lat": 50.71897071380313,
-      "lon": -1.791710158585046,
-      "classification": "Excellent",
-      "sewerageUndertaker": "Wessex Water Services Limited",
-      "waterType": "coastal",
-      "rainImpacted": false,
-      "source": {
-        "api": "ea",
-        "sourceId": "ukk2101-19020",
-        "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukk2101-19020"
       }
     },
     {
@@ -1863,6 +1828,25 @@
       }
     },
     {
+      "id": "ea-ukh3100-11902",
+      "name": "Chalkwell Beach, Southend",
+      "slug": "southend-chalkwell",
+      "country": "England",
+      "region": "Southend-on-Sea",
+      "lat": 51.53739087248782,
+      "lon": 0.672951759736441,
+      "classification": "Good",
+      "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
+      "source": {
+        "api": "ea",
+        "sourceId": "ukh3100-11902",
+        "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukh3100-11902"
+      },
+      "officialName": "Southend Chalkwell"
+    },
+    {
       "id": "ea-ukk4305-26000",
       "name": "Challaborough",
       "slug": "challaborough",
@@ -1986,24 +1970,6 @@
         "api": "ea",
         "sourceId": "ukk2201-17200",
         "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukk2201-17200"
-      }
-    },
-    {
-      "id": "ea-ukk2201-18750",
-      "name": "Christchurch Friar`s Cliff",
-      "slug": "christchurch-friar-s-cliff",
-      "country": "England",
-      "region": "Bournemouth, Christchurch and Poole",
-      "lat": 50.73204459027096,
-      "lon": -1.729392227367008,
-      "classification": "Excellent",
-      "sewerageUndertaker": "Wessex Water Services Limited",
-      "waterType": "coastal",
-      "rainImpacted": false,
-      "source": {
-        "api": "ea",
-        "sourceId": "ukk2201-18750",
-        "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukk2201-18750"
       }
     },
     {
@@ -2272,7 +2238,7 @@
     },
     {
       "id": "nrw-ukl2202-36300",
-      "name": "Cold Knap Barry",
+      "name": "Cold Knap, Barry",
       "slug": "cold-knap-barry",
       "country": "Wales",
       "region": "the Vale of Glamorgan",
@@ -2285,7 +2251,8 @@
         "api": "nrw",
         "sourceId": "ukl2202-36300",
         "profileUrl": "https://environment.data.gov.uk/wales/bathing-waters/profiles/profile.html?site=ukl2202-36300"
-      }
+      },
+      "officialName": "Cold Knap Barry"
     },
     {
       "id": "sepa-643",
@@ -3422,6 +3389,23 @@
       }
     },
     {
+      "id": "daera-30047",
+      "name": "East Strand, Portrush",
+      "slug": "portrush-curran-east-strand",
+      "country": "Northern Ireland",
+      "region": "Causeway Coast and Glens Borough Council",
+      "lat": 55.2048765232501,
+      "lon": -6.64759721504824,
+      "classification": "Excellent",
+      "waterType": "coastal",
+      "source": {
+        "api": "daera",
+        "sourceId": "30047",
+        "profileUrl": "https://www.daera-ni.gov.uk/sites/default/files/2025-05/AE1%2025%20369935%20%20NEW%20DRAFT%20Portrush%20%28Curran%29%20bathing%20water%20profile%202025.pdf"
+      },
+      "officialName": "Portrush Curran (East Strand)"
+    },
+    {
       "id": "ea-ukj2201-14500",
       "name": "Eastbourne",
       "slug": "eastbourne",
@@ -3676,6 +3660,25 @@
       }
     },
     {
+      "id": "ea-ukk2101-19030",
+      "name": "Fisherman's Walk, Bournemouth",
+      "slug": "bournemouth-fisherman-s-walk",
+      "country": "England",
+      "region": "Bournemouth, Christchurch and Poole",
+      "lat": 50.72070320194038,
+      "lon": -1.816860588485414,
+      "classification": "Excellent",
+      "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
+      "source": {
+        "api": "ea",
+        "sourceId": "ukk2101-19030",
+        "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukk2101-19030"
+      },
+      "officialName": "Bournemouth Fisherman`s Walk"
+    },
+    {
       "id": "sepa-703",
       "name": "Fisherrow Sands",
       "slug": "fisherrow-sands",
@@ -3914,6 +3917,25 @@
         "sourceId": "ukl1403-38248",
         "profileUrl": "https://environment.data.gov.uk/wales/bathing-waters/profiles/profile.html?site=ukl1403-38248"
       }
+    },
+    {
+      "id": "ea-ukk2201-18750",
+      "name": "Friar's Cliff, Christchurch",
+      "slug": "christchurch-friar-s-cliff",
+      "country": "England",
+      "region": "Bournemouth, Christchurch and Poole",
+      "lat": 50.73204459027096,
+      "lon": -1.729392227367008,
+      "classification": "Excellent",
+      "sewerageUndertaker": "Wessex Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
+      "source": {
+        "api": "ea",
+        "sourceId": "ukk2201-18750",
+        "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukk2201-18750"
+      },
+      "officialName": "Christchurch Friar`s Cliff"
     },
     {
       "id": "ea-ukh1401-11051",
@@ -4970,7 +4992,7 @@
     },
     {
       "id": "nrw-ukl2202-36100",
-      "name": "Jackson's Bay Barry Island",
+      "name": "Jackson's Bay, Barry Island",
       "slug": "jackson-s-bay-barry-island",
       "country": "Wales",
       "region": "the Vale of Glamorgan",
@@ -4983,7 +5005,8 @@
         "api": "nrw",
         "sourceId": "ukl2202-36100",
         "profileUrl": "https://environment.data.gov.uk/wales/bathing-waters/profiles/profile.html?site=ukl2202-36100"
-      }
+      },
+      "officialName": "Jackson's Bay Barry Island"
     },
     {
       "id": "ea-ukh3311-11600",
@@ -5494,23 +5517,6 @@
         "api": "nrw",
         "sourceId": "ukl1301-40300",
         "profileUrl": "https://environment.data.gov.uk/wales/bathing-waters/profiles/profile.html?site=ukl1301-40300"
-      }
-    },
-    {
-      "id": "nrw-ukl1301-40200",
-      "name": "Llandudno West Shore",
-      "slug": "llandudno-west-shore",
-      "country": "Wales",
-      "region": "Conwy",
-      "lat": 53.3173496779201,
-      "lon": -3.85463758549329,
-      "classification": "Good",
-      "waterType": "coastal",
-      "rainImpacted": true,
-      "source": {
-        "api": "nrw",
-        "sourceId": "ukl1301-40200",
-        "profileUrl": "https://environment.data.gov.uk/wales/bathing-waters/profiles/profile.html?site=ukl1301-40200"
       }
     },
     {
@@ -6352,7 +6358,7 @@
     },
     {
       "id": "ea-ukk2305-35000",
-      "name": "Minehead Terminus",
+      "name": "Minehead Beach",
       "slug": "minehead-terminus",
       "country": "England",
       "region": "Somerset",
@@ -6366,7 +6372,8 @@
         "api": "ea",
         "sourceId": "ukk2305-35000",
         "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukk2305-35000"
-      }
+      },
+      "officialName": "Minehead Terminus"
     },
     {
       "id": "ea-ukj4210-12300",
@@ -6557,7 +6564,7 @@
     },
     {
       "id": "ea-ukk3104-32800",
-      "name": "Mother Ivey`s Bay",
+      "name": "Mother Ivey's Bay",
       "slug": "mother-ivey-s-bay",
       "country": "England",
       "region": "Cornwall",
@@ -6571,7 +6578,8 @@
         "api": "ea",
         "sourceId": "ukk3104-32800",
         "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukk3104-32800"
-      }
+      },
+      "officialName": "Mother Ivey`s Bay"
     },
     {
       "id": "ea-ukh1305-10300",
@@ -6865,7 +6873,7 @@
     },
     {
       "id": "ea-ukj2205-14300",
-      "name": "Norman`s Bay",
+      "name": "Norman's Bay",
       "slug": "norman-s-bay",
       "country": "England",
       "region": "Rother",
@@ -6879,7 +6887,8 @@
         "api": "ea",
         "sourceId": "ukj2205-14300",
         "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukj2205-14300"
-      }
+      },
+      "officialName": "Norman`s Bay"
     },
     {
       "id": "sepa-680",
@@ -8071,38 +8080,6 @@
       }
     },
     {
-      "id": "daera-30047",
-      "name": "Portrush Curran (East Strand)",
-      "slug": "portrush-curran-east-strand",
-      "country": "Northern Ireland",
-      "region": "Causeway Coast and Glens Borough Council",
-      "lat": 55.2048765232501,
-      "lon": -6.64759721504824,
-      "classification": "Excellent",
-      "waterType": "coastal",
-      "source": {
-        "api": "daera",
-        "sourceId": "30047",
-        "profileUrl": "https://www.daera-ni.gov.uk/sites/default/files/2025-05/AE1%2025%20369935%20%20NEW%20DRAFT%20Portrush%20%28Curran%29%20bathing%20water%20profile%202025.pdf"
-      }
-    },
-    {
-      "id": "daera-30045",
-      "name": "Portrush Mill (West Strand)",
-      "slug": "portrush-mill-west-strand",
-      "country": "Northern Ireland",
-      "region": "Causeway Coast and Glens Borough Council",
-      "lat": 55.2054102387719,
-      "lon": -6.6563057977259,
-      "classification": "Excellent",
-      "waterType": "coastal",
-      "source": {
-        "api": "daera",
-        "sourceId": "30045",
-        "profileUrl": "https://www.daera-ni.gov.uk/sites/default/files/2025-05/AE1%2025%20333233%20%20NEW%20DRAFT%20Portrush%20%28Mill%29%20bathing%20water%20profile%202025.pdf"
-      }
-    },
-    {
       "id": "daera-30052",
       "name": "Portrush Whiterocks",
       "slug": "portrush-whiterocks",
@@ -8417,7 +8394,7 @@
     },
     {
       "id": "nrw-ukl1701-36700",
-      "name": "Rest Bay Porthcawl",
+      "name": "Rest Bay, Porthcawl",
       "slug": "rest-bay-porthcawl",
       "country": "Wales",
       "region": "Bridgend",
@@ -8430,7 +8407,8 @@
         "api": "nrw",
         "sourceId": "ukl1701-36700",
         "profileUrl": "https://environment.data.gov.uk/wales/bathing-waters/profiles/profile.html?site=ukl1701-36700"
-      }
+      },
+      "officialName": "Rest Bay Porthcawl"
     },
     {
       "id": "nrw-ukl1100-39990",
@@ -9045,7 +9023,7 @@
     },
     {
       "id": "nrw-ukl1701-36600",
-      "name": "Sandy Bay Porthcawl",
+      "name": "Sandy Bay, Porthcawl",
       "slug": "sandy-bay-porthcawl",
       "country": "Wales",
       "region": "Bridgend",
@@ -9058,7 +9036,8 @@
         "api": "nrw",
         "sourceId": "ukl1701-36600",
         "profileUrl": "https://environment.data.gov.uk/wales/bathing-waters/profiles/profile.html?site=ukl1701-36600"
-      }
+      },
+      "officialName": "Sandy Bay Porthcawl"
     },
     {
       "id": "nrw-ukl1403-38255",
@@ -9767,6 +9746,25 @@
       }
     },
     {
+      "id": "ea-ukk4301-21800",
+      "name": "Sidmouth Beach",
+      "slug": "sidmouth-town",
+      "country": "England",
+      "region": "East Devon",
+      "lat": 50.67618469413079,
+      "lon": -3.243033974073603,
+      "classification": "Excellent",
+      "sewerageUndertaker": "South West Water Limited",
+      "waterType": "coastal",
+      "rainImpacted": true,
+      "source": {
+        "api": "ea",
+        "sourceId": "ukk4301-21800",
+        "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukk4301-21800"
+      },
+      "officialName": "Sidmouth Town"
+    },
+    {
       "id": "ea-ukk4301-21900",
       "name": "Sidmouth Jacobs Ladder",
       "slug": "sidmouth-jacobs-ladder",
@@ -9782,24 +9780,6 @@
         "api": "ea",
         "sourceId": "ukk4301-21900",
         "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukk4301-21900"
-      }
-    },
-    {
-      "id": "ea-ukk4301-21800",
-      "name": "Sidmouth Town",
-      "slug": "sidmouth-town",
-      "country": "England",
-      "region": "East Devon",
-      "lat": 50.67618469413079,
-      "lon": -3.243033974073603,
-      "classification": "Excellent",
-      "sewerageUndertaker": "South West Water Limited",
-      "waterType": "coastal",
-      "rainImpacted": true,
-      "source": {
-        "api": "ea",
-        "sourceId": "ukk4301-21800",
-        "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukk4301-21800"
       }
     },
     {
@@ -9928,22 +9908,23 @@
       }
     },
     {
-      "id": "ea-ukh3100-11902",
-      "name": "Southend Chalkwell",
-      "slug": "southend-chalkwell",
+      "id": "ea-ukk2101-19020",
+      "name": "Southbourne, Bournemouth",
+      "slug": "bournemouth-southbourne",
       "country": "England",
-      "region": "Southend-on-Sea",
-      "lat": 51.53739087248782,
-      "lon": 0.672951759736441,
-      "classification": "Good",
-      "sewerageUndertaker": "Anglian Water Services Limited",
+      "region": "Bournemouth, Christchurch and Poole",
+      "lat": 50.71897071380313,
+      "lon": -1.791710158585046,
+      "classification": "Excellent",
+      "sewerageUndertaker": "Wessex Water Services Limited",
       "waterType": "coastal",
-      "rainImpacted": true,
+      "rainImpacted": false,
       "source": {
         "api": "ea",
-        "sourceId": "ukh3100-11902",
-        "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukh3100-11902"
-      }
+        "sourceId": "ukk2101-19020",
+        "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukk2101-19020"
+      },
+      "officialName": "Bournemouth Southbourne"
     },
     {
       "id": "ea-ukh3100-11830",
@@ -9964,24 +9945,6 @@
       }
     },
     {
-      "id": "ea-ukh3100-11800",
-      "name": "Southend Thorpe Bay",
-      "slug": "southend-thorpe-bay",
-      "country": "England",
-      "region": "Southend-on-Sea",
-      "lat": 51.52886881078944,
-      "lon": 0.753632019781134,
-      "classification": "Excellent",
-      "sewerageUndertaker": "Anglian Water Services Limited",
-      "waterType": "coastal",
-      "rainImpacted": false,
-      "source": {
-        "api": "ea",
-        "sourceId": "ukh3100-11800",
-        "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukh3100-11800"
-      }
-    },
-    {
       "id": "ea-ukh3100-11850",
       "name": "Southend Three Shells",
       "slug": "southend-three-shells",
@@ -9997,24 +9960,6 @@
         "api": "ea",
         "sourceId": "ukh3100-11850",
         "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukh3100-11850"
-      }
-    },
-    {
-      "id": "ea-ukh3100-11900",
-      "name": "Southend Westcliff Bay",
-      "slug": "southend-westcliff-bay",
-      "country": "England",
-      "region": "Southend-on-Sea",
-      "lat": 51.53536180804658,
-      "lon": 0.686965498944973,
-      "classification": "Good",
-      "sewerageUndertaker": "Anglian Water Services Limited",
-      "waterType": "coastal",
-      "rainImpacted": false,
-      "source": {
-        "api": "ea",
-        "sourceId": "ukh3100-11900",
-        "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukh3100-11900"
       }
     },
     {
@@ -10296,7 +10241,7 @@
     },
     {
       "id": "ea-ukj4204-13200",
-      "name": "St Margaret`s Bay",
+      "name": "St Margaret's Bay",
       "slug": "st-margaret-s-bay",
       "country": "England",
       "region": "Dover",
@@ -10310,7 +10255,8 @@
         "api": "ea",
         "sourceId": "ukj4204-13200",
         "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukj4204-13200"
-      }
+      },
+      "officialName": "St Margaret`s Bay"
     },
     {
       "id": "ea-ukk4200-24600",
@@ -10714,6 +10660,25 @@
         "sourceId": "694",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4573"
       }
+    },
+    {
+      "id": "ea-ukh3100-11800",
+      "name": "Thorpe Bay, Southend",
+      "slug": "southend-thorpe-bay",
+      "country": "England",
+      "region": "Southend-on-Sea",
+      "lat": 51.52886881078944,
+      "lon": 0.753632019781134,
+      "classification": "Excellent",
+      "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
+      "source": {
+        "api": "ea",
+        "sourceId": "ukh3100-11800",
+        "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukh3100-11800"
+      },
+      "officialName": "Southend Thorpe Bay"
     },
     {
       "id": "ea-ukk4305-25600",
@@ -11611,6 +11576,41 @@
       }
     },
     {
+      "id": "nrw-ukl1301-40200",
+      "name": "West Shore, Llandudno",
+      "slug": "llandudno-west-shore",
+      "country": "Wales",
+      "region": "Conwy",
+      "lat": 53.3173496779201,
+      "lon": -3.85463758549329,
+      "classification": "Good",
+      "waterType": "coastal",
+      "rainImpacted": true,
+      "source": {
+        "api": "nrw",
+        "sourceId": "ukl1301-40200",
+        "profileUrl": "https://environment.data.gov.uk/wales/bathing-waters/profiles/profile.html?site=ukl1301-40200"
+      },
+      "officialName": "Llandudno West Shore"
+    },
+    {
+      "id": "daera-30045",
+      "name": "West Strand, Portrush",
+      "slug": "portrush-mill-west-strand",
+      "country": "Northern Ireland",
+      "region": "Causeway Coast and Glens Borough Council",
+      "lat": 55.2054102387719,
+      "lon": -6.6563057977259,
+      "classification": "Excellent",
+      "waterType": "coastal",
+      "source": {
+        "api": "daera",
+        "sourceId": "30045",
+        "profileUrl": "https://www.daera-ni.gov.uk/sites/default/files/2025-05/AE1%2025%20333233%20%20NEW%20DRAFT%20Portrush%20%28Mill%29%20bathing%20water%20profile%202025.pdf"
+      },
+      "officialName": "Portrush Mill (West Strand)"
+    },
+    {
       "id": "ea-ukj2403-16100",
       "name": "West Wittering",
       "slug": "west-wittering",
@@ -11645,6 +11645,25 @@
         "sourceId": "ukj4210-12450",
         "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukj4210-12450"
       }
+    },
+    {
+      "id": "ea-ukh3100-11900",
+      "name": "Westcliff Bay, Southend",
+      "slug": "southend-westcliff-bay",
+      "country": "England",
+      "region": "Southend-on-Sea",
+      "lat": 51.53536180804658,
+      "lon": 0.686965498944973,
+      "classification": "Good",
+      "sewerageUndertaker": "Anglian Water Services Limited",
+      "waterType": "coastal",
+      "rainImpacted": false,
+      "source": {
+        "api": "ea",
+        "sourceId": "ukh3100-11900",
+        "profileUrl": "https://environment.data.gov.uk/bwq/profiles/profile.html?site=ukh3100-11900"
+      },
+      "officialName": "Southend Westcliff Bay"
     },
     {
       "id": "ea-ukk1202-35800",
@@ -11896,7 +11915,7 @@
     },
     {
       "id": "nrw-ukl2202-36200",
-      "name": "Whitmore Bay Barry Island",
+      "name": "Whitmore Bay, Barry Island",
       "slug": "whitmore-bay-barry-island",
       "country": "Wales",
       "region": "the Vale of Glamorgan",
@@ -11909,7 +11928,8 @@
         "api": "nrw",
         "sourceId": "ukl2202-36200",
         "profileUrl": "https://environment.data.gov.uk/wales/bathing-waters/profiles/profile.html?site=ukl2202-36200"
-      }
+      },
+      "officialName": "Whitmore Bay Barry Island"
     },
     {
       "id": "ea-ukk3104-33400",

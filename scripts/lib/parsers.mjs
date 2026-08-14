@@ -67,6 +67,9 @@ export function dedupeSlugs(locations) {
 	const taken = new Map(); // slug -> country
 	const counter = new Map(); // base-slug -> next index
 	for (const loc of locations) {
+		// The name fallback only holds while every row carries a slug, since a
+		// renamed row would slugify to a different URL. display-names.test.mjs
+		// asserts the cache never ships a row without one.
 		const base = loc.slug || slugify(loc.name);
 		if (!taken.has(base)) {
 			taken.set(base, loc.country);

@@ -14,6 +14,7 @@
 import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { applyDisplayNames } from './lib/display-names.mjs';
 import {
 	classifyValue,
 	dedupeSlugs,
@@ -330,6 +331,9 @@ async function buildIndex() {
 	}
 
 	dedupeSlugs(collected);
+	// After dedupe, so the override is keyed by the slug the site actually
+	// ships, and before the sort, so the catalogue orders by the displayed name.
+	applyDisplayNames(collected);
 	collected.sort((a, b) => a.name.localeCompare(b.name, 'en-GB'));
 
 	const byCountry = {
@@ -367,6 +371,7 @@ async function main() {
 			id: l.id,
 			slug: l.slug,
 			name: l.name,
+			officialName: l.officialName,
 			country: l.country,
 			region: l.region,
 			classification: l.classification,

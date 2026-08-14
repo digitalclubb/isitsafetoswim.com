@@ -5,6 +5,8 @@ export interface SearchLocation {
 	id: string;
 	slug: string;
 	name: string;
+	/** The regulator's own name, when the displayed one differs from it. */
+	officialName?: string;
 	country: Country;
 	region?: string;
 	classification: Classification;
@@ -34,11 +36,17 @@ export function searchSlim(query: string, limit = 8): SearchLocation[] {
 	const out: Array<{ loc: SearchLocation; score: number }> = [];
 	for (const loc of index.locations) {
 		const name = foldDiacritics(loc.name.toLowerCase());
+		// Someone reading the regulator's name off a beach board or an EA profile
+		// searches for that, not for the name we chose to display.
+		const official = foldDiacritics((loc.officialName ?? '').toLowerCase());
 		const region = foldDiacritics((loc.region ?? '').toLowerCase());
 		let score = 0;
 		if (name === q) score = 100;
 		else if (name.startsWith(q)) score = 60;
 		else if (name.includes(q)) score = 30;
+		else if (official === q) score = 50;
+		else if (official.startsWith(q)) score = 25;
+		else if (official.includes(q)) score = 20;
 		else if (region.includes(q)) score = 15;
 		if (score > 0) out.push({ loc, score });
 	}

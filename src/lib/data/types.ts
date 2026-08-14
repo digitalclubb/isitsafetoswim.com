@@ -21,6 +21,8 @@ export interface Location {
 	id: string;
 	slug: string;
 	name: string;
+	/** The regulator's own name, when the displayed one differs from it. */
+	officialName?: string;
 	country: Country;
 	region?: string;
 	lat: number;
