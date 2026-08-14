@@ -2,7 +2,7 @@ import { getAllLocations, getIndexMeta } from './locations';
 import type { Classification, Country, Location } from './types';
 
 /**
- * Regional and country hub pages ("Bathing water quality in Cornwall") are
+ * Regional and country hub pages ("Cleanest beaches in Cornwall") are
  * derived entirely from the location catalogue, so they can never carry stale
  * hand-written rankings. A region needs at least this many bathing waters to
  * earn its own page; smaller regions roll up into their country page only.

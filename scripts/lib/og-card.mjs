@@ -106,7 +106,7 @@ export function buildAreaCard({ name, country, count, kind }) {
 		kind === 'country'
 			? `${count} designated bathing waters`
 			: `${count} designated bathing waters · ${country}`;
-	const inner = `	<text x="80" y="250" font-family="Source Serif 4" font-weight="400" font-size="34" fill="${INK_SOFT}">Bathing water quality in</text>
+	const inner = `	<text x="80" y="250" font-family="Source Serif 4" font-weight="400" font-size="34" fill="${INK_SOFT}">Cleanest beaches in</text>
 	<text x="80" y="${top}" font-family="Source Serif 4" font-weight="600" font-size="${h.size}" letter-spacing="-1" fill="${INK}">${h.tspans}</text>
 	<text x="80" y="${top + h.extra + 70}" font-family="Source Serif 4" font-weight="400" font-size="38" fill="${INK_SOFT}">${escapeXml(sub)}</text>`;
 	return frame(inner);

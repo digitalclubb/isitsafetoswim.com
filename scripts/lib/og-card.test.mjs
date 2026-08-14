@@ -50,7 +50,8 @@ describe('buildLocationCard', () => {
 describe('buildAreaCard', () => {
 	it('renders the area headline and count', () => {
 		const svg = buildAreaCard({ name: 'Cornwall', country: 'England', count: 90, kind: 'region' });
-		expect(svg).toContain('Bathing water quality in');
+		// Matches the page's own title, so a shared card never contradicts it.
+		expect(svg).toContain('Cleanest beaches in');
 		expect(svg).toContain('Cornwall');
 		expect(svg).toContain('90 designated bathing waters · England');
 	});

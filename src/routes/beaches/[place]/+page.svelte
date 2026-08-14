@@ -42,9 +42,11 @@
 		new Date(data.generatedAt).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
 	);
 
-	let metaTitle = $derived(`Bathing water quality in ${place.name}`);
+	// "Cleanest beaches in X" is what this page is actually asked for, and it is
+	// demand that holds up outside the bathing season, unlike the daily verdict.
+	let metaTitle = $derived(`Cleanest beaches in ${place.name}`);
 	let metaDescription = $derived(
-		`The cleanest beaches in ${place.name} and live water-quality verdicts for all ${count} designated bathing waters.`
+		`All ${count} designated bathing waters in ${place.name}, ranked by official water-quality classification, with a live verdict for each.`
 	);
 
 	let cleanestAnswer = $derived(
@@ -61,7 +63,7 @@
 
 	let crumbs = $derived([
 		{ name: 'Is it safe to swim?', url: `${BASE}/` },
-		{ name: 'Areas', url: `${BASE}/beaches` },
+		{ name: 'Cleanest beaches by area', url: `${BASE}/beaches` },
 		...(data.parent ? [{ name: data.parent.name, url: `${BASE}/beaches/${data.parent.slug}` }] : []),
 		{ name: place.name, url: `${BASE}/beaches/${place.slug}` }
 	]);
@@ -115,7 +117,7 @@
 		<p class="back"><a href="/beaches">← All areas</a></p>
 
 		<header class="head">
-			<h1>Bathing water quality in {place.name}</h1>
+			<h1>Cleanest beaches in {place.name}</h1>
 			<p class="lede">
 				{place.name} has {count} designated bathing waters.{classSummary
 					? ` The regulator's latest classifications are ${classSummary}.`
@@ -128,10 +130,10 @@
 
 		{#if data.cleanest.length > 0}
 			<section class="block" aria-labelledby="cleanest">
-				<h2 id="cleanest">The cleanest beaches in {place.name}</h2>
+				<h2 id="cleanest">Top rated</h2>
 				<p class="muted">
-					Rated Excellent or Good in the regulator's latest annual classification. Open any beach
-					for today's live verdict.
+					A selection rated Excellent or Good in the regulator's latest annual classification.
+					Open any beach for today's live verdict.
 				</p>
 				<div class="card-grid">
 					{#each data.cleanest as loc (loc.slug)}

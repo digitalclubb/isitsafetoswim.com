@@ -3,9 +3,14 @@
 
 	let { data }: { data: PageData } = $props();
 
-	const title = 'UK bathing waters by area';
-	const description =
-		'Browse every designated bathing water in the UK by country and region, with the cleanest beaches in each area and live water-quality verdicts.';
+	// Titled around "cleanest beaches in X", which is the demand these pages
+	// answer and the phrasing that carries through the winter, rather than the
+	// regulator's term for the same thing.
+	const title = 'Cleanest beaches in the UK, by area';
+	let total = $derived(data.countries.reduce((sum, g) => sum + g.country.count, 0));
+	let description = $derived(
+		`The cleanest beaches in every UK country and region, ranked by official water-quality classification, with a live verdict for all ${total} designated bathing waters.`
+	);
 </script>
 
 <svelte:head>
@@ -25,10 +30,11 @@
 		<p class="back"><a href="/">← Home</a></p>
 
 		<header class="head">
-			<h1>Bathing waters by area</h1>
+			<h1>Cleanest beaches by area</h1>
 			<p class="lede">
 				Every designated bathing water in the UK, grouped by country and region. Each area page
-				ranks the cleanest beaches and links through to today's live verdict.
+				ranks its beaches by the regulator's official classification and links through to
+				today's live verdict.
 			</p>
 		</header>
 
