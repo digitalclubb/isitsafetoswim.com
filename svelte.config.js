@@ -19,7 +19,11 @@ const config = {
 		prerender: {
 			handleHttpError: 'warn',
 			handleMissingId: 'warn',
-			entries: ['*', '/sitemap.xml']
+			// '*' already covers every route without a required parameter, which
+			// includes all four of these. They are named anyway, matching how
+			// /sitemap.xml was already listed, so a rename cannot silently drop
+			// one from the build.
+			entries: ['*', '/sitemap.xml', '/sitemap-pages.xml', '/sitemap-swim.xml', '/sitemap-beaches.xml']
 		}
 	}
 };
