@@ -6,6 +6,7 @@
 	import { onNavigate } from '$app/navigation';
 	import { navigating, page } from '$app/state';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
+	import { redactAnalyticsUrl } from '$lib/util/redact';
 
 	let { children } = $props();
 
@@ -13,15 +14,12 @@
 	// cookies. mode 'auto' sends only from the Vercel production deployment and
 	// stays silent in dev. Speed Insights is deliberately not included.
 	//
-	// A postcode someone types is in the path, and a full UK postcode can
-	// identify a household. beforeSend keeps the route but drops the postcode
-	// itself, so the analytics show that /near was used without recording who
-	// used it from where.
+	// A visitor can put their own location into the URL two ways: the postcode
+	// they search, and the coordinates the near-me button writes into the query
+	// string. beforeSend keeps the route and drops both, so the counts show how
+	// often each search is used without recording who used it from where.
 	injectAnalytics({
-		beforeSend: (event) => ({
-			...event,
-			url: event.url.replace(/\/near\/[^/?#]+/i, '/near/[postcode]')
-		})
+		beforeSend: (event) => ({ ...event, url: redactAnalyticsUrl(event.url) })
 	});
 
 	let current: '' | 'home' | 'map' | 'areas' | 'spills' | 'about' = $derived(
@@ -40,8 +38,10 @@
 
 	let busy = $derived(Boolean(navigating.to));
 
-	let notePages = $derived(
-		page.url.pathname.startsWith('/swim/') || page.url.pathname.startsWith('/about')
+	// The location and about pages carry the signed note, so the footer holds its
+	// tongue there rather than asking twice on one screen.
+	let showFooterAsk = $derived(
+		!(page.url.pathname.startsWith('/swim/') || page.url.pathname === '/about')
 	);
 
 	// Cross-fade between routes using the browser View Transitions API. Falls
@@ -66,9 +66,7 @@
 	{@render children?.()}
 </main>
 
-<!-- The location and about pages carry the full note, so the footer does not
-     repeat the ask a few centimetres below it. -->
-<SiteFooter support={!notePages} />
+<SiteFooter support={showFooterAsk} />
 
 <style>
 	main {

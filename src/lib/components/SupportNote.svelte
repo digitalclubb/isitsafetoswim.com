@@ -26,7 +26,7 @@
 	}
 </script>
 
-<aside class="note" class:full={variant === 'full'} aria-labelledby="support-heading">
+<section class="note" class:full={variant === 'full'} aria-labelledby="support-heading">
 	{#if variant === 'full'}
 		<h2 id="support-heading">Why this is free</h2>
 		<p>
@@ -70,46 +70,37 @@
 			<a class="quiet" href={`${SITE}/writing`} rel="external nofollow">Writing</a>
 		{/if}
 	</p>
-</aside>
+</section>
 
 <style>
 	.note {
 		margin-top: var(--space-7);
 		padding-top: var(--space-5);
-		border-top: var(--rule-weight-strong) solid var(--rule-strong);
+		border-top: var(--rule-weight) solid var(--rule);
 	}
 
 	h2 {
-		font-family: var(--font-serif);
 		font-size: var(--text-lg);
-		font-weight: 600;
-		letter-spacing: -0.01em;
 		margin: 0 0 var(--space-3);
 	}
 
 	p {
 		font-family: var(--font-serif);
 		font-size: var(--text-md);
-		line-height: var(--text-lh);
 		color: var(--ink-soft);
 		margin: 0 0 var(--space-3);
 		max-width: 62ch;
 	}
 
 	.ask {
-		color: var(--link);
 		font-weight: 600;
-	}
-
-	.ask:hover {
-		color: var(--link-hover);
 	}
 
 	.sign {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 0 var(--space-4);
+		gap: var(--space-1) var(--space-4);
 		margin-bottom: 0;
 		font-family: var(--font-sans);
 		font-size: var(--text-xs);
@@ -129,10 +120,6 @@
 		align-items: center;
 		min-height: 44px;
 		color: var(--ink-soft);
-	}
-
-	.quiet:hover {
-		color: var(--link-hover);
 	}
 
 	.full h2 {

@@ -105,18 +105,20 @@
 			There are no adverts, no cookies and no sign-in. Nothing here is sold or shared.
 		</p>
 		<p>
-			Page views are counted through Vercel Web Analytics so I can see which beaches people
-			actually look up and where the site is falling short. Each view records the page, the
-			referring site, a country-level location and the browser and device type. It sets no
-			cookies, stores no IP address and cannot follow you to another website. The temporary
-			identifier it uses is discarded after 24 hours.
+			We count page views through Vercel Web Analytics so we can see which beaches people
+			actually look up and where the site falls short. Each view records the page, the referring
+			site, an approximate location worked out from your connection which can be as precise as a
+			city, and the browser and device type. It sets no cookies, stores no IP address and cannot
+			follow you to another website. The temporary identifier it uses is discarded after 24
+			hours.
 		</p>
 		<p>
-			If you search by postcode, the postcode is stripped out before anything is recorded, so the
-			count shows that the postcode search was used without showing which postcode. Looking up a
-			postcode sends it to <a href="https://postcodes.io" rel="noopener">postcodes.io</a> to turn
-			it into coordinates. If you use the "near me" button instead, your coordinates stay in your
-			browser and are never sent here.
+			Searching by postcode puts that postcode in the address bar, and pressing "Use my location"
+			puts your rounded coordinates there. Both are removed before the page view is counted, so
+			the figures show which kind of search was used without showing where you were. Looking up a
+			postcode sends it to <a href="https://postcodes.io" rel="external">postcodes.io</a> to turn
+			it into coordinates, and "Use my location" rounds your position to about 110 metres before
+			it is used at all.
 		</p>
 	</section>
 
