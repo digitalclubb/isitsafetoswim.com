@@ -10,10 +10,20 @@
 	 * because every sibling block on these pages is separated by a rule and a
 	 * panel would read as a widget bolted on afterwards.
 	 */
+	import { track } from '@vercel/analytics';
+
 	let { variant = 'compact' }: { variant?: 'compact' | 'full' } = $props();
 
 	const KOFI = 'https://ko-fi.com/digitalclubb';
 	const SITE = 'https://digitalclubb.com';
+
+	// Ko-fi is a link rather than their embedded widget, because that widget
+	// sets third-party cookies and the about page now promises there are none.
+	// A new tab keeps the verdict the reader came for, and the click is counted
+	// first-party so the ask can be judged on its numbers rather than a guess.
+	function countClick() {
+		track('support_click', { placement: variant === 'full' ? 'about' : 'location' });
+	}
 </script>
 
 <aside class="note" class:full={variant === 'full'} aria-labelledby="support-heading">
@@ -30,15 +40,26 @@
 		</p>
 		<p>
 			If this saved you a wasted trip or set your mind at rest, you can
-			<a class="ask" href={KOFI} rel="external">buy me a coffee</a>. A coffee goes towards the
-			running costs.
+			<a
+				class="ask"
+				href={KOFI}
+				target="_blank"
+				rel="external noopener"
+				onclick={countClick}>buy me a coffee<span class="sr-only"> (opens in a new tab)</span></a
+			>. A coffee goes towards the running costs.
 		</p>
 	{:else}
 		<h2 id="support-heading">Built by one person</h2>
 		<p>
 			This site is free and always will be. There are no adverts and nothing to sign up for. I pay
 			for the domain and the hosting, so if today's answer was useful you can
-			<a class="ask" href={KOFI} rel="external">buy me a coffee</a>.
+			<a
+				class="ask"
+				href={KOFI}
+				target="_blank"
+				rel="external noopener"
+				onclick={countClick}>buy me a coffee<span class="sr-only"> (opens in a new tab)</span></a
+			>.
 		</p>
 	{/if}
 

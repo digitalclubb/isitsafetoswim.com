@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { track } from '@vercel/analytics';
+
 	let {
 		attribution = [] as string[],
 		support = true
@@ -16,8 +18,13 @@
 				</p>
 				{#if support}
 					<p class="muted small support">
-						Free, with no adverts. <a href="https://ko-fi.com/digitalclubb" rel="external"
-							>Buy me a coffee</a
+						Free, with no adverts.
+						<a
+							href="https://ko-fi.com/digitalclubb"
+							target="_blank"
+							rel="external noopener"
+							onclick={() => track('support_click', { placement: 'footer' })}
+							>Buy me a coffee<span class="sr-only"> (opens in a new tab)</span></a
 						> if it helped.
 					</p>
 				{/if}
