@@ -1,5 +1,6 @@
 <script lang="ts">
-	let { current = '' }: { current?: '' | 'home' | 'map' | 'spills' | 'about' } = $props();
+	let { current = '' }: { current?: '' | 'home' | 'map' | 'areas' | 'spills' | 'about' } =
+		$props();
 </script>
 
 <header class="masthead">
@@ -33,6 +34,7 @@
 		<nav aria-label="Primary">
 			<a href="/" aria-current={current === 'home' ? 'page' : undefined}>Find a beach</a>
 			<a href="/map" aria-current={current === 'map' ? 'page' : undefined}>Map</a>
+			<a href="/beaches" aria-current={current === 'areas' ? 'page' : undefined}>By area</a>
 			<a href="/spills" aria-current={current === 'spills' ? 'page' : undefined}>Spills</a>
 			<a href="/about" aria-current={current === 'about' ? 'page' : undefined}>About</a>
 		</nav>
@@ -90,8 +92,14 @@
 		font-style: italic;
 	}
 
+	/* Wrapping rather than a fixed budget: five labels at 15px do not fit a
+	 * 390px phone once the container padding is taken out, and the exact width
+	 * depends on which system font the device resolves. Wrapping to a second
+	 * row cannot overflow whatever the metrics turn out to be. */
 	nav {
-		display: inline-flex;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
 		gap: var(--space-2);
 		font-size: var(--text-sm);
 	}

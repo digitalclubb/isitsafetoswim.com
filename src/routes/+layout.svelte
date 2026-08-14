@@ -14,16 +14,18 @@
 	// stays silent in dev. Speed Insights is deliberately not included.
 	injectAnalytics();
 
-	let current: '' | 'home' | 'map' | 'spills' | 'about' = $derived(
+	let current: '' | 'home' | 'map' | 'areas' | 'spills' | 'about' = $derived(
 		page.url.pathname === '/'
 			? 'home'
 			: page.url.pathname.startsWith('/map')
 				? 'map'
-				: page.url.pathname.startsWith('/spills')
-					? 'spills'
-					: page.url.pathname.startsWith('/about')
-						? 'about'
-						: ''
+				: page.url.pathname.startsWith('/beaches')
+					? 'areas'
+					: page.url.pathname.startsWith('/spills')
+						? 'spills'
+						: page.url.pathname.startsWith('/about')
+							? 'about'
+							: ''
 	);
 
 	let busy = $derived(Boolean(navigating.to));

@@ -13,6 +13,16 @@
 				</p>
 			</div>
 			<div>
+				<h3 class="hdg">Browse</h3>
+				<ul class="links">
+					<li><a href="/">Find a beach</a></li>
+					<li><a href="/map">Map of every bathing water</a></li>
+					<li><a href="/beaches">Cleanest beaches by area</a></li>
+					<li><a href="/spills">Sewage spills happening now</a></li>
+					<li><a href="/about">How the verdict works</a></li>
+				</ul>
+			</div>
+			<div>
 				<h3 class="hdg">Sources</h3>
 				<ul class="links">
 					<li><a href="https://environment.data.gov.uk/bwq/">Environment Agency (England)</a></li>
@@ -61,7 +71,7 @@
 
 	.grid {
 		display: grid;
-		grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+		grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
 		gap: var(--space-6);
 		padding-bottom: var(--space-5);
 		border-bottom: var(--rule-weight) solid var(--rule);
@@ -114,7 +124,20 @@
 		margin: var(--space-2) 0 0;
 	}
 
-	@media (max-width: 640px) {
+	/* Two columns would leave Sources alone on a second row with an empty cell
+	 * beside it, so the blurb takes the full width and the two link lists pair
+	 * up underneath. */
+	@media (max-width: 880px) {
+		.grid {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		}
+
+		.grid > div:first-child {
+			grid-column: 1 / -1;
+		}
+	}
+
+	@media (max-width: 560px) {
 		.grid {
 			grid-template-columns: 1fr;
 		}
