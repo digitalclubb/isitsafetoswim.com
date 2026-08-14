@@ -52,7 +52,8 @@ isitsafetoswim.com/
 ├── scripts/
 │   ├── build-location-index.mjs    Builds src/data/locations.json + search-index.json at build time
 │   ├── generate-images.mjs         Renders icon.svg / og.svg to PNG variants
-│   └── lib/parsers.mjs             Pure helpers shared with the build script (Vitest-tested)
+│   ├── lib/parsers.mjs             Pure helpers shared with the build script (Vitest-tested)
+│   └── lib/display-names.mjs       Slug-keyed overrides for regulator names nobody searches
 │
 ├── src/
 │   ├── data/                       Build outputs (do not edit by hand)
@@ -68,7 +69,8 @@ isitsafetoswim.com/
 │   │   ├── map/                    Map precompute: Redis store (kv.ts), hourly colour compute,
 │   │   │                            daily profile cache, nearest-safe, colour tokens.
 │   │   ├── components/             Svelte components. Scoped <style> per file (BeachMap.svelte = MapLibre).
-│   │   ├── util/                   Small shared helpers (pool.ts concurrency, time.ts)
+│   │   ├── seo/                    jsonLd.ts escaping, sitemap.ts urlset and index builders
+│   │   ├── util/                   Small shared helpers (pool.ts concurrency, time.ts London formatters)
 │   │   └── styles/
 │   │       ├── tokens.css          Design tokens (colour, type, space, containers, shadows)
 │   │       └── app.css             Base reset and shared utilities
@@ -84,7 +86,7 @@ isitsafetoswim.com/
 │       ├── api/verdict/[id]/       JSON endpoint, edge-cacheable
 │       ├── api/map/                Precomputed colour blob
 │       ├── api/cron/               refresh-map (hourly), refresh-profiles (daily)
-│       └── sitemap.xml/            Generated at build, all locations + area + map pages
+│       └── sitemap*.xml/           Index at /sitemap.xml plus a child per section
 ```
 
 ## Verdict engine thresholds
@@ -147,6 +149,8 @@ Runtime env vars (Vercel): `REDIS_URL` (colour, profile, spills and rainfall sto
 
 `/beaches` and `/beaches/[place]` rank the cleanest bathing waters per country and per region (at least five sites), derived entirely from the catalogue (`src/lib/data/places.ts`) so they never carry stale hand-written rankings. A weekly GitHub Action (`.github/workflows/refresh.yml`) pings a Vercel deploy hook (secret `VERCEL_DEPLOY_HOOK`) to rebuild and keep them current.
 
+They are titled "Cleanest beaches in X" rather than the regulator's phrasing, because that is the demand they answer and it is the only demand that survives the winter. Sampling and the daily pollution-risk forecast both stop on 30 September, so classification-led pages carry the site through to May. Keep the share card in `scripts/lib/og-card.mjs` saying the same thing as the title.
+
 ## URL shape
 
 - `/` homepage, prerendered
@@ -158,7 +162,7 @@ Runtime env vars (Vercel): `REDIS_URL` (colour, profile, spills and rainfall sto
 - `/api/map` precomputed colour blob, `s-maxage=1800`
 - `/api/cron/refresh-map` (hourly, on the hour) and `/api/cron/refresh-profiles` (hourly, at :30), CRON_SECRET-gated
 - `/about` prerendered
-- `/sitemap.xml` prerendered, all locations plus the area and map pages
+- `/sitemap.xml` prerendered sitemap index, with `/sitemap-pages.xml`, `/sitemap-swim.xml` and `/sitemap-beaches.xml` as its children
 - `/robots.txt`, `/manifest.webmanifest`, `/icon-*.png`, `/og.png`, `/favicon.svg`, `/uk.pmtiles`
 
 ## Commands
@@ -183,6 +187,7 @@ pnpm data:images        # regenerate PNG icons and OG card
 - Don't add features beyond what's asked, refactor adjacent systems as a side effect, or "clean up" code you don't fully understand. Surgical changes only.
 - Don't write planning, decision or analysis Markdown files unless explicitly asked.
 - Don't strip data-source attribution lines.
+- Don't rename a bathing water anywhere but `scripts/lib/display-names.mjs`, and never let a display name reach `slugify`. Slugs come from the regulator name, so a rename that fed back into slug derivation would move all 700 URLs. The override is keyed by slug and applied after `dedupeSlugs` for exactly that reason.
 - Don't add a comment to explain what well-named code already says.
 - Don't add backwards-compatibility shims, dead exports or unused vars marked with `_` after a refactor — just delete.
 
