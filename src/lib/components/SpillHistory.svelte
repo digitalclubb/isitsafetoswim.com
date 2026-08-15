@@ -36,6 +36,11 @@
 			: ''
 	);
 
+	// A clean record is the good news on the page, not an absence of data, so it
+	// gets its own sentence rather than "they discharged 0 times". Brighton
+	// Central reads this way: two overflows, both silent since 2023.
+	let allClear = $derived(years.length > 0 && years.every((entry) => entry.spills === 0));
+
 	function plural(n: number, one: string, many: string): string {
 		return n === 1 ? one : many;
 	}
@@ -44,12 +49,21 @@
 {#if latest}
 	<p class="lede">
 		The Environment Agency links {latest.overflows}
-		{plural(latest.overflows, 'storm overflow', 'storm overflows')} to {locationName}. In
-		{latest.year} they discharged <strong>{latest.spills.toLocaleString('en-GB')}</strong>
-		{plural(latest.spills, 'time', 'times')}.
+		{plural(latest.overflows, 'storm overflow', 'storm overflows')} to {locationName}.
+		{#if allClear}
+			<strong>{plural(latest.overflows, 'It has', 'They have')} not discharged at all</strong>
+			since {years[0].year}.
+		{:else if latest.spills === 0}
+			{plural(latest.overflows, 'It', 'They')}
+			<strong>did not discharge at all</strong> in {latest.year}.
+		{:else}
+			In {latest.year} {plural(latest.overflows, 'it', 'they')} discharged
+			<strong>{latest.spills.toLocaleString('en-GB')}</strong>
+			{plural(latest.spills, 'time', 'times')}.
+		{/if}
 	</p>
 
-	{#if bars.length >= 2}
+	{#if bars.length >= 2 && !allClear}
 		<figure class="trend">
 			<figcaption>Counted spills a year at the overflows feeding this bathing water.</figcaption>
 			<div class="chart" role="img" aria-label={chartLabel}>
