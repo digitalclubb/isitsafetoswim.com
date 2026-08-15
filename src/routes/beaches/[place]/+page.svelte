@@ -1,7 +1,9 @@
 <script lang="ts">
 	import LocationCard from '$lib/components/LocationCard.svelte';
+	import { RATED_TIERS } from '$lib/data/rating';
 	import type { Classification } from '$lib/data/types';
 	import { safeJsonLd } from '$lib/seo/jsonLd';
+	import { joinList } from '$lib/util/text';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -11,23 +13,17 @@
 	let place = $derived(data.place);
 	let count = $derived(data.ranked.length);
 
-	function joinList(items: string[]): string {
-		if (items.length <= 1) return items.join('');
-		return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
-	}
-
 	function article(classification: Classification): string {
 		return classification === 'Excellent' ? 'an' : 'a';
 	}
 
 	// Only the four genuine rating tiers belong in the summary sentence. New,
-	// Unknown and Closed are statuses, not ratings, so listing them as things
-	// "the regulator rates" would be wrong. They still appear in the full list.
-	const RATED: Classification[] = ['Excellent', 'Good', 'Sufficient', 'Poor'];
+	// Unknown and Closed are statuses, not ratings. They still appear in the
+	// full list below.
 	let classSummary = $derived(
 		joinList(
 			data.countsByClass
-				.filter((c) => RATED.includes(c.classification))
+				.filter((c) => (RATED_TIERS as readonly Classification[]).includes(c.classification))
 				.map((c) => `${c.count} ${c.classification}`)
 		)
 	);

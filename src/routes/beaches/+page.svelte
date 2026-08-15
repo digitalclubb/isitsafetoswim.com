@@ -38,6 +38,18 @@
 			</p>
 		</header>
 
+		<section class="block" aria-labelledby="by-rating">
+			<h2 id="by-rating">By classification</h2>
+			<ul class="regions">
+				{#each data.tiers as tier (tier.slug)}
+					<li>
+						<a href={`/beaches/rated/${tier.slug}`}>Rated {tier.tier}</a>
+						<span class="muted small">{tier.count}</span>
+					</li>
+				{/each}
+			</ul>
+		</section>
+
 		{#each data.countries as group (group.country.slug)}
 			<section class="block" aria-labelledby={group.country.slug}>
 				<h2 id={group.country.slug}>

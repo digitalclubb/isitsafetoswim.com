@@ -1,5 +1,18 @@
 import type { Classification } from './types';
 
+/**
+ * The four genuine rating tiers, in descending order. New, Unknown and Closed
+ * are statuses rather than ratings: listing them as things the regulator rates
+ * would be wrong, and Unknown is partly a parser catch-all (see ratingLabel
+ * below) so it would not be an honest grouping either.
+ *
+ * Lives here rather than beside the catalogue so it can be imported into a
+ * component without dragging locations.json into the client bundle.
+ */
+export const RATED_TIERS = ['Excellent', 'Good', 'Sufficient', 'Poor'] as const;
+
+export type RatedTier = (typeof RATED_TIERS)[number];
+
 export interface RatingLabel {
 	/** Shown on the card. */
 	label: string;

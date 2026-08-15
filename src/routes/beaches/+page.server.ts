@@ -1,3 +1,4 @@
+import { getTierSummaries } from '$lib/data/classifications';
 import { getAllPlaces } from '$lib/data/places';
 import type { PageServerLoad } from './$types';
 
@@ -14,5 +15,5 @@ export const load: PageServerLoad = () => {
 				.filter((p) => p.kind === 'region' && p.country === country.country)
 				.sort((a, b) => a.name.localeCompare(b.name, 'en-GB'))
 		}));
-	return { countries };
+	return { countries, tiers: getTierSummaries() };
 };
