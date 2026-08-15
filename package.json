@@ -16,6 +16,7 @@
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"data:index": "node ./scripts/build-location-index.mjs",
+		"data:spills": "node ./scripts/build-spill-history.mjs",
 		"data:images": "node ./scripts/generate-images.mjs"
 	},
 	"devDependencies": {

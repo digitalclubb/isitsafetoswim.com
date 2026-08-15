@@ -1,6 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { getLocationBySlug } from '$lib/data/locations';
 import { getHubForLocation } from '$lib/data/places';
+import { getSpillHistory } from '$lib/data/spill-history';
 import { buildPageData, type CachedSignals } from '$lib/live/verdict';
 import { readProfiles, readRainfall } from '$lib/map/kv';
 import { rainfallFrom } from '$lib/map/precompute';
@@ -45,6 +46,7 @@ export const load: PageServerLoad = async ({ params, request, setHeaders }) => {
 	return {
 		location,
 		live: await buildPageData(location, cached, request.signal),
-		hub: { slug: hub.slug, name: hub.name }
+		hub: { slug: hub.slug, name: hub.name },
+		spillHistory: getSpillHistory(location.slug)
 	};
 };

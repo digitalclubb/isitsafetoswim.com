@@ -15,3 +15,6 @@ vite.config.ts.timestamp-*
 
 # Generated per-page social cards (built by generate-images.mjs)
 static/og/
+
+# EDM annual returns, downloaded on demand by build-spill-history.mjs
+scripts/.edm-cache/

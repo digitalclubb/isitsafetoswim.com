@@ -6,11 +6,13 @@
 	import LocationCard from '$lib/components/LocationCard.svelte';
 	import SampleHistory from '$lib/components/SampleHistory.svelte';
 	import SampleSummary from '$lib/components/SampleSummary.svelte';
+	import SpillHistory from '$lib/components/SpillHistory.svelte';
 	import SupportNote from '$lib/components/SupportNote.svelte';
 	import Verdict from '$lib/components/Verdict.svelte';
 	import WaterTemperature from '$lib/components/WaterTemperature.svelte';
 	import { findNearestSlim } from '$lib/data/search-index';
 	import type { RecentSample } from '$lib/data/types';
+	import { comparableSpillYears, getSpillHistoryMeta } from '$lib/data/spill-history';
 	import { buildFaq } from '$lib/seo/faq';
 	import { safeJsonLd } from '$lib/seo/jsonLd';
 	import { londonClock, londonDayAndMonth, londonIsoDateTime, newestTimestamp } from '$lib/util/time';
@@ -112,6 +114,27 @@
 			acceptedAnswer: { '@type': 'Answer', text: item.answer }
 		}))
 	});
+
+	// Where the EA attributes overflows to this bathing water the section is its
+	// spill record, and the heading dates the series actually shown. Where it
+	// does not, all we have is what sits within ten kilometres, which is not
+	// this beach's record and must not be headed as though it were.
+	let spillYears = $derived(
+		(() => {
+			const shown = comparableSpillYears(data.spillHistory?.attributed ?? []);
+			if (shown.length === 0) return '';
+			const years = shown.map((entry) => entry.year);
+			const first = Math.min(...years);
+			const last = Math.max(...years);
+			return first === last ? `${first}` : `${first} to ${last}`;
+		})()
+	);
+	// Named in the sources list, because five-year totals on a page whose
+	// premise is "today" need to say plainly that they are an annual return.
+	const spillMeta = getSpillHistoryMeta();
+	let spillHeading = $derived(
+		spillYears ? `Sewage spills, ${spillYears}` : 'Storm overflows nearby'
+	);
 
 	let placeId = $derived(`https://isitsafetoswim.com/swim/${location.slug}#place`);
 
@@ -354,6 +377,13 @@
 			{/if}
 		{/if}
 
+		{#if data.spillHistory}
+			<section class="block" aria-labelledby="spill-history">
+				<h2 id="spill-history">{spillHeading}</h2>
+				<SpillHistory record={data.spillHistory} locationName={location.name} />
+			</section>
+		{/if}
+
 		{#if faq.length > 0}
 			<section class="block" aria-labelledby="faq">
 				<h2 id="faq">Common questions</h2>
@@ -372,6 +402,12 @@
 				{#each live.attribution as line (line)}
 					<li>{line}</li>
 				{/each}
+				{#if data.spillHistory}
+					<li>
+						Spill counts from the {spillMeta.source}, {spillMeta.years[0]} to
+						{spillMeta.years[spillMeta.years.length - 1]}, published annually.
+					</li>
+				{/if}
 				<li>
 					<a href={location.source.profileUrl} rel="external">View the regulator's full profile</a>
 				</li>
