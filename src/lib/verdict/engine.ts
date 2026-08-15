@@ -48,6 +48,14 @@ const HEAVY_RAIN_MM = 15;
 const NOTICEABLE_RAIN_MM = 8;
 
 /**
+ * How long a sample keeps deciding the verdict. The regulator samples weekly in
+ * season, so anything older than this is a gap or the tail of last season. Such
+ * a reading is still shown as a factor, dated, but it no longer drives a No: a
+ * high result from late September should not hold a beach at No until May.
+ */
+const SAMPLE_CURRENT_DAYS = 28;
+
+/**
  * Single-sample risk cut-offs in cfu/100ml. There is no statutory single-sample
  * standard (classification is a multi-year percentile), so these adopt the
  * revised Bathing Water Directive percentile boundaries as proxy cut-offs:
@@ -193,7 +201,27 @@ export function evaluateVerdict(
 	);
 	const recentWider = recentNearby(recentDischarges, DISTANCE_WIDER_M, RECENT_WINDOW_HOURS, now);
 	const rain = rainfall24hMm ?? null;
-	const sampleRisk = worstSampleRisk(latestSample, waterType);
+	// An undated sample fails safe. The regulator profile can carry counts with no
+	// date (parseSample in live/profile.ts admits `sampledAt: ''`), and a reading
+	// we cannot date is far likelier to be current than a year old, so it keeps
+	// deciding the verdict rather than being discarded as stale.
+	const sampleAge = hoursSince(latestSample?.sampledAt, now);
+	const sampleIsCurrent =
+		latestSample !== null && (sampleAge === null || sampleAge <= SAMPLE_CURRENT_DAYS * 24);
+	const sampleRisk = sampleIsCurrent ? worstSampleRisk(latestSample, waterType) : null;
+
+	// Out of season the daily forecast and weekly sampling both stop. That is a
+	// gap in the evidence, not a reason to doubt the water, so it is recorded as
+	// a neutral factor rather than cautioning every clean site for seven months.
+	// Discharges, rainfall and the annual classification all still apply. Pushed
+	// before the hard-No returns so it appears on every verdict, not just Yes.
+	if (!inSeason) {
+		factors.push({
+			label: 'Bathing season',
+			value: 'Closed until 15 May',
+			weight: 'neutral'
+		});
+	}
 
 	// ---- Hard NO ----------------------------------------------------------
 	if (ongoing) {
@@ -230,10 +258,12 @@ export function evaluateVerdict(
 			verdict: 'no',
 			headline: 'No.',
 			reason: 'This bathing water is closed.',
-			factors: appendBaseFactors([], classification, riskForecast, rain, latestSample, waterType)
+			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample, waterType)
 		};
 	}
-	if (classification === 'Poor' && inSeason) {
+	// Year-round. The classification is an annual rating of the water itself, so
+	// it does not lapse on 30 September; only the advisory sign comes down.
+	if (classification === 'Poor') {
 		factors.push({
 			label: 'Annual classification',
 			value: 'Poor',
@@ -242,7 +272,9 @@ export function evaluateVerdict(
 		return {
 			verdict: 'no',
 			headline: 'No.',
-			reason: 'Annual classification is Poor and bathing is advised against.',
+			reason: inSeason
+				? 'Annual classification is Poor and bathing is advised against.'
+				: 'Rated Poor in the most recent annual classification.',
 			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample, waterType)
 		};
 	}
@@ -309,15 +341,6 @@ export function evaluateVerdict(
 			weight: 'negative'
 		});
 	}
-	if (!inSeason) {
-		cautions.push('Outside bathing season, the official forecast is not in operation.');
-		factors.push({
-			label: 'Bathing season',
-			value: 'Outside official season',
-			weight: 'neutral'
-		});
-	}
-
 	if (cautions.length > 0) {
 		return {
 			verdict: 'caution',
@@ -328,15 +351,18 @@ export function evaluateVerdict(
 	}
 
 	// ---- Yes --------------------------------------------------------------
-	const yesReason =
-		classification === 'Excellent'
+	// Out of season there is no daily forecast behind the answer, so the reason
+	// leads with the classification instead of implying a forecast that did not run.
+	const yesReason = inSeason
+		? classification === 'Excellent'
 			? 'Excellent water quality and no sewage in the last 48 hours.'
-			: 'Good water quality and no sewage in the last 48 hours.';
+			: 'Good water quality and no sewage in the last 48 hours.'
+		: `Rated ${classification} and no sewage discharged nearby in the last 48 hours.`;
 	return {
 		verdict: 'yes',
 		headline: 'Yes.',
 		reason: yesReason,
-		factors: appendBaseFactors([], classification, riskForecast, rain, latestSample, waterType)
+		factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample, waterType)
 	};
 }
 
@@ -441,6 +467,7 @@ export const _internals = {
 	DISTANCE_WIDER_M,
 	HEAVY_RAIN_MM,
 	NOTICEABLE_RAIN_MM,
+	SAMPLE_CURRENT_DAYS,
 	SAMPLE_THRESHOLDS
 };
 

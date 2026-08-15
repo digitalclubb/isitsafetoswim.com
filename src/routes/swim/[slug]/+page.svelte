@@ -13,6 +13,7 @@
 	import type { RecentSample } from '$lib/data/types';
 	import { safeJsonLd } from '$lib/seo/jsonLd';
 	import { londonClock, londonDayAndMonth, londonIsoDateTime, newestTimestamp } from '$lib/util/time';
+	import { bathingSeasonActive } from '$lib/verdict/engine';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -60,6 +61,10 @@
 	// implying we checked feeds that do not exist for those sites.
 	let liveSignals = $derived(location.country === 'England' || location.country === 'Wales');
 	let regulator = $derived(location.country === 'Scotland' ? 'SEPA' : 'DAERA');
+
+	// Derived from the same clock the verdict was decided on, so the page never
+	// explains a season the verdict did not apply.
+	let inSeason = $derived(bathingSeasonActive(new Date(live.verdict.fetchedAt)));
 	let nearby = $derived(
 		findNearestSlim({ lat: location.lat, lon: location.lon }, 5)
 			.map((r) => r.location)
@@ -227,6 +232,29 @@
 			{/key}
 		</section>
 
+		{#if !inSeason}
+			<section class="block" aria-labelledby="out-of-season">
+				<h2 id="out-of-season" class="muted-h">Out of season</h2>
+				<p class="muted">
+					Weekly sampling and the daily pollution-risk forecast pause on 30 September and
+					resume on 15 May.
+					{#if liveSignals}
+						This verdict rests on the annual classification, live storm-overflow data and
+						rainfall in the last 24 hours.
+					{:else}
+						This verdict rests on the annual classification, which is the only measure
+						{regulator} publishes for this site year-round.
+					{/if}
+				</p>
+				{#if liveSignals}
+					<p class="muted">
+						Storm overflows are driven by rain, so they spill more in autumn and winter than
+						in summer. <a href="/spills">See every spill happening now across the UK</a>.
+					</p>
+				{/if}
+			</section>
+		{/if}
+
 		{#if seaTemperatureC != null}
 			<section
 				class="block"
@@ -295,8 +323,13 @@
 						<SampleHistory samples={sampleHistory} waterType={location.waterType} />
 					{/if}
 					<p class="muted small">
-						The regulator samples weekly during the bathing season. E. coli and intestinal
-						enterococci are the indicator organisms used in the official classification.
+						{#if inSeason}
+							The regulator samples weekly during the bathing season.
+						{:else}
+							This is the most recent reading. Sampling resumes on 15 May.
+						{/if}
+						E. coli and intestinal enterococci are the indicator organisms used in the
+						official classification.
 					</p>
 				</section>
 			{/if}

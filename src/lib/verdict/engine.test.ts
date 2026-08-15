@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { DischargeEvent } from '$lib/data/types';
-import { bathingSeasonActive, decideAt, evaluateVerdict } from './engine';
+import { _internals, bathingSeasonActive, decideAt, evaluateVerdict } from './engine';
 
 const summerNow = new Date('2026-07-15T10:00:00Z');
 const winterNow = new Date('2026-01-15T10:00:00Z');
@@ -181,7 +181,7 @@ describe('evaluateVerdict — caution', () => {
 		}
 	});
 
-	it('returns Caution when out of season', () => {
+	it('does not caution a clean site merely for being out of season', () => {
 		const result = evaluateVerdict({
 			classification: 'Excellent',
 			latestSample: null,
@@ -190,8 +190,9 @@ describe('evaluateVerdict — caution', () => {
 			rainfall24hMm: 0,
 			now: winterNow
 		});
-		expect(result.verdict).toBe('caution');
-		expect(result.reason).toMatch(/bathing season/i);
+		expect(result.verdict).toBe('yes');
+		expect(result.reason).toMatch(/rated Excellent/i);
+		expect(result.reason).not.toMatch(/bathing season/i);
 	});
 
 	it('returns Caution for elevated but sub-danger E. coli', () => {
@@ -393,6 +394,177 @@ describe('evaluateVerdict — rain susceptibility', () => {
 		});
 		expect(result.verdict).toBe('caution');
 		expect(result.reason).toMatch(/rain/);
+	});
+});
+
+describe('evaluateVerdict — out of season', () => {
+	it('records the closed season as a neutral factor, not a caution', () => {
+		const result = evaluateVerdict({
+			classification: 'Excellent',
+			latestSample: null,
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			now: winterNow
+		});
+		const season = result.factors.find((f) => f.label === 'Bathing season');
+		expect(season).toEqual({
+			label: 'Bathing season',
+			value: 'Closed until 15 May',
+			weight: 'neutral'
+		});
+	});
+
+	it('omits the season factor in season', () => {
+		const result = evaluateVerdict({
+			classification: 'Excellent',
+			latestSample: null,
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			now: summerNow
+		});
+		expect(result.factors.find((f) => f.label === 'Bathing season')).toBeUndefined();
+	});
+
+	it('records the season factor on a No verdict too', () => {
+		for (const classification of ['Poor', 'Closed'] as const) {
+			const result = evaluateVerdict({
+				classification,
+				latestSample: null,
+				riskForecast: null,
+				recentDischarges: [],
+				rainfall24hMm: 0,
+				now: winterNow
+			});
+			expect(result.verdict).toBe('no');
+			expect(result.factors.map((f) => f.label)).toContain('Bathing season');
+		}
+	});
+
+	it('still returns No for Poor out of season', () => {
+		const result = evaluateVerdict({
+			classification: 'Poor',
+			latestSample: null,
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			now: winterNow
+		});
+		expect(result.verdict).toBe('no');
+		expect(result.reason).toMatch(/rated Poor/i);
+	});
+
+	it('still returns No for a live discharge out of season', () => {
+		const result = evaluateVerdict({
+			classification: 'Excellent',
+			latestSample: null,
+			riskForecast: null,
+			recentDischarges: [discharge({ ongoing: true, distanceMetres: 1200 })],
+			rainfall24hMm: 0,
+			now: winterNow
+		});
+		expect(result.verdict).toBe('no');
+	});
+
+	it('still cautions on a Sufficient classification out of season', () => {
+		const result = evaluateVerdict({
+			classification: 'Sufficient',
+			latestSample: null,
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			now: winterNow
+		});
+		expect(result.verdict).toBe('caution');
+		expect(result.reason).toMatch(/Sufficient/);
+	});
+});
+
+describe('evaluateVerdict — sample staleness', () => {
+	it('lets a current high sample decide the verdict', () => {
+		const result = evaluateVerdict({
+			classification: 'Excellent',
+			latestSample: { sampledAt: '2026-07-08T09:00:00Z', eColi: 1500 },
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			now: summerNow
+		});
+		expect(result.verdict).toBe('no');
+	});
+
+	it('does not hold a beach at No on a sample from last season', () => {
+		const result = evaluateVerdict({
+			classification: 'Excellent',
+			latestSample: { sampledAt: '2025-09-24T09:00:00Z', eColi: 1500 },
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			now: winterNow
+		});
+		expect(result.verdict).toBe('yes');
+	});
+
+	it('still reports the stale reading as a negative factor', () => {
+		const result = evaluateVerdict({
+			classification: 'Excellent',
+			latestSample: { sampledAt: '2025-09-24T09:00:00Z', eColi: 1500 },
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			now: winterNow
+		});
+		expect(result.factors).toContainEqual({
+			label: 'Latest E. coli',
+			value: '1500 cfu/100ml',
+			weight: 'negative'
+		});
+	});
+
+	it('ignores an elevated sample exactly one hour past the current window', () => {
+		const sampledAt = '2026-07-01T09:00:00Z';
+		const windowMs = _internals.SAMPLE_CURRENT_DAYS * 24 * 36e5;
+		const inputs = {
+			classification: 'Excellent' as const,
+			latestSample: { sampledAt, eColi: 700 },
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0
+		};
+		const onTheBoundary = new Date(Date.parse(sampledAt) + windowMs);
+		const pastIt = new Date(Date.parse(sampledAt) + windowMs + 36e5);
+		expect(evaluateVerdict({ ...inputs, now: onTheBoundary }).verdict).toBe('caution');
+		expect(evaluateVerdict({ ...inputs, now: pastIt }).verdict).toBe('yes');
+	});
+
+	// The regulator profile can carry counts with no usable date, so a reading we
+	// cannot age must keep deciding rather than be discarded as stale.
+	it('still returns No for a high reading with no sample date', () => {
+		for (const sampledAt of ['', 'not-a-date']) {
+			const result = evaluateVerdict({
+				classification: 'Excellent',
+				latestSample: { sampledAt, eColi: 5000 },
+				riskForecast: null,
+				recentDischarges: [],
+				rainfall24hMm: 0,
+				now: summerNow
+			});
+			expect(result.verdict).toBe('no');
+			expect(result.reason).toMatch(/5000/);
+		}
+	});
+
+	it('still returns No for a high reading dated in the future', () => {
+		const result = evaluateVerdict({
+			classification: 'Excellent',
+			latestSample: { sampledAt: '2027-07-10T09:00:00Z', eColi: 5000 },
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			now: summerNow
+		});
+		expect(result.verdict).toBe('no');
 	});
 });
 
