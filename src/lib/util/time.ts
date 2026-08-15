@@ -70,6 +70,15 @@ export function londonDayAndMonth(iso: string): string {
 	return p ? `${p.day} ${p.month}` : '';
 }
 
+/**
+ * "14 August 2026", London time. Carries the year, so it stays unambiguous for
+ * a sample taken in a previous bathing season.
+ */
+export function londonFullDate(iso: string): string {
+	const p = partsOf(iso, { day: 'numeric', month: 'long', year: 'numeric' });
+	return p ? `${p.day} ${p.month} ${p.year}` : '';
+}
+
 /** "2026-08-14", the London calendar date, for a <time datetime> attribute. */
 export function londonIsoDate(iso: string): string {
 	const p = partsOf(iso, { year: 'numeric', month: '2-digit', day: '2-digit' });

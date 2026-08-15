@@ -7,7 +7,7 @@ import type {
 } from '$lib/data/types';
 import { decideAt, emptyVerdict } from '$lib/verdict/engine';
 import { attributionFor, type OverflowSource } from './attribution';
-import { fetchRecentDischarges, isThamesWater } from './discharges';
+import { fetchRecentDischarges, hasDischargeFeed, isThamesWater } from './discharges';
 import { fetchSampleHistory } from './history';
 import { fetchProfile, type ProfileFetchResult } from './profile';
 import { fetchRainfall24h } from './rainfall';
@@ -45,6 +45,7 @@ export function deriveVerdict(
 			rainfall24hMm,
 			waterType: location.waterType,
 			rainImpacted: location.rainImpacted,
+			hasDischargeFeed: hasDischargeFeed(location),
 			now
 		},
 		profileOk ? 'fresh' : 'cached'
@@ -78,6 +79,7 @@ function assemble(
 		latestSample: profile?.latestSample ?? null,
 		riskForecast: profile?.riskForecast ?? null,
 		recentDischarges,
+		hasDischargeFeed: hasDischargeFeed(location),
 		rainfall24hMm,
 		sampleHistory,
 		seaTemperatureC,

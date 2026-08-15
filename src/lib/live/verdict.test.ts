@@ -19,6 +19,7 @@ vi.mock('./profile', () => ({
 
 vi.mock('./discharges', () => ({
 	fetchRecentDischarges: async () => [],
+	hasDischargeFeed: () => true,
 	isThamesWater: () => false
 }));
 

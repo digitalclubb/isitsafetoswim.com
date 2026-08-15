@@ -36,6 +36,12 @@ export interface VerdictInputs {
 	 * still caution.
 	 */
 	rainImpacted?: boolean | null;
+	/**
+	 * Whether a storm-overflow feed exists for this site at all. When false the
+	 * empty discharge list means "not checked" rather than "nothing found", so
+	 * the verdict must not claim an all-clear on sewage. Defaults to true.
+	 */
+	hasDischargeFeed?: boolean;
 	now: Date;
 }
 
@@ -53,7 +59,7 @@ const NOTICEABLE_RAIN_MM = 8;
  * a reading is still shown as a factor, dated, but it no longer drives a No: a
  * high result from late September should not hold a beach at No until May.
  */
-const SAMPLE_CURRENT_DAYS = 28;
+export const SAMPLE_CURRENT_DAYS = 28;
 
 /**
  * Single-sample risk cut-offs in cfu/100ml. There is no statutory single-sample
@@ -351,13 +357,18 @@ export function evaluateVerdict(
 	}
 
 	// ---- Yes --------------------------------------------------------------
-	// Out of season there is no daily forecast behind the answer, so the reason
-	// leads with the classification instead of implying a forecast that did not run.
-	const yesReason = inSeason
-		? classification === 'Excellent'
-			? 'Excellent water quality and no sewage in the last 48 hours.'
-			: 'Good water quality and no sewage in the last 48 hours.'
-		: `Rated ${classification} and no sewage discharged nearby in the last 48 hours.`;
+	// Three wordings, because the reason must only claim checks that ran. With
+	// no storm-overflow feed for the site there is nothing to say about sewage,
+	// and out of season there is no daily forecast behind the answer either, so
+	// each case leads with what it actually rests on.
+	const yesReason =
+		inputs.hasDischargeFeed === false
+			? `Rated ${classification} in the latest annual classification.`
+			: inSeason
+				? classification === 'Excellent'
+					? 'Excellent water quality and no sewage in the last 48 hours.'
+					: 'Good water quality and no sewage in the last 48 hours.'
+				: `Rated ${classification} and no sewage discharged nearby in the last 48 hours.`;
 	return {
 		verdict: 'yes',
 		headline: 'Yes.',

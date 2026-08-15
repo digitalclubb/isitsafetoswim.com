@@ -11,6 +11,7 @@
 	import WaterTemperature from '$lib/components/WaterTemperature.svelte';
 	import { findNearestSlim } from '$lib/data/search-index';
 	import type { RecentSample } from '$lib/data/types';
+	import { buildFaq } from '$lib/seo/faq';
 	import { safeJsonLd } from '$lib/seo/jsonLd';
 	import { londonClock, londonDayAndMonth, londonIsoDateTime, newestTimestamp } from '$lib/util/time';
 	import { bathingSeasonActive } from '$lib/verdict/engine';
@@ -72,8 +73,11 @@
 			.slice(0, 4)
 	);
 
+	// Search asks this three ways: "X water quality" (about half of all
+	// impressions), "is X safe to swim" (a fifth) and "can you swim at X". The
+	// title carries the first two phrasings, the FAQ below carries the third.
 	let metaTitle = $derived(
-		`Is it safe to swim at ${location.name}? ${
+		`${location.name} water quality. Safe to swim? ${
 			live.verdict.verdict === 'yes' ? 'Yes' : live.verdict.verdict === 'caution' ? 'Caution' : 'No'
 		}.`
 	);
@@ -93,6 +97,21 @@
 			? `Checked ${checkedLabel}. ${verdictSentence} Live sewage alerts and bacteria readings for ${location.name}.`
 			: verdictSentence
 	);
+
+	// Built server-side from the same payload as the verdict, and suppressed
+	// when the live fetch failed: "try again in a few minutes" is incoherent
+	// inside cached structured data a crawler reads.
+	let faq = $derived(live.verdict.dataAge === 'unavailable' ? [] : buildFaq(live));
+
+	let faqLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: faq.map((item) => ({
+			'@type': 'Question',
+			name: item.question,
+			acceptedAnswer: { '@type': 'Answer', text: item.answer }
+		}))
+	});
 
 	let placeId = $derived(`https://isitsafetoswim.com/swim/${location.slug}#place`);
 
@@ -203,7 +222,7 @@
 	<meta property="og:url" content={`https://isitsafetoswim.com/swim/${location.slug}`} />
 	<meta name="twitter:card" content="summary_large_image" />
 	<link rel="canonical" href={`https://isitsafetoswim.com/swim/${location.slug}`} />
-	{@html `<script type="application/ld+json">${safeJsonLd([pageLd, jsonLd, breadcrumbLd])}</script>`}
+	{@html `<script type="application/ld+json">${safeJsonLd(faq.length > 0 ? [pageLd, jsonLd, breadcrumbLd, faqLd] : [pageLd, jsonLd, breadcrumbLd])}</script>`}
 </svelte:head>
 
 <article class="page">
@@ -335,6 +354,18 @@
 			{/if}
 		{/if}
 
+		{#if faq.length > 0}
+			<section class="block" aria-labelledby="faq">
+				<h2 id="faq">Common questions</h2>
+				<dl class="faq">
+					{#each faq as item (item.question)}
+						<dt>{item.question}</dt>
+						<dd>{item.answer}</dd>
+					{/each}
+				</dl>
+			</section>
+		{/if}
+
 		<section class="block" aria-labelledby="source">
 			<h2 id="source">Where this data comes from</h2>
 			<ul class="muted source">
@@ -441,5 +472,25 @@
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 		gap: var(--space-4);
+	}
+
+	.faq {
+		margin: 0;
+	}
+
+	.faq dt {
+		font-family: var(--font-serif);
+		font-size: var(--text-lg);
+		margin-bottom: var(--space-2);
+	}
+
+	.faq dd {
+		margin: 0 0 var(--space-4);
+		color: var(--ink-soft);
+		max-width: 60ch;
+	}
+
+	.faq dd:last-child {
+		margin-bottom: 0;
 	}
 </style>

@@ -397,6 +397,52 @@ describe('evaluateVerdict — rain susceptibility', () => {
 	});
 });
 
+describe('evaluateVerdict — no storm-overflow feed', () => {
+	// An empty discharge list means "not checked" for the 237 sites outside
+	// England, so the reason must not claim an all-clear on sewage.
+	it('does not claim no sewage when there was no feed to check', () => {
+		for (const now of [summerNow, winterNow]) {
+			const result = evaluateVerdict({
+				classification: 'Good',
+				latestSample: null,
+				riskForecast: null,
+				recentDischarges: [],
+				rainfall24hMm: 0,
+				hasDischargeFeed: false,
+				now
+			});
+			expect(result.verdict).toBe('yes');
+			expect(result.reason).toBe('Rated Good in the latest annual classification.');
+			expect(result.reason).not.toMatch(/sewage/i);
+		}
+	});
+
+	it('still claims the all-clear when a feed was available', () => {
+		const result = evaluateVerdict({
+			classification: 'Good',
+			latestSample: null,
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			hasDischargeFeed: true,
+			now: summerNow
+		});
+		expect(result.reason).toMatch(/no sewage in the last 48 hours/);
+	});
+
+	it('defaults to claiming the all-clear when the flag is absent', () => {
+		const result = evaluateVerdict({
+			classification: 'Good',
+			latestSample: null,
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			now: summerNow
+		});
+		expect(result.reason).toMatch(/no sewage in the last 48 hours/);
+	});
+});
+
 describe('evaluateVerdict — out of season', () => {
 	it('records the closed season as a neutral factor, not a caution', () => {
 		const result = evaluateVerdict({

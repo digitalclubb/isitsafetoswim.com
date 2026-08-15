@@ -3,6 +3,7 @@ import {
 	londonClock,
 	londonDate,
 	londonDayAndMonth,
+	londonFullDate,
 	londonIsoDate,
 	londonIsoDateTime,
 	newestTimestamp,
@@ -48,6 +49,13 @@ describe('London formatters', () => {
 	it('renders the date a UK reader would recognise', () => {
 		expect(londonDate(summerEvening)).toBe('Friday 14 August');
 		expect(londonDayAndMonth(summerEvening)).toBe('14 August');
+		expect(londonFullDate(summerEvening)).toBe('14 August 2026');
+	});
+
+	// A sample can be months old out of season, so its year has to be on it.
+	it('carries the year, and rolls it over at UK midnight', () => {
+		expect(londonFullDate(summerMidnight)).toBe('15 August 2026');
+		expect(londonFullDate('2025-12-31T23:30:00.000Z')).toBe('31 December 2025');
 	});
 
 	it('rolls the date over at UK midnight, not UTC midnight', () => {
@@ -73,6 +81,7 @@ describe('London formatters', () => {
 			londonClock,
 			londonDate,
 			londonDayAndMonth,
+			londonFullDate,
 			londonIsoDate,
 			londonIsoDateTime
 		]) {

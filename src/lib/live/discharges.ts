@@ -64,6 +64,20 @@ export function isThamesWater(name: string | undefined): boolean {
 	return Boolean(name) && normaliseOperatorKey(name as string).includes('thames');
 }
 
+/**
+ * Whether any storm-overflow feed exists for this site. `fetchRecentDischarges`
+ * returns an empty array both when it looked and found nothing and when there
+ * was nothing to look at, so an empty list is an all-clear only when this is
+ * true. It is false for all 237 sites outside England, whose catalogue rows
+ * carry no sewerage undertaker, and reporting "no sewage" for those would be
+ * asserting the result of a check that never ran.
+ */
+export function hasDischargeFeed(location: Location): boolean {
+	return (
+		Boolean(lookupEndpoint(location.sewerageUndertaker)) || isThamesWater(location.sewerageUndertaker)
+	);
+}
+
 interface FeatureCollection {
 	features?: Array<{
 		geometry?: { coordinates?: number[] };

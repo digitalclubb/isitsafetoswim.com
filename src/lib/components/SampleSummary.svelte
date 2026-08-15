@@ -1,21 +1,14 @@
 <script lang="ts">
 	import type { RecentSample } from '$lib/data/types';
-	import { relativeDay } from '$lib/util/time';
+	import { londonFullDate, relativeDay } from '$lib/util/time';
 
 	let { sample }: { sample: RecentSample } = $props();
 
-	let formattedDate = $derived(formatDate(sample.sampledAt));
+	// London-pinned rather than formatted in the host timezone, which rendered
+	// UTC on the server and the visitor's zone on the client, so a sample
+	// timestamped near midnight changed day after hydration.
+	let formattedDate = $derived(londonFullDate(sample.sampledAt));
 	let recency = $derived(relativeDay(sample.sampledAt));
-
-	function formatDate(iso: string): string {
-		const t = Date.parse(iso);
-		if (!Number.isFinite(t)) return iso;
-		return new Date(t).toLocaleDateString('en-GB', {
-			day: 'numeric',
-			month: 'long',
-			year: 'numeric'
-		});
-	}
 </script>
 
 <div class="sample">

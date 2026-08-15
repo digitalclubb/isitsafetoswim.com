@@ -89,6 +89,11 @@ export interface LiveLocationData {
 	latestSample: RecentSample | null;
 	riskForecast: RiskForecast | null;
 	recentDischarges: DischargeEvent[];
+	/**
+	 * Whether a storm-overflow feed exists for this site at all. An empty
+	 * `recentDischarges` is an all-clear only when this is true.
+	 */
+	hasDischargeFeed: boolean;
 	rainfall24hMm: number | null;
 	sampleHistory: RecentSample[];
 	seaTemperatureC: number | null;
