@@ -36,8 +36,8 @@
 		<ol>
 			<li>
 				<strong>Annual classification.</strong> Every site is graded Excellent, Good, Sufficient or
-				Poor based on four years of bacterial sampling. The regulator publishes the result at the
-				end of each bathing season.
+				Poor based on up to four years of bacterial sampling. A recently designated site is
+				graded on fewer. The regulator publishes the result at the end of each bathing season.
 			</li>
 			<li>
 				<strong>Daily pollution-risk forecast.</strong> During the bathing season the Environment
