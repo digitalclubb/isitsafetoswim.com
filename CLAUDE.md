@@ -114,7 +114,9 @@ The latest sample is assessed on both E. coli and intestinal enterococci, taking
 
 There is no statutory single-sample standard (classification is a multi-year percentile), so these adopt the revised Bathing Water Directive percentile boundaries as proxy cut-offs: elevated at the Good 95th-percentile boundary, high at roughly twice it. Unknown water type defaults to the stricter coastal cut-offs.
 
-Bathing season runs 15 May to 30 September. Outside that window the verdict adds a Caution note that the official forecast is not in operation.
+A sample stops deciding the verdict once it is older than `SAMPLE_CURRENT_DAYS` (28). It is still reported as a factor, so a high reading from late September is visible all winter without holding the beach at No until May. A sample with no usable date fails safe and keeps deciding, because `parseSample` in `src/lib/live/profile.ts` can emit `sampledAt: ''` alongside real counts, and a reading we cannot age is likelier to be current than a year old.
+
+Bathing season runs 15 May to 30 September. **Out of season the closed season is a neutral factor, never a verdict.** It used to push a Caution, which meant every clean site read "Caution. Outside bathing season, the official forecast is not in operation." from 1 October to 15 May. Only about a tenth of the demand behind these pages carries "today"; the rest asks how clean the water is, and that stays answerable from the classification, live storm-overflow data and rainfall. A `Poor` classification returns No year-round, since the classification rates the water rather than the season, and only the advisory sign comes down.
 
 ## Data sources and licensing
 
@@ -151,12 +153,20 @@ Runtime env vars (Vercel): `REDIS_URL` (colour, profile, spills and rainfall sto
 
 They are titled "Cleanest beaches in X" rather than the regulator's phrasing, because that is the demand they answer and it is the only demand that survives the winter. Sampling and the daily pollution-risk forecast both stop on 30 September, so classification-led pages carry the site through to May. Keep the share card in `scripts/lib/og-card.mjs` saying the same thing as the title.
 
+`/beaches/rated/[tier]` is the second axis over the same catalogue (`src/lib/data/classifications.ts`): every bathing water at one classification, grouped by country. Four pages only, for the four genuine tiers in `RATED_TIERS`. New, Unknown and Closed are statuses rather than ratings, and Unknown is partly a parser catch-all, so grouping them would assert something the data cannot back.
+
+Two copy rules on those pages are non-obvious and were both got wrong once:
+
+- **Name no actor on Poor.** The duty to display advice against bathing sits with the local authority in England and Wales (Bathing Water Regulations 2013 reg 13(1)(b)), the operator in Northern Ireland (NI 2008 reg 14(b)(ii)) and SEPA itself in Scotland (Scotland 2008 reg 11). "The regulator displays signs" is wrong on three of the four countries the page lists.
+- **Classification is "up to" four bathing seasons**, never flatly four. A recently designated site is assessed on fewer.
+
 ## URL shape
 
 - `/` homepage, prerendered
 - `/swim/[slug]` per-location page, Vercel ISR (5 min revalidation)
 - `/map` interactive map plus nearest-safe list, prerendered shell
 - `/beaches` and `/beaches/[place]` area hubs, prerendered
+- `/beaches/rated/[tier]` classification hubs (`excellent`, `good`, `sufficient`, `poor`), prerendered
 - `/near` and `/near/[postcode]` geolocation and postcode results
 - `/api/verdict/[id]` JSON endpoint with `s-maxage=300, stale-while-revalidate=600`
 - `/api/map` precomputed colour blob, `s-maxage=1800`
@@ -201,3 +211,6 @@ Documented for future sessions, not blocking launch:
 4. Done: the recent-sample trend sparkline (`SampleHistory.svelte`, fed by `src/lib/live/history.ts`) is on the location page. History is fetched live per verdict; it changes only weekly, so it is a candidate to bake in at build time if request cost ever matters.
 5. SEPA and DAERA do not expose a per-site daily risk forecast; verdicts for Scotland and NI rely on classification, rainfall and any directly observable CSO data. When those regulators ship a forecast feed, plumb it through `src/lib/live/profile.ts`.
 6. The SEPA branch in `build-location-index.mjs` hardcodes `waterType: 'coastal'`, so inland Scottish lochs get coastal sample thresholds and are not skipped by the sea-temperature fetch. They fail safe today (Open-Meteo returns null inland), but a name heuristic (loch, lake, reservoir, river) or a coast-distance check would classify them correctly.
+7. `bathingSeasonActive` hardcodes 15 May to 30 September for all four countries. That is the England and Wales default only: Scotland and Northern Ireland set their own dates, and from 15 May 2026 the amended regulations let ministers set site-specific seasons per bathing water. Verify the per-country dates against the regulations before acting, then consider carrying a season on the location record rather than in the engine.
+8. **Wales gets no storm-overflow data even though its feed is wired.** `OVERFLOW_ENDPOINTS` in `src/lib/live/discharges.ts` maps Dwr Cymru, but `sewerageUndertaker` is populated only for England in the catalogue: all 114 Welsh, 90 Scottish and 33 Northern Irish rows lack it, so `lookupEndpoint` never resolves and no call is made. Populating the field for Wales in `build-location-index.mjs` would light up CSO alerts for 114 sites. Until then `hasDischargeFeed` keeps the pages honest about it rather than reporting a false all-clear.
+9. Per-location or per-area sewage-spill pages are the obvious counter-seasonal inventory, because storm overflows are rain-driven and spill most in autumn and winter, exactly when swimming demand dies. `/spills` is one national page with nothing to rank for. Doing it properly needs spill history in Redis plus a retention policy; without history the pages would be empty most of the time, which is worse than not having them.
