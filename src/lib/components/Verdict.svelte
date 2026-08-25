@@ -44,6 +44,13 @@
 		<span class="reason">{verdict.reason}</span>
 	</p>
 
+	<p class="safety">
+		<strong>Water quality only</strong>
+		This says nothing about tides, rip currents, cold water shock or lifeguard cover. Cold water and
+		currents are dangerous even when the water is clean. Read the local signs before you go in.
+		<a href="/about#cannot-tell-you">What we cannot tell you</a>.
+	</p>
+
 	<div class="rule" aria-hidden="true"></div>
 
 	<p class="updated">
@@ -151,6 +158,35 @@
 	.reason {
 		color: var(--ink);
 		font-weight: 400;
+	}
+
+	/* Deliberately not tinted with --tone-color. On a Yes verdict a green
+	   panel reads as more reassurance, and this line exists to say the
+	   opposite of whatever the verdict says. */
+	.safety {
+		margin: var(--space-5) 0 0;
+		padding: var(--space-4);
+		background: var(--surface-sunken);
+		/* The fill alone does not lift in dark mode, where --surface-sunken sits
+		   darker than the page, so the panel carries its own edge as well. */
+		border: var(--rule-weight) solid var(--rule);
+		border-left: 4px solid var(--ink);
+		font-family: var(--font-sans);
+		font-size: var(--text-base);
+		line-height: 1.5;
+		color: var(--ink);
+	}
+
+	.safety strong {
+		display: block;
+		font-size: var(--text-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		margin-bottom: var(--space-2);
+	}
+
+	.safety a {
+		color: inherit;
 	}
 
 	.rule {
