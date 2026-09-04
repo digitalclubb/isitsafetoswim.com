@@ -1,4 +1,5 @@
 import type { DischargeEvent, Location } from '$lib/data/types';
+import { parseLondonNaive } from '$lib/util/time';
 import { haversineMetres } from './geo';
 import { fetchJson } from './http';
 import { fetchThamesDischarges } from './thames';
@@ -31,8 +32,11 @@ const OVERFLOW_ENDPOINTS: Record<string, string> = {
 		'https://services1.arcgis.com/NO7lTIlnxRMMG9Gw/arcgis/rest/services/Severn_Trent_Storm_Overflow_Activity/FeatureServer/0/query',
 	'Wessex Water Services Limited':
 		'https://services.arcgis.com/3SZ6e0uCvPROr4mS/arcgis/rest/services/Wessex_Water_Storm_Overflow_Activity/FeatureServer/0/query',
+	// Welsh Water's live feed is the one behind its own public storm-overflow
+	// map. The service is named Spill_Prod__view, and it reports status as a
+	// phrase rather than the 0/1 flag the English companies use.
 	'Dwr Cymru Cyfyngedig':
-		'https://services3.arcgis.com/KLNF7YxtENPLYVey/arcgis/rest/services/DCWW_Storm_Overflow_Activity/FeatureServer/0/query'
+		'https://services3.arcgis.com/KLNF7YxtENPLYVey/arcgis/rest/services/Spill_Prod__view/FeatureServer/0/query'
 };
 
 function normaliseOperatorKey(input: string): string {
@@ -109,8 +113,11 @@ function parseDate(value: unknown): string | undefined {
 		return new Date(value).toISOString();
 	}
 	if (typeof value === 'string') {
-		const t = Date.parse(value);
-		return Number.isFinite(t) ? new Date(t).toISOString() : undefined;
+		// These feeds are all UK operators and several publish a naive local
+		// timestamp, which Date.parse would read in the host's zone (UTC on
+		// Vercel) and place an hour into the future all summer.
+		const t = parseLondonNaive(value);
+		return t === null ? undefined : new Date(t).toISOString();
 	}
 	return undefined;
 }
@@ -123,6 +130,23 @@ function readString(props: Record<string, unknown>, keys: string[]): string | un
 	return undefined;
 }
 
+/**
+ * Whether a feed's status field means "discharging right now". The English
+ * company feeds use a 1/0 flag; Welsh Water publishes a phrase.
+ *
+ * The negative forms are tested first and are the reason this is not a plain
+ * substring match: "Overflow Not Operating (Has in the last 24 hours)" contains
+ * "Operating", so a naive test would report a finished spill as still running
+ * and push the beach to a hard No.
+ */
+export function isDischarging(status: unknown): boolean {
+	if (status === 1 || status === '1') return true;
+	if (typeof status !== 'string') return false;
+	const lower = status.toLowerCase();
+	if (/\bnot\b|\bno\b|ceased|stopped|offline|investigation/.test(lower)) return false;
+	return /discharg|operating|active|spill/.test(lower);
+}
+
 function buildEvent(
 	props: Record<string, unknown>,
 	geometry: { coordinates?: number[] } | undefined,
@@ -132,15 +156,18 @@ function buildEvent(
 	const lat = Number(geometry?.coordinates?.[1]);
 	if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
 	const status = props.Status ?? props.status ?? props.AlertStatus;
-	const ongoing =
-		status === 1 || status === '1' || (typeof status === 'string' && /discharg/i.test(status));
+	const ongoing = isDischarging(status);
 	const startedAt =
 		parseDate(props.StatusStart) ??
 		parseDate(props.LatestEventStart) ??
 		parseDate(props.start_time) ??
+		parseDate(props.start_date_time_discharge) ??
 		parseDate(props.StatusChange);
 	const endedAt =
-		parseDate(props.LatestEventEnd) ?? parseDate(props.end_time) ?? parseDate(props.StatusEnd);
+		parseDate(props.LatestEventEnd) ??
+		parseDate(props.end_time) ??
+		parseDate(props.stop_date_time_discharge) ??
+		parseDate(props.StatusEnd);
 
 	// Without a real start timestamp we cannot reason about recency, so drop
 	// the event rather than synthesise a "now" fallback. Same for non-ongoing
@@ -149,8 +176,15 @@ function buildEvent(
 	if (!ongoing && !endedAt) return null;
 
 	const outfallName =
-		readString(props, ['Id', 'OutfallName', 'Outfall_Name', 'SiteName', 'Asset_ID', 'name']) ??
-		'Outfall';
+		readString(props, [
+			'Id',
+			'OutfallName',
+			'Outfall_Name',
+			'SiteName',
+			'Asset_ID',
+			'asset_name',
+			'name'
+		]) ?? 'Outfall';
 	const receivingWater = readString(props, [
 		'ReceivingWaterCourse',
 		'Receiving Water',

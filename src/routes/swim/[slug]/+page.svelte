@@ -8,15 +8,17 @@
 	import SampleSummary from '$lib/components/SampleSummary.svelte';
 	import SpillHistory from '$lib/components/SpillHistory.svelte';
 	import SupportNote from '$lib/components/SupportNote.svelte';
+	import TideTimes from '$lib/components/TideTimes.svelte';
 	import Verdict from '$lib/components/Verdict.svelte';
 	import WaterTemperature from '$lib/components/WaterTemperature.svelte';
 	import { findNearestSlim } from '$lib/data/search-index';
 	import type { RecentSample } from '$lib/data/types';
 	import { comparableSpillYears, getSpillHistoryMeta } from '$lib/data/spill-history';
+	import { coverageNotice, hasLiveSignals } from '$lib/live/coverage';
 	import { buildFaq } from '$lib/seo/faq';
 	import { safeJsonLd } from '$lib/seo/jsonLd';
 	import { londonClock, londonDayAndMonth, londonIsoDateTime, newestTimestamp } from '$lib/util/time';
-	import { bathingSeasonActive } from '$lib/verdict/engine';
+	import { bathingSeasonActive, seasonLabels } from '$lib/verdict/engine';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -27,15 +29,15 @@
 	// with today's real answer already in place. No client-side swap.
 	let live = $derived(data.live);
 
-	// The sample-history sparkline and sea temperature are decoration that does
-	// not affect the verdict, so the server render skips the slow fetches for
-	// them and we pull them in after paint. The effect re-runs on the location
-	// id so SPA navigation reissues the fetch and abandons the previous one.
-	let enrichment = $state<{ sampleHistory: RecentSample[]; seaTemperatureC: number | null } | null>(
-		null
-	);
+	// The sample-history sparkline reads the rate-limited regulator sample host,
+	// so it stays deferred to after paint rather than holding up the verdict.
+	// Sea temperature and the tide are server-rendered, so a crawler sees them.
+	// The effect re-runs on the location id so SPA navigation reissues the fetch
+	// and abandons the previous one.
+	let enrichment = $state<{ sampleHistory: RecentSample[] } | null>(null);
 	let sampleHistory = $derived(enrichment?.sampleHistory ?? []);
-	let seaTemperatureC = $derived(enrichment?.seaTemperatureC ?? null);
+	let seaTemperatureC = $derived(live.seaTemperatureC);
+	let tide = $derived(live.tide);
 
 	$effect(() => {
 		const id = data.location.id;
@@ -48,7 +50,7 @@
 				if (fresh) enrichment = fresh;
 			})
 			.catch(() => {
-				// Decoration only, so a failure just leaves these sections hidden.
+				// Decoration only, so a failure just leaves this section hidden.
 			});
 
 		return () => controller.abort();
@@ -59,15 +61,19 @@
 	);
 
 	// England and Wales expose live daily forecasts, samples and storm-overflow
-	// feeds. Scotland (SEPA) and Northern Ireland (DAERA) do not, so their
-	// verdicts rest on the annual classification and we say so rather than
-	// implying we checked feeds that do not exist for those sites.
-	let liveSignals = $derived(location.country === 'England' || location.country === 'Wales');
+	// feeds. Scotland has SEPA's daily prediction and nothing else; Northern
+	// Ireland has neither, so its verdict rests on the annual classification and
+	// we say so rather than implying we checked feeds that do not exist.
+	// coverageNotice decides which of those the page states, as one value, so two
+	// branches can never make contradictory claims about the same site.
+	let liveSignals = $derived(hasLiveSignals(location.country));
+	let coverage = $derived(coverageNotice(live));
 	let regulator = $derived(location.country === 'Scotland' ? 'SEPA' : 'DAERA');
 
 	// Derived from the same clock the verdict was decided on, so the page never
 	// explains a season the verdict did not apply.
-	let inSeason = $derived(bathingSeasonActive(new Date(live.verdict.fetchedAt)));
+	let inSeason = $derived(bathingSeasonActive(new Date(live.verdict.fetchedAt), location.country));
+	let season = $derived(seasonLabels(location.country));
 	let nearby = $derived(
 		findNearestSlim({ lat: location.lat, lon: location.lon }, 5)
 			.map((r) => r.location)
@@ -272,11 +278,18 @@
 			<section class="block" aria-labelledby="out-of-season">
 				<h2 id="out-of-season" class="muted-h">Out of season</h2>
 				<p class="muted">
-					Weekly sampling and the daily pollution-risk forecast pause on 30 September and
-					resume on 15 May.
+					{#if liveSignals || location.country === 'Scotland'}
+						Weekly sampling and the daily pollution-risk forecast pause on {season.closes}
+						and resume on {season.opens}.
+					{:else}
+						Weekly sampling pauses on {season.closes} and resumes on {season.opens}.
+					{/if}
 					{#if liveSignals}
 						This verdict rests on the annual classification, live storm-overflow data and
 						rainfall in the last 24 hours.
+					{:else if location.country === 'Scotland'}
+						This verdict rests on the annual classification. SEPA's daily prediction runs
+						only during the season and only at the beaches with an electronic sign.
 					{:else}
 						This verdict rests on the annual classification, which is the only measure
 						{regulator} publishes for this site year-round.
@@ -292,31 +305,51 @@
 		{/if}
 
 		{#if seaTemperatureC != null}
-			<section
-				class="block"
-				aria-labelledby="temperature"
-				in:slide={{ duration: 280, easing: cubicOut }}
-			>
+			<section class="block" aria-labelledby="temperature">
 				<h2 id="temperature" class="muted-h">Water temperature</h2>
 				<WaterTemperature celsius={seaTemperatureC} />
 			</section>
 		{/if}
 
-		{#if !liveSignals && live.recentDischarges.length === 0 && !live.latestSample}
+		{#if tide}
+			<section class="block" aria-labelledby="tide">
+				<h2 id="tide" class="muted-h">Tide</h2>
+				<TideTimes {tide} />
+			</section>
+		{/if}
+
+		{#if coverage === 'sepa-none' || coverage === 'sepa-forecast' || coverage === 'classification-only'}
 			<section
 				class="block"
 				aria-labelledby="coverage"
 				in:slide={{ duration: 280, delay: 200, easing: cubicOut }}
 			>
 				<h2 id="coverage" class="muted-h">Coverage for this site</h2>
-				<p class="muted">
-					{regulator} does not publish a daily pollution-risk forecast or live storm-overflow
-					data for bathing waters in {location.country}, so this verdict reflects the most
-					recent annual classification rather than today's conditions. We show live forecasts,
-					sample readings and sewage-overflow alerts for England and Wales only.
-				</p>
+				{#if coverage === 'sepa-forecast'}
+					<p class="muted">
+						Today's pollution-risk prediction comes from SEPA, which publishes one during the
+						bathing season for the Scottish beaches that carry an electronic sign. SEPA
+						publishes no live storm-overflow feed and no per-site sample readings, so the
+						rest of this verdict rests on the annual classification.
+					</p>
+				{:else if coverage === 'sepa-none'}
+					<p class="muted">
+						SEPA publishes a daily pollution-risk prediction during the bathing season for
+						the Scottish beaches that carry an electronic sign. None is showing for this
+						site right now. SEPA publishes no live storm-overflow feed and no per-site
+						sample readings, so this verdict reflects the most recent annual
+						classification.
+					</p>
+				{:else}
+					<p class="muted">
+						{regulator} does not publish a daily pollution-risk forecast or live storm-overflow
+						data for bathing waters in {location.country}, so this verdict reflects the most
+						recent annual classification rather than today's conditions. We show live
+						forecasts, sample readings and sewage-overflow alerts for England and Wales.
+					</p>
+				{/if}
 			</section>
-		{:else if live.recentDischarges.length === 0 && !live.latestSample}
+		{:else if coverage === 'quiet'}
 			<section
 				class="block"
 				aria-labelledby="all-clear"
@@ -375,6 +408,13 @@
 			<section class="block" aria-labelledby="spill-history">
 				<h2 id="spill-history">{spillHeading}</h2>
 				<SpillHistory record={data.spillHistory} locationName={location.name} />
+				{#if data.hub.leaguePath}
+					<p class="more">
+						<a href={data.hub.leaguePath}>
+							See the worst beaches for sewage in {data.hub.name} →
+						</a>
+					</p>
+				{/if}
 			</section>
 		{/if}
 

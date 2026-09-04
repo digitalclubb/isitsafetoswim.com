@@ -1,3 +1,4 @@
+import { classificationChange } from '$lib/data/rating';
 import type { LiveLocationData, RecentSample } from '$lib/data/types';
 import { joinList } from '$lib/util/text';
 import { londonFullDate } from '$lib/util/time';
@@ -55,8 +56,18 @@ function classificationSentence(live: LiveLocationData): string {
 			// classify() in live/profile.ts folds "decommissioned" into Closed, so
 			// this must not assert a present-tense closure to bathers.
 			return `${name} is no longer listed as an open bathing water.`;
-		default:
-			return `${name} is rated ${live.classification} in the regulator's latest annual classification, a percentile taken over readings from up to four bathing seasons.`;
+		default: {
+			// Dating the classification matters most out of season, when it is the
+			// only thing holding the page up: "rated Excellent" with no year is an
+			// undated claim, and the ratings are republished every November.
+			const year = live.location.classificationYear;
+			const when = year ? `${year} annual classification` : 'latest annual classification';
+			const change = classificationChange(live.classification, live.location.previousClassification);
+			const moved = change
+				? ` That is ${change.direction} from ${change.from} the season before.`
+				: '';
+			return `${name} is rated ${live.classification} in the regulator's ${when}, a percentile taken over readings from up to four bathing seasons.${moved}`;
+		}
 	}
 }
 

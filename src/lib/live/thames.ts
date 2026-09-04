@@ -1,4 +1,5 @@
 import type { DischargeEvent, Location } from '$lib/data/types';
+import { parseLondonNaive } from '$lib/util/time';
 import { haversineMetres, osgb36ToWgs84 } from './geo';
 import { fetchJson } from './http';
 
@@ -55,13 +56,13 @@ function str(value: unknown): string | undefined {
 function iso(value: unknown): string | undefined {
 	const s = str(value);
 	if (!s) return undefined;
-	// Thames timestamps are UK local with no timezone. The verdict windows are
-	// coarse (12h recovery, 48h recency), so we parse them as UTC deterministically
-	// rather than pull in timezone handling; the sub-hour BST skew never changes a
-	// verdict. Only append Z when no offset is already present.
-	const normalised = /[zZ]|[+-]\d\d:?\d\d$/.test(s) ? s : `${s}Z`;
-	const t = Date.parse(normalised);
-	return Number.isFinite(t) ? new Date(t).toISOString() : undefined;
+	// Thames timestamps are UK local with no timezone, the same as Welsh Water's.
+	// This used to append a Z and accept the BST skew on the grounds that the
+	// verdict windows are coarse; it now shares parseLondonNaive with the other
+	// feeds, so no two feeds disagree about what a naive timestamp means and a
+	// summer spill is never dated an hour into the future.
+	const t = parseLondonNaive(s);
+	return t === null ? undefined : new Date(t).toISOString();
 }
 
 function isDischarging(status: string | undefined): boolean {

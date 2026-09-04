@@ -1,5 +1,6 @@
 import type {
 	Classification,
+	Country,
 	DischargeEvent,
 	RecentSample,
 	RiskForecast,
@@ -42,6 +43,8 @@ export interface VerdictInputs {
 	 * the verdict must not claim an all-clear on sewage. Defaults to true.
 	 */
 	hasDischargeFeed?: boolean;
+	/** Sets the bathing-season dates. Defaults to the England and Wales season. */
+	country?: Country;
 	now: Date;
 }
 
@@ -136,13 +139,58 @@ export function eColiScaleCeiling(waterType: 'coastal' | 'inland' = 'coastal'): 
 	return SAMPLE_THRESHOLDS[waterType]['E. coli'].high;
 }
 
-export function bathingSeasonActive(d: Date): boolean {
-	// UK bathing season runs from 15 May to 30 September.
+/**
+ * Bathing season dates differ by country and there is no UK-wide season.
+ * England and Wales run 15 May to 30 September under the Bathing Water
+ * Regulations 2013. Scotland (SSI 2008/170) and Northern Ireland (SR 2008/241)
+ * both run 1 June to 15 September, so the England dates overstate their season
+ * by a fortnight at each end. Country is optional and defaults to the England
+ * and Wales dates, which is what a caller with no location in hand wants.
+ *
+ * From 15 May 2026 the amended English regulations let ministers set a
+ * site-specific season per bathing water. None is published per site in the
+ * regulator feeds yet, so the national dates still stand; when one appears it
+ * belongs on the location record rather than here.
+ */
+const SEASONS: Record<Country, { from: [number, number]; to: [number, number] }> = {
+	England: { from: [4, 15], to: [8, 30] },
+	Wales: { from: [4, 15], to: [8, 30] },
+	Scotland: { from: [5, 1], to: [8, 15] },
+	'Northern Ireland': { from: [5, 1], to: [8, 15] }
+};
+
+export function bathingSeasonActive(d: Date, country: Country = 'England'): boolean {
+	const { from, to } = SEASONS[country] ?? SEASONS.England;
 	const month = d.getUTCMonth();
 	const day = d.getUTCDate();
-	if (month < 4 || month > 8) return false;
-	if (month === 4 && day < 15) return false;
+	if (month < from[0] || month > to[0]) return false;
+	if (month === from[0] && day < from[1]) return false;
+	if (month === to[0] && day > to[1]) return false;
 	return true;
+}
+
+const MONTHS = [
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+	'September',
+	'October',
+	'November',
+	'December'
+];
+
+/** The season's opening and closing dates in words, for the page copy. */
+export function seasonLabels(country: Country = 'England'): { opens: string; closes: string } {
+	const { from, to } = SEASONS[country] ?? SEASONS.England;
+	return {
+		opens: `${from[1]} ${MONTHS[from[0]]}`,
+		closes: `${to[1]} ${MONTHS[to[0]]}`
+	};
 }
 
 function hoursSince(iso: string | undefined, now: Date): number | null {
@@ -196,7 +244,7 @@ export function evaluateVerdict(
 	const waterType = inputs.waterType ?? 'coastal';
 	const rainMatters = inputs.rainImpacted !== false;
 	const factors: VerdictFactor[] = [];
-	const inSeason = bathingSeasonActive(now);
+	const inSeason = bathingSeasonActive(now, inputs.country);
 
 	const ongoing = ongoingNearby(recentDischarges, DISTANCE_RELEVANT_M);
 	const justFinished = recentNearby(
@@ -224,7 +272,7 @@ export function evaluateVerdict(
 	if (!inSeason) {
 		factors.push({
 			label: 'Bathing season',
-			value: 'Closed until 15 May',
+			value: `Closed until ${seasonLabels(inputs.country).opens}`,
 			weight: 'neutral'
 		});
 	}

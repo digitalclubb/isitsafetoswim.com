@@ -7,7 +7,8 @@ import {
 	readEaBoolean,
 	readSamplingPoint,
 	slugify,
-	waterTypeFromEaType
+	waterTypeFromEaType,
+	yearFromComplianceUri
 } from './parsers.mjs';
 
 describe('waterTypeFromEaType', () => {
@@ -218,5 +219,38 @@ describe('dedupeSlugs', () => {
 		const locs = [{ slug: '', country: 'England', name: 'Anonymous Bay' }];
 		dedupeSlugs(locs);
 		expect(locs[0].slug).toBe('anonymous-bay');
+	});
+});
+
+describe('yearFromComplianceUri', () => {
+	it('reads the year out of an EA compliance URI', () => {
+		expect(
+			yearFromComplianceUri(
+				'http://environment.data.gov.uk/data/bathing-water-quality/compliance-rBWD/point/14900/year/2025'
+			)
+		).toBe(2025);
+	});
+
+	it('reads the year out of an NRW compliance URI', () => {
+		expect(
+			yearFromComplianceUri(
+				'http://environment.data.gov.uk/wales/bathing-waters/data/bathing-water-quality/compliance-rBWD/point/36040/year/2024'
+			)
+		).toBe(2024);
+	});
+
+	it('returns undefined for a URI with no year segment', () => {
+		expect(
+			yearFromComplianceUri('http://environment.data.gov.uk/id/bathing-water/ukj2100-14900')
+		).toBeUndefined();
+	});
+
+	it('rejects an implausible year rather than putting it on a page', () => {
+		expect(yearFromComplianceUri('http://example.org/year/9999')).toBeUndefined();
+	});
+
+	it('ignores non-string input', () => {
+		expect(yearFromComplianceUri(undefined)).toBeUndefined();
+		expect(yearFromComplianceUri(2025)).toBeUndefined();
 	});
 });

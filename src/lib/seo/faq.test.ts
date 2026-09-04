@@ -4,7 +4,7 @@ import { buildFaq } from './faq';
 
 const NOW = '2026-07-15T10:00:00Z';
 
-function live(partial: Partial<LiveLocationData> = {}): LiveLocationData {
+function base(): LiveLocationData {
 	return {
 		location: {
 			id: 'ea-1',
@@ -24,6 +24,7 @@ function live(partial: Partial<LiveLocationData> = {}): LiveLocationData {
 		rainfall24hMm: 0,
 		sampleHistory: [],
 		seaTemperatureC: null,
+		tide: null,
 		verdict: {
 			verdict: 'yes',
 			headline: 'Yes.',
@@ -32,9 +33,12 @@ function live(partial: Partial<LiveLocationData> = {}): LiveLocationData {
 			fetchedAt: NOW,
 			dataAge: 'fresh'
 		},
-		attribution: [],
-		...partial
+		attribution: []
 	};
+}
+
+function live(partial: Partial<LiveLocationData> = {}): LiveLocationData {
+	return { ...base(), ...partial };
 }
 
 function sewage(data: LiveLocationData): string {
@@ -168,5 +172,71 @@ describe('buildFaq', () => {
 		for (const item of buildFaq(live({ hasDischargeFeed: false, classification: 'Unknown' }))) {
 			expect(item.answer.trim().length).toBeGreaterThan(0);
 		}
+	});
+});
+
+describe('classification dating', () => {
+	it('names the season the classification was awarded for', () => {
+		const answer = buildFaq(live({ location: { ...base().location, classificationYear: 2025 } }))[1]
+			.answer;
+		expect(answer).toContain("regulator's 2025 annual classification");
+	});
+
+	it('says when the rating went up', () => {
+		const answer = buildFaq(
+			live({
+				location: { ...base().location, classificationYear: 2025, previousClassification: 'Good' }
+			})
+		)[1].answer;
+		expect(answer).toContain('up from Good the season before');
+	});
+
+	it('says when the rating went down', () => {
+		const answer = buildFaq(
+			live({
+				classification: 'Sufficient',
+				location: {
+					...base().location,
+					classification: 'Sufficient',
+					classificationYear: 2025,
+					previousClassification: 'Excellent'
+				}
+			})
+		)[1].answer;
+		expect(answer).toContain('down from Excellent the season before');
+	});
+
+	it('says nothing about a move when the rating held', () => {
+		const answer = buildFaq(
+			live({
+				location: {
+					...base().location,
+					classificationYear: 2025,
+					previousClassification: 'Excellent'
+				}
+			})
+		)[1].answer;
+		expect(answer).not.toContain('season before');
+	});
+
+	it('falls back to "latest" with no year on record', () => {
+		const answer = buildFaq(live())[1].answer;
+		expect(answer).toContain('latest annual classification');
+	});
+
+	it('never calls a closure a downgrade', () => {
+		// Closed is a status, not a worse rating, and it has its own sentence.
+		const answer = buildFaq(
+			live({
+				classification: 'Closed',
+				location: {
+					...base().location,
+					classification: 'Closed',
+					classificationYear: 2025,
+					previousClassification: 'Excellent'
+				}
+			})
+		)[1].answer;
+		expect(answer).not.toContain('down from');
 	});
 });

@@ -70,8 +70,9 @@ isitsafetoswim.com/
 │   │   ├── data/                   Typed accessors over the JSON (incl. places.ts for area pages)
 │   │   ├── verdict/engine.ts       Pure verdict engine. Unit tests cover every branch.
 │   │   ├── live/                   Server-side live data fetchers (EA profile, NRW profile,
-│   │   │                            ArcGIS CSO feeds, EA flood-monitoring rainfall) and
-│   │   │                            the buildLiveData orchestrator + deriveVerdict.
+│   │   │                            SEPA daily prediction, ArcGIS CSO feeds, EA
+│   │   │                            flood-monitoring rainfall, Open-Meteo sea temperature
+│   │   │                            and tides) and buildLiveData + deriveVerdict.
 │   │   ├── map/                    Map precompute: Redis store (kv.ts), hourly colour compute,
 │   │   │                            daily profile cache, nearest-safe, colour tokens.
 │   │   ├── components/             Svelte components. Scoped <style> per file (BeachMap.svelte = MapLibre).
@@ -122,7 +123,11 @@ There is no statutory single-sample standard (classification is a multi-year per
 
 A sample stops deciding the verdict once it is older than `SAMPLE_CURRENT_DAYS` (28). It is still reported as a factor, so a high reading from late September is visible all winter without holding the beach at No until May. A sample with no usable date fails safe and keeps deciding, because `parseSample` in `src/lib/live/profile.ts` can emit `sampledAt: ''` alongside real counts, and a reading we cannot age is likelier to be current than a year old.
 
-Bathing season runs 15 May to 30 September. **Out of season the closed season is a neutral factor, never a verdict.** It used to push a Caution, which meant every clean site read "Caution. Outside bathing season, the official forecast is not in operation." from 1 October to 15 May. Only about a tenth of the demand behind these pages carries "today"; the rest asks how clean the water is, and that stays answerable from the classification, live storm-overflow data and rainfall. A `Poor` classification returns No year-round, since the classification rates the water rather than the season, and only the advisory sign comes down.
+Every England, Wales and Scotland row carries `classificationYear`, and England and Wales also carry `previousClassification` (the season before, fetched in bulk by the build). That is what lets the page say "rated Good in the regulator's 2025 annual classification, down from Excellent the season before" rather than an undated "rated Good". The ratings are republished every November, so an undated claim goes stale on a known date. NI publishes no year.
+
+Bathing season dates are per country, not UK-wide: England and Wales run 15 May to 30 September, Scotland and Northern Ireland 1 June to 15 September. `bathingSeasonActive(date, country)` holds them, and the country reaches the engine through `VerdictInputs.country`. Omitting the country falls back to the England and Wales dates.
+
+**Out of season the closed season is a neutral factor, never a verdict.** It used to push a Caution, which meant every clean site read "Caution. Outside bathing season, the official forecast is not in operation." from 1 October to 15 May. Only about a tenth of the demand behind these pages carries "today"; the rest asks how clean the water is, and that stays answerable from the classification, live storm-overflow data and rainfall. A `Poor` classification returns No year-round, since the classification rates the water rather than the season, and only the advisory sign comes down.
 
 ## Data sources and licensing
 
@@ -135,6 +140,8 @@ Bathing season runs 15 May to 30 September. **Out of season the closed season is
 | Storm overflows (9 English + Welsh water companies) | Stream / ArcGIS FeatureServer per company | None | OGL v3 |
 | Thames Water CSO | `api.thameswater.co.uk/opendata/v2/discharge/status` | None (open v2 API) | Thames Water open data terms |
 | Rainfall and river levels | `environment.data.gov.uk/flood-monitoring/...` | None | OGL v3 |
+| SEPA daily prediction | `map.sepa.org.uk/.../MapServer/18/query` | None | SEPA open data |
+| Sea temperature and tide | `marine-api.open-meteo.com/v1/marine` | None | CC-BY 4.0 |
 
 Attribution is rendered per location page via `src/lib/live/attribution.ts`. Do not strip the attribution lines.
 
@@ -185,6 +192,38 @@ Neither bounds the other. St Annes has 64 attributed overflows against 19 within
 
 **England only.** The EDM return is an England publication. Dwr Cymru appears but only for its overflows on the English side of the border. Wales, Scotland and Northern Ireland need NRW, SEPA and NI Water equivalents, which is why `getSpillHistory` returns null for those 237 sites and the section does not render.
 
+## Tides and sea temperature
+
+Both come from the Open-Meteo Marine API (open, no key, CC-BY) and both are **server-rendered on the location page**, not fetched after paint. They were client-only, which hid them from crawlers, and cold-water and tide questions are exactly the demand that grows as the water gets colder. The sample-history sparkline is still deferred to `/api/enrichment/[id]`, because it reads the rate-limited regulator sample host that made a cold render take ten seconds.
+
+Neither is an input to the verdict. Both return null for inland sites, which are off the marine grid.
+
+**The tide is modelled and is deliberately not sold as a tide table.** Open-Meteo returns an hourly `sea_level_height_msl` curve, not tide times; `src/lib/live/tides.ts` finds the turning points and refines each with a parabola through the peak sample and its two neighbours.
+
+Validated against EA tide gauges on three coasts in September 2026, the modelled turn ran **20 to 60 minutes ahead** of the observed one (Newhaven 28 min, Plymouth 34 to 63 min, Kinlochbervie 19 to 34 min). Some of that is real, because the grid cell is offshore and a harbour lags the open coast, but most of it is model error. So:
+
+- Times are rounded to ten minutes (`roundToTenMinutes`) and printed as "about 17:30", because minute precision would claim an accuracy the data does not have.
+- The section is headed "Tide", not "Tide times", and leads with rising or falling, which is the part that survives the error and the part a swimmer actually wants.
+- The component states the half-hour caveat and links to Admiralty EasyTide. **Do not remove either.** UKHO is the authority, but its APIs need a registered key and its predictions cannot be republished.
+
+If tide times ever need to be accurate, that means a UKHO Admiralty licence, not a better parser.
+
+## Sewage league tables
+
+`/beaches/sewage` and `/beaches/sewage/[place]` rank English bathing waters by storm-overflow spills, from the same five-year EDM record the location pages carry. `src/lib/data/spill-league.ts` derives them, so they never carry a hand-written ranking. 24 prerendered pages: the hub carries the whole national table, plus 23 English regions.
+
+**There is deliberately no `/beaches/sewage/england`.** It would ship the same rows and the same title as the hub and compete with it, so `getSpillLeaguePlaces()` returns regions only. An English location whose hub is the country page links to `/beaches/sewage` instead.
+
+This is the counter-seasonal asset. Storm overflows are rain-driven, so they spill hardest from October to March, exactly when swimming demand disappears, and the EA republishes the return every April.
+
+Three rules the tables must keep:
+
+- **Rank on `attributed`, never on `nearby`.** `attributed` is the set of overflows the EA itself links to that bathing water, so it follows the sewer network. `nearby` is a 10km radius, which is geography rather than hydrology and puts 267 urban overflows against a lake in Bristol they do not drain into. A table headed "worst for sewage" has to be defensible row by row.
+- **A site with no attributed record is left out, not ranked at zero.** No record is not a clean record, and the pages say how many are missing.
+- **Every row is the same year.** The ranked year is the newest any site has a comparable figure for. A site whose record stops earlier drops out rather than being carried in on an older figure. The per-row trend baseline varies by site, so it is printed with the row ("since 2022"), because a year too patchily monitored to compare is dropped from that site's record.
+
+`ranked` and `withRecord` are different numbers and both are stated: 464 English bathing waters, **324** carry an attributed record, **300** have a comparable 2025 figure to be ranked on. Conflating them once told readers that a site whose record stops at 2023 had no record at all.
+
 ## URL shape
 
 - `/` homepage, prerendered
@@ -192,6 +231,7 @@ Neither bounds the other. St Annes has 64 attributed overflows against 19 within
 - `/map` interactive map plus nearest-safe list, prerendered shell
 - `/beaches` and `/beaches/[place]` area hubs, prerendered
 - `/beaches/rated/[tier]` classification hubs (`excellent`, `good`, `sufficient`, `poor`), prerendered
+- `/beaches/sewage` and `/beaches/sewage/[place]` sewage league tables, England only, prerendered
 - `/near` and `/near/[postcode]` geolocation and postcode results
 - `/api/verdict/[id]` JSON endpoint with `s-maxage=300, stale-while-revalidate=600`
 - `/api/map` precomputed colour blob, `s-maxage=1800`
@@ -223,6 +263,9 @@ pnpm data:images        # regenerate PNG icons and OG card
 - Don't add features beyond what's asked, refactor adjacent systems as a side effect, or "clean up" code you don't fully understand. Surgical changes only.
 - Don't write planning, decision or analysis Markdown files unless explicitly asked.
 - Don't strip data-source attribution lines.
+- Don't state coverage from a template condition. `coverageNotice` in `src/lib/live/coverage.ts` returns one value for what the page may claim about live data, because two independent branches once contradicted each other: the Scottish notice said "none is showing for this site right now" on a gate that was true for every Scottish site, so it would have denied a SEPA forecast at the moment one arrived and drove the verdict above it.
+- Don't rank anything on the `nearby` spill figure. It is a 10km radius, not the sewer network, and it is offered as labelled context only. Only `attributed` may be stated or ranked as a beach's own record.
+- Don't present the tide as authoritative or navigational, and don't drop the EasyTide link. It is a model, not an Admiralty prediction.
 - Don't rename a bathing water anywhere but `scripts/lib/display-names.mjs`, and never let a display name reach `slugify`. Slugs come from the regulator name, so a rename that fed back into slug derivation would move all 700 URLs. The override is keyed by slug and applied after `dedupeSlugs` for exactly that reason.
 - Don't add a comment to explain what well-named code already says.
 - Don't add backwards-compatibility shims, dead exports or unused vars marked with `_` after a refactor — just delete.
@@ -235,9 +278,20 @@ Documented for future sessions, not blocking launch:
 2. Per-location OG share cards rendered at build time via @resvg/resvg-js.
 3. Done: postcode and outward-code entry resolve via postcodes.io to the `/near/[postcode]` results page, alongside name search and geolocation (`/near`).
 4. Done: the recent-sample trend sparkline (`SampleHistory.svelte`, fed by `src/lib/live/history.ts`) is on the location page. History is fetched live per verdict; it changes only weekly, so it is a candidate to bake in at build time if request cost ever matters.
-5. SEPA and DAERA do not expose a per-site daily risk forecast; verdicts for Scotland and NI rely on classification, rainfall and any directly observable CSO data. When those regulators ship a forecast feed, plumb it through `src/lib/live/profile.ts`.
+5. Done for Scotland, outstanding for NI. SEPA does publish a daily pollution-risk prediction, for the ~33 sites carrying an electronic sign, on layer 18 of the MapServer the catalogue is already built from. `src/lib/live/sepa.ts` reads it and `fetchProfile` folds it in. **It is gated on freshness and currently shows nothing**: every row in the open-data layer has carried a `last_updated` of 19 May 2026 all season, even though SEPA's own site updates daily by 10:00, and serving a four-month-old "Poor" as today's forecast is worse than showing none. If SEPA resumes updating the mirror, Scottish forecasts light up with no code change. DAERA still exposes no forecast.
 6. The SEPA branch in `build-location-index.mjs` hardcodes `waterType: 'coastal'`, so inland Scottish lochs get coastal sample thresholds and are not skipped by the sea-temperature fetch. They fail safe today (Open-Meteo returns null inland), but a name heuristic (loch, lake, reservoir, river) or a coast-distance check would classify them correctly.
-7. `bathingSeasonActive` hardcodes 15 May to 30 September for all four countries. That is the England and Wales default only: Scotland and Northern Ireland set their own dates, and from 15 May 2026 the amended regulations let ministers set site-specific seasons per bathing water. Verify the per-country dates against the regulations before acting, then consider carrying a season on the location record rather than in the engine.
-8. **Wales gets no storm-overflow data even though its feed is wired.** `OVERFLOW_ENDPOINTS` in `src/lib/live/discharges.ts` maps Dwr Cymru, but `sewerageUndertaker` is populated only for England in the catalogue: all 114 Welsh, 90 Scottish and 33 Northern Irish rows lack it, so `lookupEndpoint` never resolves and no call is made. Populating the field for Wales in `build-location-index.mjs` would light up CSO alerts for 114 sites. Until then `hasDischargeFeed` keeps the pages honest about it rather than reporting a false all-clear.
-9. Per-location and per-area sewage-spill pages are now buildable: the five-year record in `spill-history.json` is the substrate they needed, so they would no longer be empty most of the year. `/spills` is still one national page of live spills with nothing to rank for. The obvious next pages are "worst beaches for sewage" league tables, per country and per region, which is also the link-earning asset for the EA's annual publication on 1 April.
-10. Welsh, Scottish and Northern Irish spill history has no source yet. NRW, SEPA and NI Water publish their own storm-overflow data outside the EDM return, so 237 sites carry no record. Wiring any one of them would extend the spill history beyond England.
+7. Done. `bathingSeasonActive(date, country)` now carries the real dates: England and Wales 15 May to 30 September (Bathing Water Regulations 2013), Scotland and Northern Ireland 1 June to 15 September (SSI 2008/170 and the NI 2008 regulations). The old England-for-everyone default was wrong for 123 sites at both ends of the season, 32 days a year. Still outstanding: from 15 May 2026 the amended English regulations let ministers set a site-specific season per bathing water. No regulator feed publishes one per site yet; when one does, it belongs on the location record rather than in the engine.
+8. Done. **Wales now has live storm-overflow data on all 114 sites.** Two things were broken, not one. The mapped Dwr Cymru endpoint was dead (`DCWW_Storm_Overflow_Activity` returned "Invalid URL"); the live service behind Welsh Water's own public map is `Spill_Prod__view` on the same ArcGIS org. And `sewerageUndertaker` was never populated for Wales, so `lookupEndpoint` never resolved. The build now sets `Dwr Cymru Cyfyngedig` on Welsh rows, which is the key the lookup table already held.
+
+   Two things about that feed differ from the English ones and both are load-bearing:
+   - **Status is a phrase, not a 0/1 flag.** `isDischarging` in `discharges.ts` tests the negative forms first, because `Overflow Not Operating (Has in the last 24 hours)` contains the word "Operating" and a substring match would report a finished spill as running, which is a hard No on the beach page.
+   - **Timestamps are naive UK local time.** `2026-09-04T11:02:34` means 11:02 BST. `Date.parse` reads that in the host's zone, which is UTC on Vercel, putting every summer event an hour into the future. `parseLondonNaive` in `src/lib/util/time.ts` handles it, and `parseDate` in `discharges.ts` routes every string feed through it: a string carrying its own offset is left alone.
+
+   Scotland (90) and Northern Ireland (33) still have no CSO feed, so `hasDischargeFeed` still keeps those pages honest.
+9. Done. `/beaches/sewage` and `/beaches/sewage/[place]` are the league tables, built by `src/lib/data/spill-league.ts` over the same catalogue and spill record: England plus 23 English regions with at least five ranked sites. See **Sewage league tables** above for the rules they follow.
+10. Welsh, Scottish and Northern Irish **spill history** still has no usable source, so 237 sites carry no five-year record. This was investigated properly in September 2026 and is blocked rather than merely unstarted:
+   - **NRW** publishes storm overflow spill data reports as **PDFs only**, 2022 to 2024, with no 2025 and no grid references. Not machine-readable and not joinable to a bathing water.
+   - **Welsh Water** publishes EDM data on its own site, but as a map rather than an annual return with coordinates.
+   - The Rivers Trust republishes an England-and-Wales EDM FeatureServer with coordinates, but only to 2022, and it is third-party republication rather than the regulator's own return.
+
+   Note this is spill *history* only. Wales now has live CSO data (follow-up 8), which is the part that matters for today's verdict.

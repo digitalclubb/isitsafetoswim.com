@@ -3,6 +3,7 @@ import type {
 	LiveLocationData,
 	Location,
 	RecentSample,
+	TideInfo,
 	VerdictResult
 } from '$lib/data/types';
 import { decideAt, emptyVerdict } from '$lib/verdict/engine';
@@ -12,6 +13,7 @@ import { fetchSampleHistory } from './history';
 import { fetchProfile, type ProfileFetchResult } from './profile';
 import { fetchRainfall24h } from './rainfall';
 import { fetchSeaTemperature } from './temperature';
+import { fetchTide } from './tides';
 
 type Profile = Awaited<ReturnType<typeof fetchProfile>>;
 
@@ -46,6 +48,7 @@ export function deriveVerdict(
 			waterType: location.waterType,
 			rainImpacted: location.rainImpacted,
 			hasDischargeFeed: hasDischargeFeed(location),
+			country: location.country,
 			now
 		},
 		profileOk ? 'fresh' : 'cached'
@@ -64,6 +67,7 @@ function assemble(
 	rainfall24hMm: number | null,
 	sampleHistory: RecentSample[],
 	seaTemperatureC: number | null,
+	tide: TideInfo | null,
 	now: Date
 ): LiveLocationData {
 	const overflowSource: OverflowSource =
@@ -83,6 +87,7 @@ function assemble(
 		rainfall24hMm,
 		sampleHistory,
 		seaTemperatureC,
+		tide,
 		verdict: deriveVerdict(location, profile, recentDischarges, rainfall24hMm, now),
 		attribution: attributionFor(location.country, overflowSource)
 	};
@@ -93,14 +98,21 @@ export async function buildLiveData(
 	signal?: AbortSignal
 ): Promise<LiveLocationData> {
 	const now = new Date();
-	const [profileResult, dischargesResult, rainfallResult, historyResult, temperatureResult] =
-		await Promise.allSettled([
-			fetchProfile(location, signal),
-			fetchRecentDischarges(location, signal),
-			fetchRainfall24h({ lat: location.lat, lon: location.lon }, signal),
-			fetchSampleHistory(location, signal),
-			fetchSeaTemperature(location, signal)
-		]);
+	const [
+		profileResult,
+		dischargesResult,
+		rainfallResult,
+		historyResult,
+		temperatureResult,
+		tideResult
+	] = await Promise.allSettled([
+		fetchProfile(location, signal),
+		fetchRecentDischarges(location, signal),
+		fetchRainfall24h({ lat: location.lat, lon: location.lon }, signal),
+		fetchSampleHistory(location, signal),
+		fetchSeaTemperature(location, signal),
+		fetchTide(location, signal)
+	]);
 
 	return assemble(
 		location,
@@ -109,6 +121,7 @@ export async function buildLiveData(
 		rainfallResult.status === 'fulfilled' ? rainfallResult.value : null,
 		historyResult.status === 'fulfilled' ? historyResult.value : [],
 		temperatureResult.status === 'fulfilled' ? temperatureResult.value : null,
+		tideResult.status === 'fulfilled' ? tideResult.value : null,
 		now
 	);
 }
@@ -145,9 +158,14 @@ export interface CachedSignals {
  * flood-monitoring station takes anywhere from 0.1s to 15s, which dominated the
  * render, and a rolling 24h total moves far too slowly to be worth that. The
  * cache is passed in as a promise so it is awaited here, alongside the live
- * fetches, rather than ahead of them. The sample-history sparkline and sea
- * temperature are decoration that cannot change the verdict, so they are left
- * empty here and hydrated after paint.
+ * fetches, rather than ahead of them.
+ *
+ * Sea temperature and the tide are decoration that cannot change the verdict,
+ * but they are fetched here rather than after paint: both come from Open-Meteo
+ * in a couple of hundred milliseconds, and cold-water and tide questions are
+ * exactly the winter demand a client-only render hides from crawlers. The
+ * sample-history sparkline stays deferred, because it reads the rate-limited
+ * regulator host that made a cold render take ten seconds.
  */
 export async function buildPageData(
 	location: Location,
@@ -155,11 +173,14 @@ export async function buildPageData(
 	signal?: AbortSignal
 ): Promise<LiveLocationData> {
 	const now = new Date();
-	const [profileResult, dischargesResult, cachedResult] = await Promise.allSettled([
-		fetchProfile(location, signal),
-		fetchRecentDischarges(location, signal),
-		cached
-	]);
+	const [profileResult, dischargesResult, cachedResult, temperatureResult, tideResult] =
+		await Promise.allSettled([
+			fetchProfile(location, signal),
+			fetchRecentDischarges(location, signal),
+			cached,
+			fetchSeaTemperature(location, signal),
+			fetchTide(location, signal)
+		]);
 
 	const signals: CachedSignals =
 		cachedResult.status === 'fulfilled' ? cachedResult.value : { profile: null, rainfall24hMm: null };
@@ -171,7 +192,8 @@ export async function buildPageData(
 		dischargesResult.status === 'fulfilled' ? dischargesResult.value : [],
 		signals.rainfall24hMm,
 		[],
-		null,
+		temperatureResult.status === 'fulfilled' ? temperatureResult.value : null,
+		tideResult.status === 'fulfilled' ? tideResult.value : null,
 		now
 	);
 }

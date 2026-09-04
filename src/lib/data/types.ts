@@ -28,6 +28,10 @@ export interface Location {
 	lat: number;
 	lon: number;
 	classification: Classification;
+	/** The bathing season the classification was awarded for, e.g. 2025. */
+	classificationYear?: number;
+	/** The classification for the season before `classificationYear`. */
+	previousClassification?: Classification;
 	sewerageUndertaker?: string;
 	waterType?: 'coastal' | 'inland';
 	/** EA flag: is this site's water quality degraded by heavy rain? */
@@ -52,6 +56,22 @@ export interface RecentSample {
 export interface RiskForecast {
 	riskLevel: 'normal' | 'increased' | 'unknown';
 	expiresAt?: string;
+}
+
+/** One turning point in the tidal curve. */
+export interface TideEvent {
+	/** ISO timestamp of high or low water. */
+	at: string;
+	type: 'high' | 'low';
+	/** Height in metres relative to mean sea level. */
+	heightM: number;
+}
+
+export interface TideInfo {
+	/** Turning points from now onwards, soonest first. */
+	events: TideEvent[];
+	/** Whether the water is rising or falling right now. */
+	state: 'rising' | 'falling';
 }
 
 export interface DischargeEvent {
@@ -97,6 +117,7 @@ export interface LiveLocationData {
 	rainfall24hMm: number | null;
 	sampleHistory: RecentSample[];
 	seaTemperatureC: number | null;
+	tide: TideInfo | null;
 	verdict: VerdictResult;
 	attribution: string[];
 }

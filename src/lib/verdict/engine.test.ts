@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { DischargeEvent } from '$lib/data/types';
-import { _internals, bathingSeasonActive, decideAt, evaluateVerdict } from './engine';
+import { _internals, bathingSeasonActive, decideAt, evaluateVerdict, seasonLabels } from './engine';
 
 const summerNow = new Date('2026-07-15T10:00:00Z');
 const winterNow = new Date('2026-01-15T10:00:00Z');
@@ -629,5 +629,70 @@ describe('decideAt wrapper', () => {
 		);
 		expect(result.fetchedAt).toBe(summerNow.toISOString());
 		expect(result.dataAge).toBe('cached');
+	});
+});
+
+describe('bathingSeasonActive, per country', () => {
+	// England and Wales run 15 May to 30 September under the Bathing Water
+	// Regulations 2013. Scotland (SSI 2008/170) and Northern Ireland run
+	// 1 June to 15 September, a fortnight shorter at each end.
+	const lateMay = new Date('2026-05-20T12:00:00Z');
+	const earlyJune = new Date('2026-06-05T12:00:00Z');
+	const lateSeptember = new Date('2026-09-20T12:00:00Z');
+	const midSeptember = new Date('2026-09-10T12:00:00Z');
+
+	it('opens England and Wales on 15 May', () => {
+		expect(bathingSeasonActive(new Date('2026-05-14T12:00:00Z'), 'England')).toBe(false);
+		expect(bathingSeasonActive(new Date('2026-05-15T12:00:00Z'), 'England')).toBe(true);
+		expect(bathingSeasonActive(lateMay, 'Wales')).toBe(true);
+	});
+
+	it('keeps Scotland and Northern Ireland closed in late May', () => {
+		expect(bathingSeasonActive(lateMay, 'Scotland')).toBe(false);
+		expect(bathingSeasonActive(lateMay, 'Northern Ireland')).toBe(false);
+	});
+
+	it('opens Scotland and Northern Ireland on 1 June', () => {
+		expect(bathingSeasonActive(new Date('2026-05-31T12:00:00Z'), 'Scotland')).toBe(false);
+		expect(bathingSeasonActive(new Date('2026-06-01T12:00:00Z'), 'Scotland')).toBe(true);
+		expect(bathingSeasonActive(earlyJune, 'Northern Ireland')).toBe(true);
+	});
+
+	it('closes Scotland and Northern Ireland on 15 September', () => {
+		expect(bathingSeasonActive(midSeptember, 'Scotland')).toBe(true);
+		expect(bathingSeasonActive(new Date('2026-09-15T12:00:00Z'), 'Scotland')).toBe(true);
+		expect(bathingSeasonActive(new Date('2026-09-16T12:00:00Z'), 'Scotland')).toBe(false);
+		expect(bathingSeasonActive(lateSeptember, 'Northern Ireland')).toBe(false);
+	});
+
+	it('keeps England and Wales open to 30 September', () => {
+		expect(bathingSeasonActive(lateSeptember, 'England')).toBe(true);
+		expect(bathingSeasonActive(new Date('2026-09-30T12:00:00Z'), 'England')).toBe(true);
+		expect(bathingSeasonActive(new Date('2026-10-01T12:00:00Z'), 'England')).toBe(false);
+	});
+
+	it('defaults to the England and Wales season with no country given', () => {
+		expect(bathingSeasonActive(lateSeptember)).toBe(true);
+		expect(bathingSeasonActive(lateMay)).toBe(true);
+	});
+
+	it('names the right reopening date per country', () => {
+		expect(seasonLabels('England')).toEqual({ opens: '15 May', closes: '30 September' });
+		expect(seasonLabels('Scotland')).toEqual({ opens: '1 June', closes: '15 September' });
+	});
+
+	it('tells a Scottish site the season is closed in late September', () => {
+		// The out-of-season factor must follow the country, not England's dates.
+		const result = evaluateVerdict({
+			classification: 'Excellent',
+			latestSample: null,
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			country: 'Scotland',
+			now: lateSeptember
+		});
+		const season = result.factors.find((f) => f.label === 'Bathing season');
+		expect(season?.value).toBe('Closed until 1 June');
 	});
 });

@@ -123,3 +123,21 @@ export function readEaBoolean(value) {
 	if (typeof value === 'string') return value.toLowerCase() === 'true';
 	return undefined;
 }
+
+/**
+ * The bathing season a compliance assessment belongs to, read from its own URI:
+ * ".../compliance-rBWD/point/14900/year/2025" gives 2025. Both the EA and NRW
+ * linked-data records date the assessment only in that URI, so the page can
+ * otherwise say a site is rated Excellent without saying which season for.
+ *
+ * Bounded to plausible bathing years so a URI shape change cannot put a
+ * nonsense year on 578 pages.
+ */
+export function yearFromComplianceUri(uri) {
+	if (typeof uri !== 'string') return undefined;
+	const m = /\/year\/(\d{4})(?:\D|$)/.exec(uri);
+	if (!m) return undefined;
+	const year = Number(m[1]);
+	if (year < 1990 || year > 2100) return undefined;
+	return year;
+}

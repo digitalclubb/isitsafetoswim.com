@@ -1,5 +1,6 @@
 import type { Classification, Location, RecentSample, RiskForecast } from '$lib/data/types';
 import { fetchJson } from './http';
+import { fetchSepaForecast } from './sepa';
 
 interface LinkedDataValue {
 	_value?: unknown;
@@ -161,8 +162,10 @@ function extractRisk(item: ItemShape): RiskForecast | null {
 }
 
 /**
- * For Scotland and Northern Ireland we don't yet have a per-site live API,
- * so fall back to the classification captured in the index at build time.
+ * Scotland and Northern Ireland publish no per-site sample or profile API, so
+ * the classification captured in the index at build time stands in. Scotland
+ * layers today's SEPA prediction on top where one is available; see
+ * fetchProfile.
  */
 function fallbackResult(location: Location, ok: boolean): ProfileFetchResult {
 	return {
@@ -182,10 +185,19 @@ export async function fetchProfile(
 	signal?: AbortSignal
 ): Promise<ProfileFetchResult> {
 	const url = profileEndpoint(location);
-	// Scotland and Northern Ireland do not have a per-site live API yet, so
+	// Scotland and Northern Ireland have no per-site sample or profile API, so
 	// we return the index-time classification but flag the profile as "ok":
 	// the caller treats live-data unavailability separately from a fetch error.
-	if (!url) return fallbackResult(location, true);
+	// SEPA does run a daily pollution-risk prediction for the Scottish sites
+	// carrying an electronic sign, so Scotland gets that folded in when today's
+	// run is available. A missing or stale prediction leaves the fallback as it
+	// was rather than failing the profile.
+	if (!url) {
+		const fallback = fallbackResult(location, true);
+		if (location.source.api !== 'sepa') return fallback;
+		const riskForecast = await fetchSepaForecast(location, signal);
+		return riskForecast ? { ...fallback, riskForecast } : fallback;
+	}
 	let payload: unknown;
 	try {
 		payload = await fetchJson<unknown>(url, { signal });

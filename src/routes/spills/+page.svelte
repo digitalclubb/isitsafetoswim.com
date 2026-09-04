@@ -120,6 +120,14 @@
 			</p>
 		{/if}
 
+		<section class="block" aria-labelledby="league">
+			<h2 id="league" class="muted-h">The five-year record</h2>
+			<p class="muted small">
+				This page is today only. For how often each beach has had sewage over five years, see the
+				<a href="/beaches/sewage">worst beaches for sewage in England</a>.
+			</p>
+		</section>
+
 		<section class="block" aria-labelledby="about-data">
 			<h2 id="about-data" class="muted-h">About this data</h2>
 			<p class="muted small">

@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit';
 import { getLocationBySlug } from '$lib/data/locations';
 import { getHubForLocation } from '$lib/data/places';
 import { getSpillHistory } from '$lib/data/spill-history';
+import { getSpillLeaguePlaces } from '$lib/data/spill-league';
 import { buildPageData, type CachedSignals } from '$lib/live/verdict';
 import { readProfiles, readRainfall } from '$lib/map/kv';
 import { rainfallFrom } from '$lib/map/precompute';
@@ -36,6 +37,14 @@ export const load: PageServerLoad = async ({ params, request, setHeaders }) => {
 	});
 
 	const hub = getHubForLocation(location.country, location.region);
+	// Only offer the league link where that area actually has a table, so the
+	// spill section never points at a 404 for a region below the size cut-off.
+	// England has no [place] page of its own: the hub carries the national table.
+	const leaguePath = getSpillLeaguePlaces().some((p) => p.slug === hub.slug)
+		? `/beaches/sewage/${hub.slug}`
+		: location.country === 'England'
+			? '/beaches/sewage'
+			: null;
 	const cached: Promise<CachedSignals> = Promise.all([readProfiles(), readRainfall()])
 		.then(([profiles, rain]) => ({
 			profile: profiles?.profiles[location.id] ?? null,
@@ -46,7 +55,7 @@ export const load: PageServerLoad = async ({ params, request, setHeaders }) => {
 	return {
 		location,
 		live: await buildPageData(location, cached, request.signal),
-		hub: { slug: hub.slug, name: hub.name },
+		hub: { slug: hub.slug, name: hub.name, leaguePath },
 		spillHistory: getSpillHistory(location.slug)
 	};
 };

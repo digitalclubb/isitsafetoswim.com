@@ -38,6 +38,14 @@
 			</p>
 		</header>
 
+		<section class="block" aria-labelledby="by-sewage">
+			<h2 id="by-sewage">By sewage record</h2>
+			<p class="muted">
+				<a href="/beaches/sewage">Worst beaches for sewage in England</a>, ranked on the
+				storm-overflow spills the Environment Agency links to each bathing water.
+			</p>
+		</section>
+
 		<section class="block" aria-labelledby="by-rating">
 			<h2 id="by-rating">By classification</h2>
 			<ul class="regions">
@@ -143,5 +151,11 @@
 	.small {
 		font-size: var(--text-sm);
 		font-weight: 400;
+	}
+
+	.muted {
+		color: var(--ink-soft);
+		max-width: 65ch;
+		margin: 0;
 	}
 </style>

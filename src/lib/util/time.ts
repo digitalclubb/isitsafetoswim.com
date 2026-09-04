@@ -52,6 +52,64 @@ function partsOf(iso: string, options: Intl.DateTimeFormatOptions) {
 	return Object.fromEntries(parts.map((p) => [p.type, p.value]));
 }
 
+/**
+ * Hoisted, because constructing a formatter is the expensive part. A Welsh
+ * location page parses two timestamps for each of ~113 nearby overflows, and
+ * each parse resolves the offset twice: building a formatter per lookup cost
+ * ~50ms a render against ~1.6ms shared.
+ */
+const londonOffsetFormat = new Intl.DateTimeFormat('en-GB', {
+	timeZone: UK,
+	timeZoneName: 'longOffset'
+});
+
+function londonOffsetMs(t: number): number {
+	const parts = londonOffsetFormat.formatToParts(new Date(t));
+	const name = parts.find((p) => p.type === 'timeZoneName')?.value ?? 'GMT';
+	// longOffset gives "GMT+01:00" in summer and a bare "GMT" in winter.
+	const m = /GMT([+-])(\d{2}):(\d{2})/.exec(name);
+	if (!m) return 0;
+	return (m[1] === '-' ? -1 : 1) * (Number(m[2]) * 3_600_000 + Number(m[3]) * 60_000);
+}
+
+/**
+ * Parse a naive "2026-09-04T11:02:34" as London wall-clock time and return the
+ * UTC instant. Several water-company feeds publish timestamps with no zone at
+ * all, and JavaScript reads those as the host's local time, which on Vercel is
+ * UTC: in summer that puts every event an hour into the future, so a spill that
+ * started twenty minutes ago reads as not yet begun.
+ *
+ * A string carrying its own zone (a trailing Z or an explicit offset) is left
+ * to Date.parse, so this only reinterprets the genuinely ambiguous ones.
+ *
+ * The offset is resolved twice because the offset itself depends on the instant
+ * being resolved. The second pass settles the hour either side of a DST switch,
+ * where the first guess can land in the wrong offset.
+ */
+export function parseLondonNaive(value: string): number | null {
+	const trimmed = value.trim();
+	if (/(?:Z|[+-]\d{2}:?\d{2})$/i.test(trimmed)) {
+		const direct = Date.parse(trimmed);
+		return Number.isFinite(direct) ? direct : null;
+	}
+	const m = /^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})(?::(\d{2}))?/.exec(trimmed);
+	if (!m) {
+		const direct = Date.parse(trimmed);
+		return Number.isFinite(direct) ? direct : null;
+	}
+	const guess = Date.UTC(
+		Number(m[1]),
+		Number(m[2]) - 1,
+		Number(m[3]),
+		Number(m[4]),
+		Number(m[5]),
+		Number(m[6] ?? 0)
+	);
+	if (!Number.isFinite(guess)) return null;
+	const first = guess - londonOffsetMs(guess);
+	return guess - londonOffsetMs(first);
+}
+
 /** "21:26", London time. Empty string for an unparseable date. */
 export function londonClock(iso: string): string {
 	const p = partsOf(iso, { hour: '2-digit', minute: '2-digit', hour12: false });
@@ -77,6 +135,12 @@ export function londonDayAndMonth(iso: string): string {
 export function londonFullDate(iso: string): string {
 	const p = partsOf(iso, { day: 'numeric', month: 'long', year: 'numeric' });
 	return p ? `${p.day} ${p.month} ${p.year}` : '';
+}
+
+/** "Friday", London time, for a date too far out to call today or tomorrow. */
+export function londonWeekday(iso: string): string {
+	const p = partsOf(iso, { weekday: 'long' });
+	return p ? p.weekday : '';
 }
 
 /** "2026-08-14", the London calendar date, for a <time datetime> attribute. */

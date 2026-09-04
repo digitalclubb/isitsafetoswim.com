@@ -23,7 +23,8 @@ import {
 	readEaBoolean,
 	readSamplingPoint,
 	slugify,
-	waterTypeFromEaType
+	waterTypeFromEaType,
+	yearFromComplianceUri
 } from './lib/parsers.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -37,6 +38,11 @@ const FETCH_TIMEOUT_MS = 20_000;
 const FETCHER_BUDGET_MS = 90_000;
 const MAX_PAGES = 50;
 const CACHE_ONLY = process.env.CACHE_ONLY === '1';
+
+// The key OVERFLOW_ENDPOINTS in src/lib/live/discharges.ts maps to the live
+// Welsh Water storm-overflow feed. Spelled exactly as the EA spells it for the
+// English rows so one lookup table serves both.
+const WELSH_UNDERTAKER = 'Dwr Cymru Cyfyngedig';
 
 const COUNTRY = {
 	ENGLAND: 'England',
@@ -120,6 +126,7 @@ async function fetchEngland() {
 					extractLabel(item.latestComplianceAssessment?.complianceClassification) ??
 						extractLabel(item.latestComplianceAssessment)
 				),
+				classificationYear: yearFromComplianceUri(item.latestComplianceAssessment?._about),
 				sewerageUndertaker: extractLabel(item.appointedSewerageUndertaker),
 				waterType: waterTypeFromEaType(item.type),
 				rainImpacted: readEaBoolean(item.waterQualityImpactedByHeavyRain),
@@ -167,6 +174,14 @@ async function fetchWales() {
 				classification: classifyValue(
 					extractLabel(item.latestComplianceAssessment?.complianceClassification)
 				),
+				classificationYear: yearFromComplianceUri(item.latestComplianceAssessment?._about),
+				// NRW publishes no appointed-undertaker field, but Dwr Cymru is the
+				// sewerage undertaker for effectively all of Wales, and it is the key
+				// that resolves the live storm-overflow feed. Without it every Welsh
+				// site reported "no feed" while a working feed sat unused. The small
+				// Hafren Dyfrdwy border area is not separated out: the feed's own
+				// ten-kilometre distance filter decides what is actually nearby.
+				sewerageUndertaker: WELSH_UNDERTAKER,
 				waterType: waterTypeFromEaType(item.type),
 				rainImpacted: readEaBoolean(item.waterQualityImpactedByHeavyRain),
 				source: {
@@ -182,6 +197,75 @@ async function fetchWales() {
 		console.warn(`[build-location-index] Wales hit MAX_PAGES=${MAX_PAGES}, may be truncated`);
 	}
 	return out;
+}
+
+// ---- Previous classification -------------------------------------------
+
+// Both regulators date an assessment only inside its own URI, and neither
+// serves last year's rating alongside this year's. One filtered query per
+// country covers the whole catalogue, which is what makes "up from Good" a
+// build-time fact rather than 578 extra per-site requests.
+const COMPLIANCE_BASES = {
+	[COUNTRY.ENGLAND]:
+		'https://environment.data.gov.uk/doc/bathing-water-quality/compliance-rBWD.json',
+	[COUNTRY.WALES]:
+		'https://environment.data.gov.uk/wales/bathing-waters/doc/bathing-water-quality/compliance-rBWD.json'
+};
+
+async function fetchComplianceYear(base, year) {
+	const bySourceId = new Map();
+	for (let page = 0; page < MAX_PAGES; page += 1) {
+		const url = `${base}?sampleYear.ordinalYear=${year}&_pageSize=${PAGE_SIZE}&_page=${page}`;
+		const body = await fetchJson(url);
+		const items = body.result?.items ?? [];
+		if (items.length === 0) break;
+		for (const item of items) {
+			const sourceId = item.bwq_bathingWater?.eubwidNotation;
+			const classification = classifyValue(
+				extractLabel(item.complianceClassification?.name) ?? extractLabel(item.complianceClassification)
+			);
+			if (!sourceId || !classification || classification === 'Unknown') continue;
+			bySourceId.set(sourceId, classification);
+		}
+		if (!body.result?.next) break;
+	}
+	return bySourceId;
+}
+
+/**
+ * Stamp each England and Wales row with the classification it held the season
+ * before, so the page can say a rating went up or down rather than only what it
+ * is now. Best-effort: a failure leaves the field unset and the page simply
+ * says nothing about the change, which is why it never aborts the build.
+ */
+async function addPreviousClassifications(locations) {
+	for (const [country, base] of Object.entries(COMPLIANCE_BASES)) {
+		const rows = locations.filter((l) => l.country === country && l.classificationYear);
+		if (rows.length === 0) continue;
+		// Take the newest year present rather than an assumed one, so the build
+		// follows the regulator through the November publication automatically.
+		const latest = Math.max(...rows.map((l) => l.classificationYear));
+		try {
+			const previous = await withBudget(`${country} compliance ${latest - 1}`, () =>
+				fetchComplianceYear(base, latest - 1)
+			);
+			let stamped = 0;
+			for (const row of rows) {
+				if (row.classificationYear !== latest) continue;
+				const was = previous.get(row.source.sourceId);
+				if (!was) continue;
+				row.previousClassification = was;
+				stamped += 1;
+			}
+			console.log(
+				`[build-location-index] ${country}: ${stamped} rows carry their ${latest - 1} classification`
+			);
+		} catch (err) {
+			console.warn(
+				`[build-location-index] ${country} previous classification unavailable: ${err.message}`
+			);
+		}
+	}
 }
 
 // ---- Scotland ----------------------------------------------------------
@@ -210,6 +294,7 @@ async function fetchScotland() {
 			lat,
 			lon,
 			classification: classifyValue(props.class_description ?? props.classification),
+			classificationYear: Number.isFinite(Number(props.year)) ? Number(props.year) : undefined,
 			waterType: 'coastal',
 			source: {
 				api: 'sepa',
@@ -329,6 +414,10 @@ async function buildIndex() {
 		);
 		collected.push(...backfill);
 	}
+
+	// Best-effort and after the backfill, so rows restored from cache keep the
+	// previous classification they were built with when the host is unreachable.
+	await addPreviousClassifications(collected);
 
 	dedupeSlugs(collected);
 	// After dedupe, so the override is keyed by the slug the site actually

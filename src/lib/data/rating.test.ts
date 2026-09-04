@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isAdverseRating, ratingLabel } from './rating';
+import { classificationChange, isAdverseRating, ratingLabel } from './rating';
 import type { Classification } from './types';
 
 describe('ratingLabel', () => {
@@ -55,5 +55,31 @@ describe('isAdverseRating', () => {
 		for (const c of ['Excellent', 'Good', 'Sufficient', 'New', 'Unknown'] as Classification[]) {
 			expect(isAdverseRating(c)).toBe(false);
 		}
+	});
+});
+
+describe('classificationChange', () => {
+	it('reports a rise', () => {
+		expect(classificationChange('Excellent', 'Good')).toEqual({ direction: 'up', from: 'Good' });
+	});
+
+	it('reports a fall', () => {
+		expect(classificationChange('Sufficient', 'Good')).toEqual({ direction: 'down', from: 'Good' });
+	});
+
+	it('returns null when the rating held', () => {
+		expect(classificationChange('Excellent', 'Excellent')).toBeNull();
+	});
+
+	it('returns null with no previous classification', () => {
+		expect(classificationChange('Good', undefined)).toBeNull();
+	});
+
+	it('does not rank a status as a rise or a fall', () => {
+		// Closed is not "worse water" and Unknown is a parser catch-all, so
+		// neither may be reported as a movement in quality.
+		expect(classificationChange('Closed', 'Excellent')).toBeNull();
+		expect(classificationChange('Excellent', 'Unknown')).toBeNull();
+		expect(classificationChange('Good', 'New')).toBeNull();
 	});
 });

@@ -7,6 +7,7 @@ import {
 	londonIsoDate,
 	londonIsoDateTime,
 	newestTimestamp,
+	parseLondonNaive,
 	relativeDay
 } from './time';
 
@@ -108,5 +109,31 @@ describe('newestTimestamp', () => {
 	it('falls back when nothing usable is offered', () => {
 		expect(newestTimestamp([], fallback)).toBe(fallback);
 		expect(newestTimestamp([undefined, 'nonsense'], fallback)).toBe(fallback);
+	});
+});
+
+describe('parseLondonNaive', () => {
+	it('reads a naive summer timestamp as BST, not UTC', () => {
+		// Welsh Water publishes "2026-09-04T11:02:34" meaning 11:02 UK time.
+		// Read as UTC it would sit an hour in the future all summer.
+		expect(parseLondonNaive('2026-09-04T11:02:34')).toBe(Date.parse('2026-09-04T10:02:34Z'));
+	});
+
+	it('reads a naive winter timestamp as GMT', () => {
+		expect(parseLondonNaive('2026-01-15T09:30:00')).toBe(Date.parse('2026-01-15T09:30:00Z'));
+	});
+
+	it('leaves a timestamp that carries its own zone alone', () => {
+		expect(parseLondonNaive('2026-09-04T11:02:34Z')).toBe(Date.parse('2026-09-04T11:02:34Z'));
+		expect(parseLondonNaive('2026-09-04T11:02:34+02:00')).toBe(Date.parse('2026-09-04T09:02:34Z'));
+	});
+
+	it('accepts a space separator and a missing seconds field', () => {
+		expect(parseLondonNaive('2026-09-04 11:02')).toBe(Date.parse('2026-09-04T10:02:00Z'));
+	});
+
+	it('returns null for something unparseable', () => {
+		expect(parseLondonNaive('not a date')).toBeNull();
+		expect(parseLondonNaive('')).toBeNull();
 	});
 });

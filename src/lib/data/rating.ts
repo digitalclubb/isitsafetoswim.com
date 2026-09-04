@@ -58,3 +58,35 @@ export function ratingLabel(classification: Classification): RatingLabel {
 export function isAdverseRating(classification: Classification): boolean {
 	return classification === 'Poor' || classification === 'Closed';
 }
+
+const TIER_RANK: Record<string, number> = {
+	Excellent: 4,
+	Good: 3,
+	Sufficient: 2,
+	Poor: 1
+};
+
+export interface ClassificationChange {
+	direction: 'up' | 'down';
+	/** The classification held the season before. */
+	from: Classification;
+}
+
+/**
+ * How a site's classification moved against the season before, or null when it
+ * did not move or cannot be compared.
+ *
+ * Only the four rated tiers rank. New, Unknown and Closed are statuses, so a
+ * move into or out of one is not a rise or a fall in water quality and saying
+ * so would misread, for instance, a site that closed as one that got worse.
+ */
+export function classificationChange(
+	current: Classification,
+	previous: Classification | undefined
+): ClassificationChange | null {
+	if (!previous) return null;
+	const now = TIER_RANK[current];
+	const then = TIER_RANK[previous];
+	if (!now || !then || now === then) return null;
+	return { direction: now > then ? 'up' : 'down', from: previous };
+}
