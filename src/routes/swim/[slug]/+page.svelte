@@ -17,7 +17,13 @@
 	import { coverageNotice, hasLiveSignals } from '$lib/live/coverage';
 	import { buildFaq } from '$lib/seo/faq';
 	import { safeJsonLd } from '$lib/seo/jsonLd';
-	import { londonClock, londonDayAndMonth, londonIsoDateTime, newestTimestamp } from '$lib/util/time';
+	import {
+		londonClock,
+		londonDayAndMonth,
+		londonFullDate,
+		londonIsoDateTime,
+		newestTimestamp
+	} from '$lib/util/time';
 	import { bathingSeasonActive, seasonLabels } from '$lib/verdict/engine';
 	import type { PageData } from './$types';
 
@@ -68,7 +74,16 @@
 	// branches can never make contradictory claims about the same site.
 	let liveSignals = $derived(hasLiveSignals(location.country));
 	let coverage = $derived(coverageNotice(live));
-	let regulator = $derived(location.country === 'Scotland' ? 'SEPA' : 'DAERA');
+	// DAERA's own word for its latest reading, with the date it was taken, so an
+	// out-of-season reading is never mistaken for this week's.
+	let assessment = $derived(location.currentAssessment ?? null);
+	let assessedLabel = $derived(
+		assessment
+			? assessment.assessedAt
+				? `${assessment.label}, taken ${londonFullDate(assessment.assessedAt)}`
+				: assessment.label
+			: ''
+	);
 
 	// Derived from the same clock the verdict was decided on, so the page never
 	// explains a season the verdict did not apply.
@@ -291,8 +306,8 @@
 						This verdict rests on the annual classification. SEPA's daily prediction runs
 						only during the season and only at the beaches with an electronic sign.
 					{:else}
-						This verdict rests on the annual classification, which is the only measure
-						{regulator} publishes for this site year-round.
+						DAERA publishes no annual classification, so out of season this page has only
+						its last weekly reading, shown with the date it was taken.
 					{/if}
 				</p>
 				{#if liveSignals}
@@ -318,7 +333,7 @@
 			</section>
 		{/if}
 
-		{#if coverage === 'sepa-none' || coverage === 'sepa-forecast' || coverage === 'classification-only'}
+		{#if coverage !== 'full' && coverage !== 'quiet'}
 			<section
 				class="block"
 				aria-labelledby="coverage"
@@ -342,10 +357,19 @@
 					</p>
 				{:else}
 					<p class="muted">
-						{regulator} does not publish a daily pollution-risk forecast or live storm-overflow
-						data for bathing waters in {location.country}, so this verdict reflects the most
-						recent annual classification rather than today's conditions. We show live
-						forecasts, sample readings and sewage-overflow alerts for England and Wales.
+						DAERA publishes no annual classification for Northern Ireland's bathing waters. It
+						publishes a weekly water-quality indicator instead.
+						{#if assessedLabel}
+							The most recent reading here was {assessedLabel}.
+						{/if}
+						{#if coverage === 'daera-forecast'}
+							Today's pollution-risk prediction also comes from DAERA, which runs one for
+							six Northern Irish sites.
+						{:else}
+							DAERA runs a daily pollution-risk prediction for six Northern Irish sites.
+							None is showing for this site right now.
+						{/if}
+						There is no live storm-overflow feed for Northern Ireland.
 					</p>
 				{/if}
 			</section>

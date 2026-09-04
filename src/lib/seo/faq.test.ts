@@ -240,3 +240,69 @@ describe('classification dating', () => {
 		expect(answer).not.toContain('down from');
 	});
 });
+
+describe('Northern Ireland, where no classification is published', () => {
+	function ni(partial: Partial<LiveLocationData> = {}): LiveLocationData {
+		const b = base();
+		return {
+			...b,
+			classification: 'Unknown',
+			location: {
+				...b.location,
+				country: 'Northern Ireland',
+				classification: 'Unknown',
+				source: { api: 'daera', sourceId: '30003' }
+			},
+			...partial
+		};
+	}
+
+	it('never claims a site is rated every season', () => {
+		// DAERA publishes no annual classification, so this had been telling 33
+		// pages they carried a rating that does not exist.
+		const answer = buildFaq(
+			ni({
+				location: {
+					...ni().location,
+					currentAssessment: { level: 'good', label: 'Excellent' }
+				}
+			})
+		)[0].answer;
+		expect(answer).not.toContain('rated every season');
+		expect(answer).toContain('samples it through the bathing season');
+	});
+
+	it('reports the regulator reading rather than an absent classification', () => {
+		const answer = buildFaq(
+			ni({
+				location: {
+					...ni().location,
+					currentAssessment: {
+						level: 'good',
+						label: 'Excellent',
+						assessedAt: '2026-08-28T08:27:00Z'
+					}
+				}
+			})
+		)[1].answer;
+		expect(answer).toContain('No annual classification is published');
+		expect(answer).toContain('Excellent');
+		expect(answer).toContain('28 August 2026');
+	});
+
+	it('leads with the warning where the regulator advises against bathing', () => {
+		const answer = buildFaq(
+			ni({
+				location: {
+					...ni().location,
+					currentAssessment: { level: 'advised-against', label: 'Advised against bathing' }
+				}
+			})
+		)[1].answer;
+		expect(answer).toContain('advises against bathing');
+	});
+
+	it('still says we hold nothing when there is no reading either', () => {
+		expect(buildFaq(ni())[1].answer).toContain('We hold no annual classification');
+	});
+});

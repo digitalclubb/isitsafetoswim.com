@@ -15,7 +15,8 @@ function toCard(l: Location) {
 		name: l.name,
 		region: l.region,
 		country: l.country,
-		classification: l.classification
+		classification: l.classification,
+		currentAssessment: l.currentAssessment
 	};
 }
 
@@ -26,6 +27,7 @@ export const load: PageServerLoad = ({ params }) => {
 	return {
 		place: data.place,
 		parent: data.parent,
+		classified: data.classified,
 		cleanest: data.cleanest.map(toCard),
 		ranked: data.ranked.map(toCard),
 		countsByClass: data.countsByClass,

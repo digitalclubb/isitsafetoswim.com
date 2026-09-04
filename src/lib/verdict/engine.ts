@@ -1,6 +1,7 @@
 import type {
 	Classification,
 	Country,
+	CurrentAssessment,
 	DischargeEvent,
 	RecentSample,
 	RiskForecast,
@@ -8,6 +9,7 @@ import type {
 	VerdictFactor,
 	VerdictResult
 } from '$lib/data/types';
+import { londonFullDate } from '$lib/util/time';
 
 /**
  * The verdict engine combines four signals into one British-English answer:
@@ -45,6 +47,11 @@ export interface VerdictInputs {
 	hasDischargeFeed?: boolean;
 	/** Sets the bathing-season dates. Defaults to the England and Wales season. */
 	country?: Country;
+	/**
+	 * The regulator's own current judgement, where it publishes one instead of an
+	 * annual classification. Only Northern Ireland has this today.
+	 */
+	currentAssessment?: CurrentAssessment | null;
 	now: Date;
 }
 
@@ -264,6 +271,20 @@ export function evaluateVerdict(
 		latestSample !== null && (sampleAge === null || sampleAge <= SAMPLE_CURRENT_DAYS * 24);
 	const sampleRisk = sampleIsCurrent ? worstSampleRisk(latestSample, waterType) : null;
 
+	// The regulator's own reading, aged on the same window as a sample because it
+	// is drawn from one.
+	//
+	// An undated reading is treated as stale, which is the opposite of how an
+	// undated sample is handled, and deliberately so. An undated sample fails
+	// safe because it keeps driving a No; an undated clean reading would fail
+	// *open*, holding a site at Yes for ever on a reading of unknown age and
+	// suppressing the caution that says no classification exists. Every DAERA row
+	// carries a date today, so this costs nothing and closes the hole.
+	const assessment = inputs.currentAssessment ?? null;
+	const assessmentAge = hoursSince(assessment?.assessedAt, now);
+	const assessmentIsCurrent =
+		assessment !== null && assessmentAge !== null && assessmentAge <= SAMPLE_CURRENT_DAYS * 24;
+
 	// Out of season the daily forecast and weekly sampling both stop. That is a
 	// gap in the evidence, not a reason to doubt the water, so it is recorded as
 	// a neutral factor rather than cautioning every clean site for seven months.
@@ -290,7 +311,16 @@ export function evaluateVerdict(
 			verdict: 'no',
 			headline: 'No.',
 			reason: `Sewage being discharged ${fmtKm(ongoing.distanceMetres)} away right now.`,
-			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample, waterType)
+			factors: appendBaseFactors(
+				factors,
+				classification,
+				riskForecast,
+				rain,
+				latestSample,
+				waterType,
+				assessment,
+				now
+			)
 		};
 	}
 	if (justFinished) {
@@ -304,7 +334,16 @@ export function evaluateVerdict(
 			verdict: 'no',
 			headline: 'No.',
 			reason: `Sewage discharged ${fmtKm(justFinished.distanceMetres)} away ${fmtHours(age)}.`,
-			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample, waterType)
+			factors: appendBaseFactors(
+				factors,
+				classification,
+				riskForecast,
+				rain,
+				latestSample,
+				waterType,
+				assessment,
+				now
+			)
 		};
 	}
 	if (classification === 'Closed') {
@@ -312,7 +351,37 @@ export function evaluateVerdict(
 			verdict: 'no',
 			headline: 'No.',
 			reason: 'This bathing water is closed.',
-			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample, waterType)
+			factors: appendBaseFactors(
+				factors,
+				classification,
+				riskForecast,
+				rain,
+				latestSample,
+				waterType,
+				assessment,
+				now
+			)
+		};
+	}
+	// Year-round, and before the classification checks, because this is advice
+	// against bathing rather than a rating of the water. It is the strongest
+	// thing a regulator says and it outranks anything else on the page. Not aged
+	// out: a warning that lapses quietly is worse than one that is shown dated.
+	if (assessment?.level === 'advised-against') {
+		return {
+			verdict: 'no',
+			headline: 'No.',
+			reason: 'The regulator advises against bathing here.',
+			factors: appendBaseFactors(
+				factors,
+				classification,
+				riskForecast,
+				rain,
+				latestSample,
+				waterType,
+				assessment,
+				now
+			)
 		};
 	}
 	// Year-round. The classification is an annual rating of the water itself, so
@@ -329,7 +398,16 @@ export function evaluateVerdict(
 			reason: inSeason
 				? 'Annual classification is Poor and bathing is advised against.'
 				: 'Rated Poor in the most recent annual classification.',
-			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample, waterType)
+			factors: appendBaseFactors(
+				factors,
+				classification,
+				riskForecast,
+				rain,
+				latestSample,
+				waterType,
+				assessment,
+				now
+			)
 		};
 	}
 	if (sampleRisk?.level === 'high') {
@@ -342,7 +420,16 @@ export function evaluateVerdict(
 			verdict: 'no',
 			headline: 'No.',
 			reason: `Latest sample showed ${sampleRisk.value} ${sampleRisk.label} cfu/100ml.`,
-			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample, waterType)
+			factors: appendBaseFactors(
+				factors,
+				classification,
+				riskForecast,
+				rain,
+				latestSample,
+				waterType,
+				assessment,
+				now
+			)
 		};
 	}
 
@@ -384,8 +471,26 @@ export function evaluateVerdict(
 	if (classification === 'Sufficient') {
 		cautions.push('Annual classification is only Sufficient.');
 	}
+	// Deliberate: a current `satisfactory` reading does not caution, while a
+	// Sufficient classification does. They are different claims. Sufficient means
+	// the water sat at the minimum standard across up to four seasons, which is a
+	// record worth flagging. DAERA's Satisfactory is this week's sample coming
+	// back acceptable, on a three-value scale where it is the middle term rather
+	// than a bare pass, so the regulator is saying today's water is fine.
 	if (classification === 'New' || classification === 'Unknown') {
-		cautions.push('No verified classification for this site yet.');
+		if (assessmentIsCurrent) {
+			// The regulator published a reading for this site within the last four
+			// weeks. That is a live judgement on the water, so it stands in for the
+			// classification rather than the page cautioning about a gap it filled.
+			// The factor row itself is added by appendBaseFactors, so it appears on
+			// every verdict rather than only on the paths that pass through here.
+		} else if (assessment) {
+			cautions.push(
+				'No annual classification is published for this site and the last reading is out of date.'
+			);
+		} else {
+			cautions.push('No verified classification for this site yet.');
+		}
 	}
 	if (sampleRisk?.level === 'elevated') {
 		cautions.push(`Latest ${sampleRisk.label} was elevated at ${sampleRisk.value} cfu/100ml.`);
@@ -400,7 +505,16 @@ export function evaluateVerdict(
 			verdict: 'caution',
 			headline: 'Caution.',
 			reason: cautions[0],
-			factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample, waterType)
+			factors: appendBaseFactors(
+				factors,
+				classification,
+				riskForecast,
+				rain,
+				latestSample,
+				waterType,
+				assessment,
+				now
+			)
 		};
 	}
 
@@ -409,19 +523,31 @@ export function evaluateVerdict(
 	// no storm-overflow feed for the site there is nothing to say about sewage,
 	// and out of season there is no daily forecast behind the answer either, so
 	// each case leads with what it actually rests on.
+	const unrated = classification === 'New' || classification === 'Unknown';
 	const yesReason =
-		inputs.hasDischargeFeed === false
-			? `Rated ${classification} in the latest annual classification.`
-			: inSeason
-				? classification === 'Excellent'
-					? 'Excellent water quality and no sewage in the last 48 hours.'
-					: 'Good water quality and no sewage in the last 48 hours.'
-				: `Rated ${classification} and no sewage discharged nearby in the last 48 hours.`;
+		unrated && assessmentIsCurrent && assessment
+			? `The regulator's most recent reading here was ${assessment.label}.`
+			: inputs.hasDischargeFeed === false
+				? `Rated ${classification} in the latest annual classification.`
+				: inSeason
+					? classification === 'Excellent'
+						? 'Excellent water quality and no sewage in the last 48 hours.'
+						: 'Good water quality and no sewage in the last 48 hours.'
+					: `Rated ${classification} and no sewage discharged nearby in the last 48 hours.`;
 	return {
 		verdict: 'yes',
 		headline: 'Yes.',
 		reason: yesReason,
-		factors: appendBaseFactors(factors, classification, riskForecast, rain, latestSample, waterType)
+		factors: appendBaseFactors(
+			factors,
+			classification,
+			riskForecast,
+			rain,
+			latestSample,
+			waterType,
+			assessment,
+			now
+		)
 	};
 }
 
@@ -431,16 +557,39 @@ function appendBaseFactors(
 	risk: RiskForecast | null,
 	rain: number | null,
 	sample: RecentSample | null,
-	waterType: 'coastal' | 'inland'
+	waterType: 'coastal' | 'inland',
+	assessment: CurrentAssessment | null,
+	now: Date
 ): VerdictFactor[] {
 	const seen = new Set(existing.map((f) => f.label));
 	const out = [...existing];
 	const limits = SAMPLE_THRESHOLDS[waterType];
-	if (!seen.has('Annual classification')) {
+	// "Annual classification: Unknown" is noise where the regulator publishes no
+	// classification at all. The regulator's own reading is the row that belongs
+	// there instead, and it has already been added.
+	const unclassified = classification === 'Unknown' || classification === 'New';
+	if (!seen.has('Annual classification') && !(unclassified && assessment)) {
 		out.push({
 			label: 'Annual classification',
 			value: classification,
 			weight: classWeight(classification)
+		});
+	}
+	// Sits where the classification row would be, so a site with no classification
+	// still says something about water quality on every verdict: on a discharge
+	// No, on a stale reading, and out of season, not only on the two paths that
+	// happen to run through the caution branch. Dated, so an out-of-season
+	// reading is never mistaken for this week's.
+	const advice = assessment?.level === 'advised-against';
+	const readingLabel = advice ? 'Regulator advice' : 'Latest regulator reading';
+	if (assessment && unclassified && !seen.has(readingLabel)) {
+		const age = hoursSince(assessment.assessedAt, now);
+		const stale = age === null || age > SAMPLE_CURRENT_DAYS * 24;
+		const when = assessment.assessedAt ? londonFullDate(assessment.assessedAt) : '';
+		out.push({
+			label: readingLabel,
+			value: when ? `${assessment.label}, ${when}` : assessment.label,
+			weight: advice ? 'negative' : stale || assessment.level !== 'good' ? 'neutral' : 'positive'
 		});
 	}
 	if (risk && !seen.has('Pollution risk forecast')) {

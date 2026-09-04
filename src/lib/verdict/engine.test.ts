@@ -696,3 +696,236 @@ describe('bathingSeasonActive, per country', () => {
 		expect(season?.value).toBe('Closed until 1 June');
 	});
 });
+
+describe('currentAssessment, where a regulator publishes no classification', () => {
+	const base = {
+		classification: 'Unknown' as const,
+		latestSample: null,
+		riskForecast: null,
+		recentDischarges: [],
+		rainfall24hMm: null,
+		hasDischargeFeed: false,
+		country: 'Northern Ireland' as const,
+		now: summerNow
+	};
+	const recently = new Date(summerNow.getTime() - 3 * 24 * 36e5).toISOString();
+	const longAgo = new Date(summerNow.getTime() - 200 * 24 * 36e5).toISOString();
+
+	it('returns No when the regulator advises against bathing', () => {
+		const r = evaluateVerdict({
+			...base,
+			currentAssessment: {
+				level: 'advised-against',
+				label: 'Advised against bathing',
+				assessedAt: recently
+			}
+		});
+		expect(r.verdict).toBe('no');
+		expect(r.reason).toBe('The regulator advises against bathing here.');
+	});
+
+	it('still returns No on advice against bathing months later', () => {
+		// A warning that lapses quietly is worse than one shown with its date.
+		const r = evaluateVerdict({
+			...base,
+			currentAssessment: {
+				level: 'advised-against',
+				label: 'Advised against bathing',
+				assessedAt: longAgo
+			}
+		});
+		expect(r.verdict).toBe('no');
+	});
+
+	it('lets a fresh clean reading stand in for the missing classification', () => {
+		const r = evaluateVerdict({
+			...base,
+			currentAssessment: { level: 'good', label: 'Excellent', assessedAt: recently }
+		});
+		expect(r.verdict).toBe('yes');
+		expect(r.reason).toContain('Excellent');
+		// It must never be reported as an annual classification, which is the
+		// claim that made 29 pages wrong in the first place.
+		expect(r.reason).not.toContain('annual classification');
+	});
+
+	it('reports the regulator’s own word, not the internal level', () => {
+		const r = evaluateVerdict({
+			...base,
+			currentAssessment: { level: 'satisfactory', label: 'Satisfactory', assessedAt: recently }
+		});
+		expect(r.factors.some((f) => f.value.startsWith('Satisfactory'))).toBe(true);
+	});
+
+	it('stops a stale reading deciding, and says why', () => {
+		const r = evaluateVerdict({
+			...base,
+			currentAssessment: { level: 'good', label: 'Excellent', assessedAt: longAgo }
+		});
+		expect(r.verdict).toBe('caution');
+		expect(r.reason).toContain('No annual classification is published');
+	});
+
+	it('still cautions an unrated site with no reading at all', () => {
+		const r = evaluateVerdict({ ...base, currentAssessment: null });
+		expect(r.verdict).toBe('caution');
+		expect(r.reason).toBe('No verified classification for this site yet.');
+	});
+
+	it('never lets a clean reading override a live discharge', () => {
+		const r = evaluateVerdict({
+			...base,
+			hasDischargeFeed: true,
+			recentDischarges: [
+				{
+					outfallName: 'Outfall',
+					distanceMetres: 500,
+					startedAt: new Date(summerNow.getTime() - 36e5).toISOString(),
+					ongoing: true
+				}
+			],
+			currentAssessment: { level: 'good', label: 'Excellent', assessedAt: recently }
+		});
+		expect(r.verdict).toBe('no');
+	});
+});
+
+describe('classification factor where none is published', () => {
+	const base = {
+		classification: 'Unknown' as const,
+		latestSample: null,
+		riskForecast: null,
+		recentDischarges: [],
+		rainfall24hMm: null,
+		hasDischargeFeed: false,
+		country: 'Northern Ireland' as const,
+		now: summerNow
+	};
+	const recently = new Date(summerNow.getTime() - 3 * 24 * 36e5).toISOString();
+
+	it('drops the classification row when the regulator publishes none', () => {
+		// "Annual classification: Unknown" is noise where no classification exists,
+		// and it sat directly under a No driven by the regulator's own advice.
+		const r = evaluateVerdict({
+			...base,
+			currentAssessment: { level: 'good', label: 'Excellent', assessedAt: recently }
+		});
+		expect(r.factors.some((f) => f.label === 'Annual classification')).toBe(false);
+	});
+
+	it('drops it on the advice-against branch too', () => {
+		const r = evaluateVerdict({
+			...base,
+			currentAssessment: {
+				level: 'advised-against',
+				label: 'Advised against bathing',
+				assessedAt: recently
+			}
+		});
+		expect(r.factors.some((f) => f.label === 'Annual classification')).toBe(false);
+		expect(r.factors.some((f) => f.label === 'Regulator advice')).toBe(true);
+	});
+
+	it('keeps the classification row for a site that genuinely has one', () => {
+		const r = evaluateVerdict({
+			...base,
+			classification: 'Excellent',
+			country: 'England',
+			currentAssessment: null
+		});
+		expect(r.factors.some((f) => f.label === 'Annual classification')).toBe(true);
+	});
+
+	it('keeps it for an unclassified site with no regulator reading either', () => {
+		const r = evaluateVerdict({ ...base, country: 'England', currentAssessment: null });
+		expect(r.factors.some((f) => f.label === 'Annual classification')).toBe(true);
+	});
+});
+
+describe('the regulator reading appears on every verdict, not only the caution path', () => {
+	const recently = new Date(summerNow.getTime() - 3 * 24 * 36e5).toISOString();
+	const longAgo = new Date(summerNow.getTime() - 200 * 24 * 36e5).toISOString();
+	const base = {
+		classification: 'Unknown' as const,
+		latestSample: null,
+		riskForecast: null,
+		recentDischarges: [],
+		rainfall24hMm: null,
+		hasDischargeFeed: false,
+		country: 'Northern Ireland' as const,
+		now: summerNow
+	};
+
+	function reading(factors: { label: string; value: string; weight: string }[]) {
+		return factors.find(
+			(f) => f.label === 'Latest regulator reading' || f.label === 'Regulator advice'
+		);
+	}
+
+	it('carries the advice through a discharge-driven No', () => {
+		// The site is held at No by a spill, but standing advice against bathing
+		// must still be visible. Losing it here is the under-warning class this
+		// whole change exists to close.
+		const r = evaluateVerdict({
+			...base,
+			hasDischargeFeed: true,
+			recentDischarges: [
+				{
+					outfallName: 'Outfall',
+					distanceMetres: 400,
+					startedAt: new Date(summerNow.getTime() - 36e5).toISOString(),
+					ongoing: true
+				}
+			],
+			currentAssessment: {
+				level: 'advised-against',
+				label: 'Advised against bathing',
+				assessedAt: recently
+			}
+		});
+		expect(r.verdict).toBe('no');
+		expect(reading(r.factors)?.label).toBe('Regulator advice');
+	});
+
+	it('shows a stale reading, dated, rather than showing nothing at all', () => {
+		const r = evaluateVerdict({
+			...base,
+			currentAssessment: { level: 'good', label: 'Excellent', assessedAt: longAgo }
+		});
+		expect(r.verdict).toBe('caution');
+		const row = reading(r.factors);
+		expect(row?.value).toContain('Excellent');
+		expect(row?.value).toContain('2025');
+		expect(row?.weight).toBe('neutral');
+	});
+
+	it('dates a current reading too', () => {
+		const r = evaluateVerdict({
+			...base,
+			currentAssessment: { level: 'good', label: 'Excellent', assessedAt: recently }
+		});
+		expect(reading(r.factors)?.weight).toBe('positive');
+		expect(reading(r.factors)?.value).toMatch(/Excellent, \d/);
+	});
+
+	it('adds no reading row for a site that has a real classification', () => {
+		const r = evaluateVerdict({
+			...base,
+			classification: 'Excellent',
+			country: 'England',
+			currentAssessment: null
+		});
+		expect(reading(r.factors)).toBeUndefined();
+	});
+
+	it('treats an undated reading as stale rather than as a permanent Yes', () => {
+		// An undated sample fails safe by continuing to drive a No. An undated
+		// clean reading would fail open, holding a site at Yes for ever.
+		const r = evaluateVerdict({
+			...base,
+			currentAssessment: { level: 'good', label: 'Excellent' }
+		});
+		expect(r.verdict).toBe('caution');
+		expect(r.reason).toContain('No annual classification is published');
+	});
+});

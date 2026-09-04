@@ -1,5 +1,8 @@
 import { getAllLocations, getIndexMeta } from './locations';
+import { RATED_TIERS } from './rating';
 import type { Classification, Country, Location } from './types';
+
+const RATED_CLASSIFICATIONS = new Set<Classification>(RATED_TIERS);
 
 /**
  * Regional and country hub pages ("Cleanest beaches in Cornwall") are
@@ -8,6 +11,17 @@ import type { Classification, Country, Location } from './types';
  * earn its own page; smaller regions roll up into their country page only.
  */
 const REGION_MIN = 5;
+
+/**
+ * Where no classification is published, the regulator's own weekly reading is
+ * the only order there is. Kept separate from CLASS_RANK because the two are
+ * not comparable: one is a multi-year percentile, the other is last week.
+ */
+const ASSESSMENT_RANK: Record<string, number> = {
+	good: 0,
+	satisfactory: 1,
+	'advised-against': 2
+};
 
 const CLASS_RANK: Record<Classification, number> = {
 	Excellent: 0,
@@ -32,6 +46,13 @@ export interface Place {
 export interface PlacePage {
 	place: Place;
 	parent: Place | null;
+	/**
+	 * Whether the regulator publishes annual classifications here at all. False
+	 * for Northern Ireland, where DAERA publishes only a weekly reading, so the
+	 * page must not describe its order as a classification ranking or read an
+	 * empty `cleanest` as "nothing here is rated Excellent or Good".
+	 */
+	classified: boolean;
 	ranked: Location[];
 	cleanest: Location[];
 	countsByClass: Array<{ classification: Classification; count: number }>;
@@ -114,15 +135,33 @@ export function getPlaceBySlug(slug: string): PlacePage | null {
 	const place = bySlug.get(slug);
 	if (!place) return null;
 
-	const ranked = locationsForPlace(place).sort(
-		(a, b) =>
-			CLASS_RANK[a.classification] - CLASS_RANK[b.classification] ||
-			a.name.localeCompare(b.name, 'en-GB')
-	);
+	const all = locationsForPlace(place);
+	const classified = all.some((l) => RATED_CLASSIFICATIONS.has(l.classification));
 
-	const cleanest = ranked
-		.filter((l) => l.classification === 'Excellent' || l.classification === 'Good')
-		.slice(0, 6);
+	// An unclassified place is ordered by the regulator's reading instead, so
+	// Northern Ireland gets a real order rather than 33 rows of alphabet.
+	const ranked = classified
+		? all
+				.slice()
+				.sort(
+					(a, b) =>
+						CLASS_RANK[a.classification] - CLASS_RANK[b.classification] ||
+						a.name.localeCompare(b.name, 'en-GB')
+				)
+		: all
+				.slice()
+				.sort(
+					(a, b) =>
+						(ASSESSMENT_RANK[a.currentAssessment?.level ?? ''] ?? 3) -
+							(ASSESSMENT_RANK[b.currentAssessment?.level ?? ''] ?? 3) ||
+						a.name.localeCompare(b.name, 'en-GB')
+				);
+
+	const cleanest = classified
+		? ranked
+				.filter((l) => l.classification === 'Excellent' || l.classification === 'Good')
+				.slice(0, 6)
+		: ranked.filter((l) => l.currentAssessment?.level === 'good').slice(0, 6);
 
 	const tally = new Map<Classification, number>();
 	for (const l of ranked) tally.set(l.classification, (tally.get(l.classification) ?? 0) + 1);
@@ -145,6 +184,7 @@ export function getPlaceBySlug(slug: string): PlacePage | null {
 	return {
 		place,
 		parent,
+		classified,
 		ranked,
 		cleanest,
 		countsByClass,

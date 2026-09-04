@@ -17,6 +17,26 @@ export interface LocationSource {
 	profileUrl?: string;
 }
 
+/**
+ * A regulator's own current judgement on the water, where it publishes one in
+ * place of an annual classification rather than as well as it.
+ *
+ * DAERA is the case this exists for. Northern Ireland's feed carries a weekly
+ * `water_quality_indicator` derived from that week's sample, and no annual
+ * classification at all. It was previously read straight into `classification`,
+ * which made 29 pages claim a four-year percentile the regulator has never
+ * published, and dropped the one site DAERA marks as advised against bathing
+ * into "unclassified".
+ */
+export interface CurrentAssessment {
+	/** `advised-against` is a warning, not a rating, and always decides. */
+	level: 'good' | 'satisfactory' | 'advised-against';
+	/** The regulator's own word for it, so the page never renames the finding. */
+	label: string;
+	/** When the sample behind it was taken, so staleness can be judged. */
+	assessedAt?: string;
+}
+
 export interface Location {
 	id: string;
 	slug: string;
@@ -32,6 +52,8 @@ export interface Location {
 	classificationYear?: number;
 	/** The classification for the season before `classificationYear`. */
 	previousClassification?: Classification;
+	/** Where the regulator publishes a current judgement instead of a classification. */
+	currentAssessment?: CurrentAssessment;
 	sewerageUndertaker?: string;
 	waterType?: 'coastal' | 'inland';
 	/** EA flag: is this site's water quality degraded by heavy rain? */

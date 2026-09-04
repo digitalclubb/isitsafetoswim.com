@@ -6,6 +6,23 @@ const INK = '#0b1f2a';
 const INK_SOFT = '#475a64';
 const CREAM = '#fbfaf6';
 
+/**
+ * Shrink a font size until the line fits the card's text column.
+ *
+ * The meta line had no fit at all, so it ran off the right edge of every card
+ * whose council name is long: all 33 Northern Irish sites (up to "Causeway
+ * Coast and Glens Borough Council · Northern Ireland" at 59 characters) plus
+ * the City of London. Source Serif averages a little under half the point size
+ * per character at this weight, which is close enough to keep text inside a
+ * column with this much slack, and the floor stops a very long line shrinking
+ * into illegibility rather than being allowed to clip.
+ */
+export function fitFontSize(text, maxWidth, baseSize, minSize = 26) {
+	const estimated = String(text).length * baseSize * 0.48;
+	if (estimated <= maxWidth) return baseSize;
+	return Math.max(minSize, Math.floor((maxWidth / estimated) * baseSize));
+}
+
 export function escapeXml(value) {
 	return String(value)
 		.replace(/&/g, '&amp;')
@@ -30,14 +47,40 @@ export function wrapText(text, max) {
 	return lines;
 }
 
-function classificationLabel(classification) {
+// Northern Ireland has no annual classification to be waiting for, so "Not yet
+// classified" would promise one that is never coming, and it would put the site
+// DAERA advises against bathing on a neutral card. Where the regulator publishes
+// a reading instead, the card carries that.
+function classificationLabel(classification, assessment) {
 	if (classification === 'Closed') return 'Currently closed';
 	if (classification === 'New') return 'Newly designated';
-	if (classification === 'Unknown' || !classification) return 'Not yet classified';
+	if (classification === 'Unknown' || !classification) {
+		if (assessment?.level === 'advised-against') return 'Advised against bathing';
+		// Same window the verdict engine and the cards use, so a card shared in
+		// February does not present August's reading as the latest word.
+		if (assessment) {
+			return readingIsCurrent(assessment)
+				? `Latest reading ${assessment.label}`
+				: `Last reading ${assessment.label}`;
+		}
+		return 'Not yet classified';
+	}
 	return `Rated ${classification}`;
 }
 
-function classificationColour(classification) {
+const READING_CURRENT_DAYS = 28;
+
+function readingIsCurrent(assessment) {
+	if (!assessment?.assessedAt) return false;
+	const at = Date.parse(assessment.assessedAt);
+	if (!Number.isFinite(at)) return false;
+	return Date.now() - at <= READING_CURRENT_DAYS * 24 * 36e5;
+}
+
+function classificationColour(classification, assessment) {
+	if (assessment?.level === 'advised-against') return STRIPE.red;
+	if (assessment?.level === 'good') return STRIPE.green;
+	if (assessment?.level === 'satisfactory') return STRIPE.amber;
 	if (classification === 'Excellent' || classification === 'Good') return STRIPE.green;
 	if (classification === 'Sufficient') return STRIPE.amber;
 	if (classification === 'Poor' || classification === 'Closed') return STRIPE.red;
@@ -76,17 +119,19 @@ function headline(name) {
 	return { tspans, size, extra: (lines.length - 1) * lineHeight };
 }
 
-export function buildLocationCard({ name, region, country, classification }) {
+export function buildLocationCard({ name, region, country, classification, currentAssessment }) {
 	const top = 300;
 	const h = headline(name);
 	const place = region ? `${region} · ${country}` : country;
+	// 1200 wide, 80 of padding each side.
+	const placeSize = fitFontSize(place, 1040, 40);
 	const metaY = top + h.extra + 74;
 	const classY = metaY + 66;
 	const inner = `	<text x="80" y="${top}" font-family="Source Serif 4" font-weight="600" font-size="${h.size}" letter-spacing="-1" fill="${INK}">${h.tspans}</text>
-	<text x="80" y="${metaY}" font-family="Source Serif 4" font-weight="400" font-size="40" fill="${INK_SOFT}">${escapeXml(place)}</text>
+	<text x="80" y="${metaY}" font-family="Source Serif 4" font-weight="400" font-size="${placeSize}" fill="${INK_SOFT}">${escapeXml(place)}</text>
 	<g transform="translate(80,${classY})">
-		<circle cx="11" cy="-12" r="11" fill="${classificationColour(classification)}"/>
-		<text x="36" y="0" font-family="Source Serif 4" font-weight="600" font-size="34" fill="${INK}">${escapeXml(classificationLabel(classification))}</text>
+		<circle cx="11" cy="-12" r="11" fill="${classificationColour(classification, currentAssessment)}"/>
+		<text x="36" y="0" font-family="Source Serif 4" font-weight="600" font-size="34" fill="${INK}">${escapeXml(classificationLabel(classification, currentAssessment))}</text>
 	</g>`;
 	return frame(inner);
 }

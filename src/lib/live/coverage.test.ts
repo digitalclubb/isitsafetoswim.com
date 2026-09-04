@@ -50,11 +50,21 @@ describe('coverageNotice', () => {
 		expect(coverageNotice(live('Scotland', { riskForecast: forecast }))).toBe('sepa-forecast');
 	});
 
-	it('never returns the SEPA notices for Northern Ireland, which has no forecast', () => {
-		expect(coverageNotice(live('Northern Ireland'))).toBe('classification-only');
+	it('never returns a SEPA notice for Northern Ireland', () => {
+		expect(coverageNotice(live('Northern Ireland'))).toBe('daera-reading');
 		expect(coverageNotice(live('Northern Ireland', { riskForecast: forecast }))).toBe(
-			'classification-only'
+			'daera-forecast'
 		);
+	});
+
+	it('reports the DAERA prediction for the six sites that have one', () => {
+		expect(coverageNotice(live('Northern Ireland', { riskForecast: forecast }))).toBe(
+			'daera-forecast'
+		);
+	});
+
+	it('falls back to the weekly reading where DAERA runs no prediction', () => {
+		expect(coverageNotice(live('Northern Ireland'))).toBe('daera-reading');
 	});
 
 	it('calls England quiet when its feeds were checked and found nothing', () => {

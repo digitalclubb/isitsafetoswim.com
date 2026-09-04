@@ -49,6 +49,7 @@ export function deriveVerdict(
 			rainImpacted: location.rainImpacted,
 			hasDischargeFeed: hasDischargeFeed(location),
 			country: location.country,
+			currentAssessment: location.currentAssessment ?? null,
 			now
 		},
 		profileOk ? 'fresh' : 'cached'

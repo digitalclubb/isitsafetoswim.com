@@ -50,8 +50,19 @@ function classificationSentence(live: LiveLocationData): string {
 	const name = live.location.name;
 	switch (live.classification) {
 		case 'New':
-		case 'Unknown':
-			return `We hold no annual classification for ${name}.`;
+		case 'Unknown': {
+			// Northern Ireland has no annual classification to hold: DAERA does not
+			// publish one. Saying only "we hold no classification" reads as a gap on
+			// our side and throws away the weekly reading DAERA does publish.
+			const assessment = live.location.currentAssessment;
+			if (!assessment) return `We hold no annual classification for ${name}.`;
+			if (assessment.level === 'advised-against') {
+				return `The regulator advises against bathing at ${name}.`;
+			}
+			const when = assessment.assessedAt ? londonFullDate(assessment.assessedAt) : '';
+			const dated = when ? `, taken ${when},` : '';
+			return `No annual classification is published for ${name}. The regulator's most recent water-quality reading${dated} was ${assessment.label}.`;
+		}
 		case 'Closed':
 			// classify() in live/profile.ts folds "decommissioned" into Closed, so
 			// this must not assert a present-tense closure to bathers.
@@ -95,6 +106,18 @@ function sewageAnswer(live: LiveLocationData): string {
 	return `Yes. ${total} storm ${total === 1 ? 'overflow' : 'overflows'} within ten kilometres of ${name}: ${joinList(parts)}.`;
 }
 
+/**
+ * What being designated actually buys the reader, which is not the same in
+ * every country. "Sampled and rated every season" is true in England, Wales and
+ * Scotland; DAERA samples but publishes no annual classification, so saying it
+ * of a Northern Irish site restates the claim this page was corrected to drop.
+ */
+function sampledAndRated(live: LiveLocationData): string {
+	return live.location.country === 'Northern Ireland'
+		? 'the regulator samples it through the bathing season'
+		: 'it is sampled and rated every season';
+}
+
 export function buildFaq(live: LiveLocationData): FaqItem[] {
 	const name = live.location.name;
 	const now = new Date(live.verdict.fetchedAt);
@@ -102,7 +125,7 @@ export function buildFaq(live: LiveLocationData): FaqItem[] {
 	return [
 		{
 			question: `Can you swim at ${name}?`,
-			answer: `${live.verdict.headline} ${live.verdict.reason} ${name} is a designated bathing water, so it is sampled and rated every season. This answer covers water quality only, not tides, currents or lifeguard cover.`
+			answer: `${live.verdict.headline} ${live.verdict.reason} ${name} is a designated bathing water, so ${sampledAndRated(live)}. This answer covers water quality only, not tides, currents or lifeguard cover.`
 		},
 		{
 			question: `What is the water quality like at ${name}?`,

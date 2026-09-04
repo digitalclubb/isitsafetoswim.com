@@ -1,4 +1,5 @@
 import type { Classification, Location, RecentSample, RiskForecast } from '$lib/data/types';
+import { fetchDaeraForecast } from './daera';
 import { fetchJson } from './http';
 import { fetchSepaForecast } from './sepa';
 
@@ -163,8 +164,8 @@ function extractRisk(item: ItemShape): RiskForecast | null {
 
 /**
  * Scotland and Northern Ireland publish no per-site sample or profile API, so
- * the classification captured in the index at build time stands in. Scotland
- * layers today's SEPA prediction on top where one is available; see
+ * what the index captured at build time stands in. Both layer today's
+ * pollution-risk prediction on top where their regulator publishes one; see
  * fetchProfile.
  */
 function fallbackResult(location: Location, ok: boolean): ProfileFetchResult {
@@ -188,14 +189,19 @@ export async function fetchProfile(
 	// Scotland and Northern Ireland have no per-site sample or profile API, so
 	// we return the index-time classification but flag the profile as "ok":
 	// the caller treats live-data unavailability separately from a fetch error.
-	// SEPA does run a daily pollution-risk prediction for the Scottish sites
-	// carrying an electronic sign, so Scotland gets that folded in when today's
-	// run is available. A missing or stale prediction leaves the fallback as it
-	// was rather than failing the profile.
+	// Both SEPA and DAERA do run a daily pollution-risk prediction, for the
+	// Scottish sites carrying an electronic sign and the six Northern Irish sites
+	// inside DAERA's predictive-modelling programme, so each gets folded in when
+	// today's run is available. A missing or stale prediction leaves the fallback
+	// as it was rather than failing the profile.
 	if (!url) {
 		const fallback = fallbackResult(location, true);
-		if (location.source.api !== 'sepa') return fallback;
-		const riskForecast = await fetchSepaForecast(location, signal);
+		const riskForecast =
+			location.source.api === 'sepa'
+				? await fetchSepaForecast(location, signal)
+				: location.source.api === 'daera'
+					? await fetchDaeraForecast(location, signal)
+					: null;
 		return riskForecast ? { ...fallback, riskForecast } : fallback;
 	}
 	let payload: unknown;

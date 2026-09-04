@@ -10,6 +10,13 @@ import type { Country, LiveLocationData } from '$lib/data/types';
  * site, so it would have denied a SEPA forecast at the very moment one arrived
  * and drove the verdict above it. Returning a single value makes that
  * impossible to reintroduce from the template.
+ *
+ * All four regulators publish something different, and no two of these notices
+ * may ever be true at once:
+ *   England and Wales  classification, weekly samples, daily forecast, CSO feed
+ *   Scotland           classification, daily prediction at signed sites only
+ *   Northern Ireland   no classification at all, a weekly indicator, and a
+ *                      daily prediction at six sites
  */
 export type CoverageNotice =
 	/** Live forecast, sample and overflow feeds all exist for this site. */
@@ -20,8 +27,10 @@ export type CoverageNotice =
 	| 'sepa-forecast'
 	/** SEPA runs predictions, but none is showing for this site. */
 	| 'sepa-none'
-	/** The regulator publishes no live data at all for this country. */
-	| 'classification-only';
+	/** DAERA published today's prediction alongside its weekly indicator. */
+	| 'daera-forecast'
+	/** DAERA publishes only its weekly indicator for this site. */
+	| 'daera-reading';
 
 /** England and Wales are the two countries with live forecast and sample feeds. */
 export function hasLiveSignals(country: Country): boolean {
@@ -34,10 +43,10 @@ export function coverageNotice(live: LiveLocationData): CoverageNotice {
 	if (hasLiveSignals(live.location.country)) {
 		return nothingToReport ? 'quiet' : 'full';
 	}
+	// Outside England and Wales a prediction is the only live signal available,
+	// so it decides the notice regardless of what else is missing.
 	if (live.location.country === 'Scotland') {
-		// A forecast is the only live signal Scotland can produce, so it decides
-		// the notice regardless of what else is missing.
 		return live.riskForecast ? 'sepa-forecast' : 'sepa-none';
 	}
-	return 'classification-only';
+	return live.riskForecast ? 'daera-forecast' : 'daera-reading';
 }

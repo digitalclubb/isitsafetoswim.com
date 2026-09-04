@@ -41,20 +41,33 @@
 	// "Cleanest beaches in X" is what this page is actually asked for, and it is
 	// demand that holds up outside the bathing season, unlike the daily verdict.
 	let metaTitle = $derived(`Cleanest beaches in ${place.name}`);
+	// The order is only a classification ranking where classifications exist.
+	// In Northern Ireland it is the regulator's most recent weekly readings.
 	let metaDescription = $derived(
-		`All ${count} designated bathing waters in ${place.name}, ranked by official water-quality classification, with a live verdict for each.`
+		data.classified
+			? `All ${count} designated bathing waters in ${place.name}, ranked by official water-quality classification, with a live verdict for each.`
+			: `All ${count} designated bathing waters in ${place.name}, with the regulator's most recent water-quality reading and a live verdict for each.`
 	);
 
+	// Never read an empty `cleanest` as "nothing here is rated Excellent or
+	// Good". Where no classification is published that asserts the opposite of
+	// what is known, which is the same overclaim the NI correction removed.
 	let cleanestAnswer = $derived(
-		data.cleanest.length > 0
-			? `${data.cleanest[0].name} holds ${article(data.cleanest[0].classification)} ${data.cleanest[0].classification} classification, the regulator's top tier. ${cleanCount} of the ${count} bathing waters in ${place.name} are rated Excellent or Good.`
-			: `No bathing water in ${place.name} currently holds an Excellent or Good classification.`
+		!data.classified
+			? data.cleanest.length > 0
+				? `No annual classification is published for bathing waters in ${place.name}. On the regulator's most recent readings, ${joinList(data.cleanest.slice(0, 3).map((c) => c.name))} came back Excellent.`
+				: `No annual classification is published for bathing waters in ${place.name}, so they cannot be ranked by one. Each page carries the regulator's most recent reading instead.`
+			: data.cleanest.length > 0
+				? `${data.cleanest[0].name} holds ${article(data.cleanest[0].classification)} ${data.cleanest[0].classification} classification, the regulator's top tier. ${cleanCount} of the ${count} bathing waters in ${place.name} are rated Excellent or Good.`
+				: `No bathing water in ${place.name} currently holds an Excellent or Good classification.`
 	);
 
 	let countAnswer = $derived(
 		classSummary
 			? `${count}. The regulator's latest classifications are ${classSummary}.`
-			: `${count}.`
+			: !data.classified
+				? `${count}. The regulator publishes no annual classification for them, only a weekly water-quality reading.`
+				: `${count}.`
 	);
 
 	let crumbs = $derived([
@@ -115,7 +128,9 @@
 		<header class="head">
 			<h1>Cleanest beaches in {place.name}</h1>
 			<p class="lede">
-				{place.name} has {count} designated bathing waters.{classSummary
+				{place.name} has {count} designated bathing waters.{!data.classified
+					? ' The regulator publishes no annual classification for them, only a weekly water-quality reading.'
+					: classSummary
 					? ` The regulator's latest classifications are ${classSummary}.`
 					: ''}
 			</p>
@@ -126,7 +141,7 @@
 
 		{#if data.cleanest.length > 0}
 			<section class="block" aria-labelledby="cleanest">
-				<h2 id="cleanest">Top rated</h2>
+				<h2 id="cleanest">{data.classified ? 'Top rated' : 'Best recent readings'}</h2>
 				<p class="muted">
 					A selection rated Excellent or Good in the regulator's latest annual classification.
 					Open any beach for today's live verdict.

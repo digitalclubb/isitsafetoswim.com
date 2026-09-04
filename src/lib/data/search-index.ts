@@ -1,5 +1,5 @@
 import searchJson from '$data/search-index.json';
-import type { Classification, Country } from './types';
+import type { Classification, Country, CurrentAssessment } from './types';
 
 export interface SearchLocation {
 	id: string;
@@ -10,6 +10,8 @@ export interface SearchLocation {
 	country: Country;
 	region?: string;
 	classification: Classification;
+	/** Where the regulator publishes a reading instead of a classification. */
+	currentAssessment?: CurrentAssessment;
 	lat: number;
 	lon: number;
 }

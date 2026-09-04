@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildAreaCard, buildLocationCard, escapeXml, wrapText } from './og-card.mjs';
+import { buildAreaCard, buildLocationCard, escapeXml, fitFontSize, wrapText } from './og-card.mjs';
 
 describe('escapeXml', () => {
 	it('escapes the markup-significant characters', () => {
@@ -60,5 +60,74 @@ describe('buildAreaCard', () => {
 		const svg = buildAreaCard({ name: 'England', country: 'England', count: 464, kind: 'country' });
 		expect(svg).toContain('464 designated bathing waters');
 		expect(svg).not.toContain('· England');
+	});
+});
+
+describe('buildLocationCard where no classification is published', () => {
+	it('shows the regulator reading rather than promising a classification', () => {
+		const svg = buildLocationCard({
+			name: 'Magilligan Benone',
+			country: 'Northern Ireland',
+			classification: 'Unknown',
+			currentAssessment: {
+				level: 'good',
+				label: 'Excellent',
+				assessedAt: new Date(Date.now() - 3 * 24 * 36e5).toISOString()
+			}
+		});
+		expect(svg).toContain('Latest reading Excellent');
+		expect(svg).not.toContain('Not yet classified');
+	});
+
+	it('stops calling an out-of-date reading the latest one', () => {
+		const svg = buildLocationCard({
+			name: 'Magilligan Benone',
+			country: 'Northern Ireland',
+			classification: 'Unknown',
+			currentAssessment: {
+				level: 'good',
+				label: 'Excellent',
+				assessedAt: new Date(Date.now() - 200 * 24 * 36e5).toISOString()
+			}
+		});
+		expect(svg).toContain('Last reading Excellent');
+	});
+
+	it('does not put an advised-against site on a neutral card', () => {
+		const svg = buildLocationCard({
+			name: "Rea's Wood",
+			country: 'Northern Ireland',
+			classification: 'Unknown',
+			currentAssessment: { level: 'advised-against', label: 'Advised against bathing' }
+		});
+		expect(svg).toContain('Advised against bathing');
+		expect(svg).not.toContain('Not yet classified');
+	});
+
+	it('still says not yet classified where there is no reading either', () => {
+		const svg = buildLocationCard({
+			name: 'Somewhere',
+			country: 'England',
+			classification: 'Unknown'
+		});
+		expect(svg).toContain('Not yet classified');
+	});
+});
+
+describe('fitFontSize', () => {
+	it('leaves a short line at the base size', () => {
+		expect(fitFontSize('Cornwall · England', 1040, 40)).toBe(40);
+	});
+
+	it('shrinks a line that would run off the card', () => {
+		// The longest real one, which used to be clipped mid-word.
+		const long = 'Causeway Coast and Glens Borough Council · Northern Ireland';
+		const size = fitFontSize(long, 1040, 40);
+		expect(size).toBeLessThan(40);
+		expect(long.length * size * 0.48).toBeLessThanOrEqual(1040);
+	});
+
+	it('never shrinks below the legibility floor', () => {
+		expect(fitFontSize('x'.repeat(500), 1040, 40)).toBe(26);
 	});
 });

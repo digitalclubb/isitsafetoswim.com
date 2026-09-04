@@ -15,7 +15,8 @@ function toCard(l: Location) {
 		name: l.name,
 		region: l.region,
 		country: l.country,
-		classification: l.classification
+		classification: l.classification,
+		currentAssessment: l.currentAssessment
 	};
 }
 

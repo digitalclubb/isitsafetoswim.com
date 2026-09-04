@@ -83,3 +83,83 @@ describe('classificationChange', () => {
 		expect(classificationChange('Good', 'New')).toBeNull();
 	});
 });
+
+describe('ratingLabel with a regulator reading', () => {
+	const recent = new Date(Date.now() - 3 * 24 * 36e5).toISOString();
+
+	it('shows the reading where no classification exists', () => {
+		// Northern Ireland has no annual classification. Labelling those cards
+		// "Unclassified" discards the only thing DAERA does publish.
+		expect(
+			ratingLabel('Unknown', { level: 'good', label: 'Excellent', assessedAt: recent }).label
+		).toBe('Latest reading Excellent');
+	});
+
+	it('keeps a reading visibly apart from a rating', () => {
+		// "Rated Excellent" is a multi-year percentile. One week's sample is not,
+		// and must never be worded as though it were.
+		const reading = ratingLabel('Unknown', {
+			level: 'good',
+			label: 'Excellent',
+			assessedAt: recent
+		});
+		expect(reading.label).not.toBe('Rated Excellent');
+		expect(reading.announced).toContain('reading');
+	});
+
+	it('flags advice against bathing rather than showing it as a reading', () => {
+		const label = ratingLabel('Unknown', {
+			level: 'advised-against',
+			label: 'Advised against bathing'
+		});
+		expect(label.label).toBe('Advised against');
+		expect(isAdverseRating('Unknown', { level: 'advised-against', label: 'x' })).toBe(true);
+	});
+
+	it('prefers a real classification over a reading', () => {
+		expect(ratingLabel('Good', { level: 'good', label: 'Excellent', assessedAt: recent }).label).toBe(
+			'Rated Good'
+		);
+	});
+
+	it('still says unclassified when there is neither', () => {
+		expect(ratingLabel('Unknown').label).toBe('Unclassified');
+		expect(isAdverseRating('Unknown')).toBe(false);
+	});
+});
+
+describe('a regulator reading ages out on cards too', () => {
+	const fresh = new Date(Date.now() - 3 * 24 * 36e5).toISOString();
+	const old = new Date(Date.now() - 200 * 24 * 36e5).toISOString();
+
+	it('calls a recent reading the latest one', () => {
+		expect(
+			ratingLabel('Unknown', { level: 'good', label: 'Excellent', assessedAt: fresh }).label
+		).toBe('Latest reading Excellent');
+	});
+
+	it('stops calling an out-of-date reading the latest one', () => {
+		// Sampling stops on 15 September, so without this every NI card would read
+		// "Latest reading Excellent" all winter beside a page that had demoted the
+		// same site to Caution for being out of date.
+		const label = ratingLabel('Unknown', { level: 'good', label: 'Excellent', assessedAt: old });
+		expect(label.label).toBe('Last reading Excellent');
+		expect(label.announced).toContain('out of date');
+	});
+
+	it('treats an undated reading as out of date, as the engine does', () => {
+		expect(ratingLabel('Unknown', { level: 'good', label: 'Excellent' }).label).toBe(
+			'Last reading Excellent'
+		);
+	});
+
+	it('never ages out advice against bathing', () => {
+		expect(
+			ratingLabel('Unknown', {
+				level: 'advised-against',
+				label: 'Advised against bathing',
+				assessedAt: old
+			}).label
+		).toBe('Advised against');
+	});
+});

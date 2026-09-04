@@ -199,6 +199,90 @@ async function fetchWales() {
 	return out;
 }
 
+// ---- Scottish council areas --------------------------------------------
+
+// SEPA's feed carries no district, so every Scottish bathing water rolled up to
+// one country page and Scotland had no regional hubs at all, against 29 for
+// England. The coordinates are there, so the council area is a reverse lookup
+// rather than missing data. postcodes.io is the same open service the site
+// already uses for postcode entry, and one POST covers the whole country.
+const POSTCODES_BULK = 'https://api.postcodes.io/postcodes';
+
+// A bathing water sits on the coast, so its nearest postcode is inland of it and
+// a little way off. Measured over all 90 Scottish sites the worst genuine match
+// is 673m, so a 2km search is already three times looser than the data needs. It
+// is deliberately not wider: a site at an estuary mouth can find its nearest
+// postcode across the water in the wrong council, and both the Forth and the
+// Clyde are under 5km across in places.
+const POSTCODE_SEARCH_RADIUS_M = 2_000;
+
+// postcodes.io rejects a bulk request of more than 100 geolocations. Scotland
+// sits at 90, so a handful of new designations would 400 the whole POST and
+// silently drop every Scottish region, deleting eight hub pages and their URLs
+// on the next build.
+const POSTCODE_BULK_LIMIT = 100;
+
+function chunk(items, size) {
+	const out = [];
+	for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
+	return out;
+}
+
+async function addScottishRegions(locations) {
+	const rows = locations.filter((l) => l.country === COUNTRY.SCOTLAND);
+	if (rows.length === 0) return;
+	try {
+		const bodies = await withBudget('Scotland council areas', () =>
+			Promise.all(
+				chunk(rows, POSTCODE_BULK_LIMIT).map((batch) =>
+					fetchJson(POSTCODES_BULK, {
+						method: 'POST',
+						headers: { 'content-type': 'application/json' },
+						body: JSON.stringify({
+							geolocations: batch.map((l) => ({
+								latitude: l.lat,
+								longitude: l.lon,
+								limit: 1,
+								radius: POSTCODE_SEARCH_RADIUS_M
+							}))
+						})
+					})
+				)
+			)
+		);
+		const results = bodies.flatMap((body) => body.result ?? []);
+		let named = 0;
+		rows.forEach((row, i) => {
+			const nearest = results[i]?.result?.[0];
+			if (!nearest) return;
+			const district = nearest.admin_district;
+			if (typeof district !== 'string' || !district.trim()) return;
+			// Belt and braces behind the search radius, written so a response
+			// carrying no distance at all is refused rather than waved through by
+			// Number(undefined) > radius evaluating false.
+			const distance = Number(nearest.distance);
+			if (!Number.isFinite(distance) || distance > POSTCODE_SEARCH_RADIUS_M) return;
+			row.region = district.trim();
+			named += 1;
+		});
+		console.log(
+			`[build-location-index] Scotland: ${named} of ${rows.length} sites given a council area`
+		);
+		if (named < rows.length) {
+			console.warn(
+				`[build-location-index] Scotland: ${rows.length - named} sites have no council area, so their region hubs will not build`
+			);
+		}
+	} catch (err) {
+		// Regions decide which hub pages exist, not whether a beach is safe, so a
+		// lookup failure leaves Scotland as it was rather than failing the build.
+		// Loud, because it silently removes live pages.
+		console.warn(
+			`[build-location-index] Scottish council areas unavailable, every Scottish region hub will be missing: ${err.message}`
+		);
+	}
+}
+
 // ---- Previous classification -------------------------------------------
 
 // Both regulators date an assessment only inside its own URI, and neither
@@ -306,6 +390,45 @@ async function fetchScotland() {
 	return out;
 }
 
+/**
+ * DAERA's weekly water-quality indicator, on its own three-value vocabulary.
+ * `NoBathing` is advice against bathing rather than a rating, so it is kept
+ * distinct from the two clean readings; the verdict engine turns it into a No.
+ * An unrecognised value returns null rather than guessing, because every one of
+ * these values ends up as a safety claim on a page.
+ */
+function readNiAssessment(props) {
+	const raw = props.water_quality_indicator ?? props.Water_Quality_Indicator;
+	if (typeof raw !== 'string') return undefined;
+	const lower = raw.toLowerCase().replace(/[^a-z]/g, '');
+	const level =
+		lower === 'nobathing'
+			? 'advised-against'
+			: lower === 'excellent'
+				? 'good'
+				: lower === 'satisfactory'
+					? 'satisfactory'
+					: null;
+	if (!level) {
+		// The exact shape of the bug this function exists to fix: classifyValue
+		// swallowing `NoBathing` is what turned advice against bathing into an
+		// unclassified site. A new DAERA word must surface at build time, not as a
+		// quietly neutral page.
+		console.warn(
+			`[build-location-index] unrecognised DAERA water_quality_indicator: ${JSON.stringify(raw)}`
+		);
+		return undefined;
+	}
+	const at = Number(props.Sampling_datetime);
+	return {
+		level,
+		// DAERA's own word, so the page reports "Excellent" where DAERA said
+		// Excellent rather than flattening it to this file's internal level.
+		label: level === 'advised-against' ? 'Advised against bathing' : raw.trim(),
+		assessedAt: Number.isFinite(at) && at > 0 ? new Date(at).toISOString() : undefined
+	};
+}
+
 // ---- Northern Ireland --------------------------------------------------
 
 async function fetchNorthernIreland() {
@@ -331,7 +454,13 @@ async function fetchNorthernIreland() {
 			region: props.Bathing_Water_Operator ?? props.Region,
 			lat,
 			lon,
-			classification: classifyValue(props.water_quality_indicator ?? props.Water_Quality_Indicator),
+			// DAERA publishes no annual classification. `water_quality_indicator` is
+			// a weekly judgement taken from that week's sample, on its own
+			// vocabulary (Excellent / Satisfactory / NoBathing), so reading it into
+			// `classification` claimed a four-year percentile that does not exist
+			// and lost the NoBathing sites to the parser's catch-all.
+			classification: 'Unknown',
+			currentAssessment: readNiAssessment(props),
 			waterType: String(props.Type ?? '').toLowerCase() === 'inland' ? 'inland' : 'coastal',
 			source: {
 				api: 'daera',
@@ -416,8 +545,9 @@ async function buildIndex() {
 	}
 
 	// Best-effort and after the backfill, so rows restored from cache keep the
-	// previous classification they were built with when the host is unreachable.
-	await addPreviousClassifications(collected);
+	// previous classification and council area they were built with when a host
+	// is unreachable.
+	await Promise.all([addPreviousClassifications(collected), addScottishRegions(collected)]);
 
 	dedupeSlugs(collected);
 	// After dedupe, so the override is keyed by the slug the site actually
@@ -451,7 +581,10 @@ async function main() {
 
 	// Ship a slim client-friendly search index alongside the full one. The
 	// client only needs slug, name, country, region, classification and a
-	// coarse lat/lon for nearest-beach lookup.
+	// coarse lat/lon for nearest-beach lookup, plus the regulator's own reading
+	// where no classification exists: without it every Northern Irish card in a
+	// nearby or postcode result reads "Unclassified", which is the gap this
+	// build stopped papering over rather than a thing to reintroduce.
 	const slimFile = resolve(repoRoot, 'src', 'data', 'search-index.json');
 	const slim = {
 		generatedAt: index.generatedAt,
@@ -464,6 +597,7 @@ async function main() {
 			country: l.country,
 			region: l.region,
 			classification: l.classification,
+			currentAssessment: l.currentAssessment,
 			lat: Math.round(l.lat * 1e4) / 1e4,
 			lon: Math.round(l.lon * 1e4) / 1e4
 		}))

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { isAdverseRating, ratingLabel } from '$lib/data/rating';
-	import type { Classification, Country, Verdict } from '$lib/data/types';
+	import type { Classification, Country, CurrentAssessment, Verdict } from '$lib/data/types';
 	import { verdictLabel } from '$lib/map/colours';
 
 	interface CardLocation {
@@ -9,6 +9,7 @@
 		region?: string;
 		country: Country;
 		classification: Classification;
+		currentAssessment?: CurrentAssessment;
 	}
 
 	let {
@@ -24,7 +25,7 @@
 
 	let place = $derived(location.region ?? location.country);
 	let meta = $derived(distanceMetres != null ? `${place} · ${formatKm(distanceMetres)}` : place);
-	let rating = $derived(ratingLabel(location.classification));
+	let rating = $derived(ratingLabel(location.classification, location.currentAssessment));
 </script>
 
 <!--
@@ -38,7 +39,9 @@
 	{#if verdict}
 		<span class="badge"><span class="sr-only">Verdict today: </span>{verdictLabel(verdict)}</span>
 	{:else}
-		<span class="rating" class:adverse={isAdverseRating(location.classification)}
+		<span
+			class="rating"
+			class:adverse={isAdverseRating(location.classification, location.currentAssessment)}
 			aria-label={rating.announced}>{rating.label}</span
 		>
 	{/if}
