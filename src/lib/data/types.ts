@@ -52,6 +52,12 @@ export interface Location {
 	classificationYear?: number;
 	/** The classification for the season before `classificationYear`. */
 	previousClassification?: Classification;
+	/**
+	 * Every classification this site has been awarded under the revised regime,
+	 * oldest first. Real assessments only, so it starts at 2015 and skips 2020,
+	 * the season the pandemic cut short and no classification was made for.
+	 */
+	classificationHistory?: Array<{ year: number; classification: Classification }>;
 	/** Where the regulator publishes a current judgement instead of a classification. */
 	currentAssessment?: CurrentAssessment;
 	sewerageUndertaker?: string;

@@ -104,3 +104,43 @@ describe('getSpillLeaguePlaces', () => {
 		expect(places.some((p) => p.slug === 'england')).toBe(false);
 	});
 });
+
+describe('sites absent from the table', () => {
+	const england = getSpillLeague('england');
+
+	it('accounts for every site that holds a record but is not ranked', () => {
+		// The count and the breakdown must reconcile, or the page states one
+		// number and itemises a different one.
+		expect(england?.absent.count).toBe((england?.withRecord ?? 0) - (england?.ranked ?? 0));
+		const named = (england?.absent.silentOperators ?? []).reduce((sum, o) => sum + o.count, 0);
+		expect(named + (england?.absent.otherReasons ?? 0)).toBe(england?.absent.count);
+	});
+
+	it('only names an operator with no ranked site anywhere', () => {
+		// The claim attached to a name is that the operator's return links no
+		// overflow to any bathing water at all. Naming a company whose other
+		// sites are ranked would blame it for a per-site gap it did not cause.
+		const ranked = new Set(
+			(england?.entries ?? []).map((e) => e.location.sewerageUndertaker).filter(Boolean)
+		);
+		for (const operator of england?.absent.silentOperators ?? []) {
+			expect(ranked.has(operator.name)).toBe(false);
+			expect(operator.count).toBeGreaterThan(0);
+		}
+	});
+
+	it('backs a named operator with the year it did report', () => {
+		for (const operator of england?.absent.silentOperators ?? []) {
+			expect(operator.previousYearCount).toBeGreaterThan(0);
+			expect(operator.previousYearCount).toBeLessThanOrEqual(operator.count);
+		}
+	});
+
+	it('never names an operator on a regional table', () => {
+		// An operator can have no ranked site inside one small region while
+		// reporting perfectly well everywhere else.
+		for (const place of getSpillLeaguePlaces()) {
+			expect(getSpillLeague(place.slug)?.absent.silentOperators).toEqual([]);
+		}
+	});
+});

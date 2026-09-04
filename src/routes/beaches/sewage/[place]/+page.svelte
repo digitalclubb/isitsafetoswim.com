@@ -106,6 +106,16 @@
 				network rather than a map radius. Spills only: the return's duration column is not
 				reliable enough to publish.
 			</p>
+			{#if data.absent.count > 0}
+				<p class="muted">
+					{data.absent.count}
+					{data.absent.count === 1 ? 'bathing water is' : 'bathing waters are'} missing from this
+					table despite holding a record for earlier years, because
+					{data.absent.count === 1 ? 'it has' : 'they have'} no comparable {data.year} figure. No
+					cause is named here: an operator can be absent from one area's table and reporting
+					normally everywhere else.
+				</p>
+			{/if}
 			<p class="muted">
 				<a href={`/beaches/${data.place.slug}`}>See the cleanest beaches in {data.place.name}</a>
 				or <a href="/spills">every spill happening now</a>.

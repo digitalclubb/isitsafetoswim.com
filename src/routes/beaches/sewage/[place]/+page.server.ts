@@ -27,6 +27,7 @@ export const load: PageServerLoad = ({ params }) => {
 		})),
 		ranked: league.ranked,
 		withRecord: league.withRecord,
+		absent: league.absent,
 		total: league.total,
 		totalSpills: league.totalSpills,
 		childRegions: league.childRegions.map((p) => ({ slug: p.slug, name: p.name })),

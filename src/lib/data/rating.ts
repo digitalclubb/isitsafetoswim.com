@@ -108,7 +108,8 @@ export function isReadingCurrent(assessment: CurrentAssessment, now: Date = new 
 	return now.getTime() - at <= READING_CURRENT_DAYS * 24 * 36e5;
 }
 
-const TIER_RANK: Record<string, number> = {
+/** Rated tiers in order, so nothing that must agree with it keeps its own copy. */
+export const TIER_RANK: Record<string, number> = {
 	Excellent: 4,
 	Good: 3,
 	Sufficient: 2,

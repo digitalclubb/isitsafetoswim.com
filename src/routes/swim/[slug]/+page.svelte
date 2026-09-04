@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { fade, slide } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
+	import ClassificationHistory from '$lib/components/ClassificationHistory.svelte';
 	import DischargeList from '$lib/components/DischargeList.svelte';
 	import FactorList from '$lib/components/FactorList.svelte';
 	import LocationCard from '$lib/components/LocationCard.svelte';
@@ -89,6 +90,7 @@
 	// explains a season the verdict did not apply.
 	let inSeason = $derived(bathingSeasonActive(new Date(live.verdict.fetchedAt), location.country));
 	let season = $derived(seasonLabels(location.country));
+	let history = $derived(location.classificationHistory ?? []);
 	let nearby = $derived(
 		findNearestSlim({ lat: location.lat, lon: location.lon }, 5)
 			.map((r) => r.location)
@@ -426,6 +428,20 @@
 					</p>
 				</section>
 			{/if}
+		{/if}
+
+		{#if history.length > 1}
+			<section class="block" aria-labelledby="record">
+				<h2 id="record">
+					Classification record, {history[0].year} to {history[history.length - 1].year}
+				</h2>
+				<ClassificationHistory {history} locationName={location.name} />
+				<p class="muted small">
+					The regulator republishes this every November as a percentile over readings from up to
+					four bathing seasons, so it describes the water's record rather than today. No
+					classification was made for 2020, when the pandemic cut the bathing season short.
+				</p>
+			</section>
 		{/if}
 
 		{#if data.spillHistory}

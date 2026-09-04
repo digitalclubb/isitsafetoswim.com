@@ -219,6 +219,18 @@ So:
 
 NI still has no live storm-overflow feed, so `hasDischargeFeed` stays false for all 33.
 
+## Classification record and what changed
+
+Every England and Wales row carries `classificationHistory`: every classification the site has been awarded under the current regime, oldest first, built by one bulk query per year in `addClassificationHistory`. Two data facts shape it and both are load-bearing:
+
+- **It starts at 2015.** The API also serves 2004 to 2014, but every one of those rows carries `assessmentQualifier: "projected-assessment"`, the regulator's back-cast of what a site *would* have scored, not a classification it was ever awarded. Publishing those would invent eleven years of record, so only "actual assessment" rows are kept.
+- **2020 is missing, genuinely.** The pandemic cut the bathing season short and no classification was made anywhere. `ClassificationHistory.svelte` draws that year as a hatched absence rather than joining the series across it.
+- **`Closed` appears 14 times across 7 sites.** It is a real reported status for a season a site was not open, so it stays in the data, but it is a status rather than a rating: the chart draws it as an absence and the summary sentence reads off rated years only, so a page never says a beach was "rated Closed". **The closed years are then named in the summary**, because drawn as a bare absence they are indistinguishable from the 2020 pandemic gap, and on a site that is closed right now that is an absence reading as an all-clear.
+
+`addClassificationHistory` catches its own failures **per year**, not around the loop: one slow year costs one year, which the chart already renders as a gap, rather than dropping the whole decade plus `previousClassification` and so failing the `/beaches/changes` prerender. It throws when a fetch succeeds but matches nothing, because a silent zero would stop stamping every history while the build reported success.
+
+`/beaches/changes` ranks what moved between the last two seasons, from `src/lib/data/changes.ts`. England and Wales only: Scotland's feed carries no previous classification and DAERA publishes none. It follows the regulator's newest year rather than a hard-coded one, so it re-points itself each November, which is the whole reason it exists. `classificationChange` refuses to rank New, Unknown or Closed, so a site that closed is never reported as water quality getting worse.
+
 ## Tides and sea temperature
 
 Both come from the Open-Meteo Marine API (open, no key, CC-BY) and both are **server-rendered on the location page**, not fetched after paint. They were client-only, which hid them from crawlers, and cold-water and tide questions are exactly the demand that grows as the water gets colder. The sample-history sparkline is still deferred to `/api/enrichment/[id]`, because it reads the rate-limited regulator sample host that made a cold render take ten seconds.
@@ -249,6 +261,16 @@ Three rules the tables must keep:
 - **A site with no attributed record is left out, not ranked at zero.** No record is not a clean record, and the pages say how many are missing.
 - **Every row is the same year.** The ranked year is the newest any site has a comparable figure for. A site whose record stops earlier drops out rather than being carried in on an older figure. The per-row trend baseline varies by site, so it is printed with the row ("since 2022"), because a year too patchily monitored to compare is dropped from that site's record.
 
+**A company that stops filling in the return disappears from the table**, and the pages say so. `SpillLeague.absent` counts the sites that hold a record but have no figure for the ranked year. For 2025 that is 23 sites.
+
+**Only one operator may be named, and only for one claim.** `silentOperators` is an operator with absent sites and **not one ranked site anywhere**, meaning its return links no overflow to any bathing water at all. For 2025 that is Yorkshire Water alone: 18 sites, against 18 in its 2024 return. The other 5 absent sites are individual gaps, and their operators filed perfectly normally (Anglian has 32 ranked sites, Wessex 30, United Utilities 28, Northumbrian 27), so naming them would blame four companies for something only one did. An earlier version of this copy did exactly that and it was caught in review.
+
+Three of those 5 are absent because of **our own filter**, not the return: they carry a 2025 row whose unmonitored share trips `UNMONITORED_LIMIT`. Never describe them as the operator failing to report.
+
+**The claim is never made on a regional page.** An operator can have no ranked site inside one small region while reporting fine everywhere else, so `silentOperators` is computed only for the country page and the regional copy names no cause at all.
+
+The copy also says the overflows are still in the return and in the EA's national figures, rather than that they "still spilled": for the 18 Yorkshire sites there is no 2025 row, so nothing here shows what they did that year.
+
 `ranked` and `withRecord` are different numbers and both are stated: 464 English bathing waters, **324** carry an attributed record, **300** have a comparable 2025 figure to be ranked on. Conflating them once told readers that a site whose record stops at 2023 had no record at all.
 
 ## URL shape
@@ -258,6 +280,7 @@ Three rules the tables must keep:
 - `/map` interactive map plus nearest-safe list, prerendered shell
 - `/beaches` and `/beaches/[place]` area hubs, prerendered
 - `/beaches/rated/[tier]` classification hubs (`excellent`, `good`, `sufficient`, `poor`), prerendered
+- `/beaches/changes` what moved in the latest annual classifications, prerendered
 - `/beaches/sewage` and `/beaches/sewage/[place]` sewage league tables, England only, prerendered
 - `/near` and `/near/[postcode]` geolocation and postcode results
 - `/api/verdict/[id]` JSON endpoint with `s-maxage=300, stale-while-revalidate=600`
@@ -306,7 +329,7 @@ Documented for future sessions, not blocking launch:
 3. Done: postcode and outward-code entry resolve via postcodes.io to the `/near/[postcode]` results page, alongside name search and geolocation (`/near`).
 4. Done: the recent-sample trend sparkline (`SampleHistory.svelte`, fed by `src/lib/live/history.ts`) is on the location page. History is fetched live per verdict; it changes only weekly, so it is a candidate to bake in at build time if request cost ever matters.
 5. Done for both. **Scotland:** SEPA publishes a daily prediction for the ~33 sites carrying an electronic sign, on layer 18 of the MapServer the catalogue is already built from. `src/lib/live/sepa.ts` reads it, gated on freshness, and currently shows nothing: every row has carried a `last_updated` of 19 May 2026 all season, and serving a four-month-old "Poor" as today's forecast is worse than showing none. **Northern Ireland:** DAERA publishes one too, which this file previously denied. It is on a separate layer, `Bathing_Waters_Predictive_Modelling_view`, for the six sites inside its predictive-modelling programme. `src/lib/live/daera.ts` reads it. Freshness there is decided by the day DAERA stamps on the row (`pm_current_prediction_for`, local midnight) rather than by an age window, which is stronger: yesterday's prediction is never today's answer however recently the layer was edited.
-6. The SEPA branch in `build-location-index.mjs` hardcodes `waterType: 'coastal'`, so inland Scottish lochs get coastal sample thresholds and are not skipped by the sea-temperature fetch. They fail safe today (Open-Meteo returns null inland), but a name heuristic (loch, lake, reservoir, river) or a coast-distance check would classify them correctly.
+6. Done, and deliberately not with a heuristic. `SCOTTISH_FRESHWATER` in `build-location-index.mjs` names the three freshwater sites: Dores (Loch Ness), Loch Morlich and Luss Bay (Loch Lomond). A name test was tried and rejected: it flags Gairloch Beach and Thorntonloch, which are both sea, and misses Luss Bay and Dores, which are not. Probing the Open-Meteo marine grid finds four Scottish sites off it, but one is Ballachulish on Loch Leven, a sea loch simply too narrow for the grid. **Inland thresholds are more forgiving than coastal ones**, so a false "inland" weakens a safety cut-off: the default stays coastal and the list is explicit.
 7. Done. `bathingSeasonActive(date, country)` now carries the real dates: England and Wales 15 May to 30 September (Bathing Water Regulations 2013), Scotland and Northern Ireland 1 June to 15 September (SSI 2008/170 and the NI 2008 regulations). The old England-for-everyone default was wrong for 123 sites at both ends of the season, 32 days a year. Still outstanding: from 15 May 2026 the amended English regulations let ministers set a site-specific season per bathing water. No regulator feed publishes one per site yet; when one does, it belongs on the location record rather than in the engine.
 8. Done. **Wales now has live storm-overflow data on all 114 sites.** Two things were broken, not one. The mapped Dwr Cymru endpoint was dead (`DCWW_Storm_Overflow_Activity` returned "Invalid URL"); the live service behind Welsh Water's own public map is `Spill_Prod__view` on the same ArcGIS org. And `sewerageUndertaker` was never populated for Wales, so `lookupEndpoint` never resolved. The build now sets `Dwr Cymru Cyfyngedig` on Welsh rows, which is the key the lookup table already held.
 

@@ -8,7 +8,7 @@ export const prerender = true;
 
 /**
  * The area hub, every country and region page, the four classification pages
- * and the sewage league tables. All are derived from the catalogue, so they
+ * the classification-change page and the sewage league tables. All are derived from the catalogue, so they
  * share its build date.
  */
 export const GET = () => {
@@ -18,6 +18,7 @@ export const GET = () => {
 		{ path: '/beaches', lastmod },
 		...getAllPlaces().map((place) => ({ path: `/beaches/${place.slug}`, lastmod })),
 		...getTierSummaries().map((tier) => ({ path: `/beaches/rated/${tier.slug}`, lastmod })),
+		{ path: '/beaches/changes', lastmod },
 		{ path: '/beaches/sewage', lastmod },
 		...getSpillLeaguePlaces().map((place) => ({
 			path: `/beaches/sewage/${place.slug}`,

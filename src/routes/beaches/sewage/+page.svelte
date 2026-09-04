@@ -4,6 +4,18 @@
 	let { data }: { data: PageData } = $props();
 
 	const title = 'Worst beaches for sewage in England';
+	// One operator may be named, and only for the claim that actually holds
+	// against it: a return that links no overflow to any bathing water at all.
+	// Every other absent site is an individual gap, and the operators behind
+	// those filed normally, so naming them would attribute a whole-return
+	// omission to companies that did not make one.
+	let silent = $derived(
+		data.absent.silentOperators.map((o) => ({
+			...o,
+			name: o.name.replace(/ (Services )?(Limited|Ltd)\.?$/, '')
+		}))
+	);
+
 	let description = $derived(
 		`Every English bathing water ranked by the storm-overflow spills the Environment Agency links to it in ${data.year}. ${data.ranked} beaches ranked, ${data.totalSpills.toLocaleString('en-GB')} spills between them.`
 	);
@@ -85,6 +97,29 @@
 				clean one. Wales, Scotland and Northern Ireland are absent because the return is an
 				England publication.
 			</p>
+			{#if data.absent.count > 0}
+				<p class="muted">
+					<strong>
+						{data.absent.count}
+						{data.absent.count === 1 ? 'bathing water is' : 'bathing waters are'} missing from this
+						table despite holding a record for earlier years.
+					</strong>
+					{#each silent as operator (operator.name)}
+						{operator.count} of them are {operator.name} sites. Its {data.year} return links no
+						overflow to any bathing water at all, against {operator.previousYearCount} in
+						{data.year - 1}.
+					{/each}
+					{#if data.absent.otherReasons > 0}
+						The other {data.absent.otherReasons} are individual sites whose {data.year} figure is
+						either absent from the return or too patchily monitored to compare.
+					{/if}
+				</p>
+				<p class="muted">
+					Those overflows are still in the return and still in the Environment Agency's national
+					figures. What is missing is the column linking an overflow to the bathing water it
+					affects, which is the only thing this table can be built from.
+				</p>
+			{/if}
 		</section>
 	</div>
 </article>

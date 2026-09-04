@@ -38,6 +38,14 @@
 			</p>
 		</header>
 
+		<section class="block" aria-labelledby="by-change">
+			<h2 id="by-change">What changed</h2>
+			<p class="muted">
+				<a href="/beaches/changes">Which beaches got better or worse</a> in the regulator's most
+				recent annual classifications.
+			</p>
+		</section>
+
 		<section class="block" aria-labelledby="by-sewage">
 			<h2 id="by-sewage">By sewage record</h2>
 			<p class="muted">

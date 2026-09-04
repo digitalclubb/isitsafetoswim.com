@@ -283,18 +283,36 @@ async function addScottishRegions(locations) {
 	}
 }
 
-// ---- Previous classification -------------------------------------------
+// ---- Classification history --------------------------------------------
 
 // Both regulators date an assessment only inside its own URI, and neither
-// serves last year's rating alongside this year's. One filtered query per
-// country covers the whole catalogue, which is what makes "up from Good" a
-// build-time fact rather than 578 extra per-site requests.
+// serves a site's history alongside its current rating. One filtered query per
+// year per country covers the whole catalogue, which is what makes a twenty-year
+// record a build-time fact rather than 578 requests per site.
 const COMPLIANCE_BASES = {
 	[COUNTRY.ENGLAND]:
 		'https://environment.data.gov.uk/doc/bathing-water-quality/compliance-rBWD.json',
 	[COUNTRY.WALES]:
 		'https://environment.data.gov.uk/wales/bathing-waters/doc/bathing-water-quality/compliance-rBWD.json'
 };
+
+// The revised Bathing Water Directive regime began in 2015. The API also serves
+// 2004 to 2014, but every one of those rows is an `assessmentQualifier` of
+// "projected-assessment": the regulator's back-cast of what the site would have
+// scored, not a classification it was ever awarded. Publishing those as a site's
+// record would invent eleven years of history.
+const HISTORY_FROM = 2015;
+
+// 2020 has no classification anywhere: the bathing season was cut short by the
+// pandemic and no assessment was made. The history therefore has a real hole in
+// it, which the page must show as a gap rather than joining across.
+const NO_CLASSIFICATION_YEARS = new Set([2020]);
+
+function isActualAssessment(item) {
+	const qualifier =
+		extractLabel(item.assessmentQualifier?.name) ?? extractLabel(item.assessmentQualifier);
+	return typeof qualifier === 'string' && qualifier.toLowerCase().includes('actual');
+}
 
 async function fetchComplianceYear(base, year) {
 	const bySourceId = new Map();
@@ -305,10 +323,11 @@ async function fetchComplianceYear(base, year) {
 		if (items.length === 0) break;
 		for (const item of items) {
 			const sourceId = item.bwq_bathingWater?.eubwidNotation;
+			if (!sourceId || !isActualAssessment(item)) continue;
 			const classification = classifyValue(
 				extractLabel(item.complianceClassification?.name) ?? extractLabel(item.complianceClassification)
 			);
-			if (!sourceId || !classification || classification === 'Unknown') continue;
+			if (!classification || classification === 'Unknown') continue;
 			bySourceId.set(sourceId, classification);
 		}
 		if (!body.result?.next) break;
@@ -317,40 +336,101 @@ async function fetchComplianceYear(base, year) {
 }
 
 /**
- * Stamp each England and Wales row with the classification it held the season
- * before, so the page can say a rating went up or down rather than only what it
- * is now. Best-effort: a failure leaves the field unset and the page simply
- * says nothing about the change, which is why it never aborts the build.
+ * Stamp each England and Wales row with every classification it has held under
+ * the current regime, and with last season's as `previousClassification` so the
+ * page can say a rating went up or down.
+ *
+ * Best-effort: a failure leaves both unset and the pages simply say less, which
+ * is why it never aborts the build. Years are fetched in sequence rather than in
+ * parallel, because environment.data.gov.uk throttles and a whole extra decade
+ * of requests is exactly the kind of burst it refuses.
  */
-async function addPreviousClassifications(locations) {
+async function addClassificationHistory(locations) {
 	for (const [country, base] of Object.entries(COMPLIANCE_BASES)) {
 		const rows = locations.filter((l) => l.country === country && l.classificationYear);
 		if (rows.length === 0) continue;
-		// Take the newest year present rather than an assumed one, so the build
-		// follows the regulator through the November publication automatically.
+		// Follow the regulator rather than assume a year, so the build picks up
+		// each November publication on its own.
 		const latest = Math.max(...rows.map((l) => l.classificationYear));
-		try {
-			const previous = await withBudget(`${country} compliance ${latest - 1}`, () =>
-				fetchComplianceYear(base, latest - 1)
-			);
-			let stamped = 0;
-			for (const row of rows) {
-				if (row.classificationYear !== latest) continue;
-				const was = previous.get(row.source.sourceId);
-				if (!was) continue;
-				row.previousClassification = was;
-				stamped += 1;
+		const years = [];
+		for (let y = HISTORY_FROM; y <= latest; y += 1) {
+			if (!NO_CLASSIFICATION_YEARS.has(y)) years.push(y);
+		}
+
+		// Per year, not around the loop: one slow year must cost one year, not the
+		// whole decade. Wrapping the loop meant a single timeout dropped both
+		// classificationHistory and previousClassification for the entire country,
+		// which then fails the prerender of /beaches/changes and so the build.
+		const byYear = new Map();
+		const failed = [];
+		for (const year of years) {
+			try {
+				byYear.set(
+					year,
+					await withBudget(`${country} compliance ${year}`, () => fetchComplianceYear(base, year))
+				);
+			} catch (err) {
+				failed.push(year);
+				console.warn(
+					`[build-location-index] ${country} compliance ${year} unavailable: ${err.message}`
+				);
 			}
-			console.log(
-				`[build-location-index] ${country}: ${stamped} rows carry their ${latest - 1} classification`
-			);
-		} catch (err) {
+		}
+		if (byYear.size === 0) {
 			console.warn(
-				`[build-location-index] ${country} previous classification unavailable: ${err.message}`
+				`[build-location-index] ${country}: no classification history fetched, cached values kept`
+			);
+			continue;
+		}
+
+		let withHistory = 0;
+		for (const row of rows) {
+			const history = [];
+			for (const year of years) {
+				const classification = byYear.get(year)?.get(row.source.sourceId);
+				if (classification) history.push({ year, classification });
+			}
+			if (history.length === 0) continue;
+			row.classificationHistory = history;
+			withHistory += 1;
+			// Against this row's own year, not the catalogue's newest. Taking
+			// latest - 1 for every row would hand a site still on an older
+			// classification a "previous" from a later season, and the change would
+			// render inverted on /beaches/changes and in the page FAQ.
+			const previous = history.find((h) => h.year === (row.classificationYear ?? latest) - 1);
+			if (previous) row.previousClassification = previous.classification;
+			// A freshly fetched history with no prior year must not leave a stale
+			// cached value beside it, or the chart and the FAQ disagree.
+			else delete row.previousClassification;
+		}
+		console.log(
+			`[build-location-index] ${country}: ${withHistory} rows carry a classification history back to ${years[0]}${failed.length ? `, ${failed.length} years unavailable` : ''}`
+		);
+		// The fetch succeeded and matched nothing, which means the shape changed
+		// under us. Silent success here would quietly stop stamping every history
+		// and every previous classification while the build reported fine.
+		if (rows.length > 0 && withHistory === 0) {
+			throw new Error(
+				`${country}: compliance data fetched but matched no bathing water, check the assessmentQualifier and eubwidNotation fields`
 			);
 		}
 	}
 }
+
+// SEPA's feed carries no water type, and inland waters take the more forgiving
+// sample thresholds, so guessing wrong in that direction weakens a safety
+// cut-off. This is therefore an explicit list rather than a heuristic, and the
+// default stays coastal.
+//
+// A name test is not good enough: it flags Gairloch Beach and Thorntonloch,
+// which are both sea, and misses Luss Bay and Dores, which are not. Probing the
+// Open-Meteo marine grid finds four Scottish sites off it, but one of those is
+// Ballachulish on Loch Leven, a sea loch that is simply too narrow for the
+// grid. These three are the freshwater ones, confirmed by position:
+//   Dores        Loch Ness
+//   Loch Morlich Cairngorms
+//   Luss Bay     Loch Lomond
+const SCOTTISH_FRESHWATER = new Set(['dores', 'loch-morlich', 'luss-bay']);
 
 // ---- Scotland ----------------------------------------------------------
 
@@ -379,7 +459,7 @@ async function fetchScotland() {
 			lon,
 			classification: classifyValue(props.class_description ?? props.classification),
 			classificationYear: Number.isFinite(Number(props.year)) ? Number(props.year) : undefined,
-			waterType: 'coastal',
+			waterType: SCOTTISH_FRESHWATER.has(slugify(name)) ? 'inland' : 'coastal',
 			source: {
 				api: 'sepa',
 				sourceId,
@@ -547,7 +627,7 @@ async function buildIndex() {
 	// Best-effort and after the backfill, so rows restored from cache keep the
 	// previous classification and council area they were built with when a host
 	// is unreachable.
-	await Promise.all([addPreviousClassifications(collected), addScottishRegions(collected)]);
+	await Promise.all([addClassificationHistory(collected), addScottishRegions(collected)]);
 
 	dedupeSlugs(collected);
 	// After dedupe, so the override is keyed by the slug the site actually

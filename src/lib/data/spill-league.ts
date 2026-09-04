@@ -54,6 +54,25 @@ export interface SpillLeague {
 	ranked: number;
 	/** Sites carrying an attributed record at all, in any year. */
 	withRecord: number;
+	/**
+	 * Sites that hold a record but have no comparable figure for `year`, so they
+	 * are missing from the table without being missing from the data.
+	 *
+	 * The two causes are kept apart because only one of them is an operator's
+	 * doing, and conflating them names companies for something they did not do.
+	 * `silentOperators` is the strong claim: an operator with absent sites here
+	 * and not one ranked site anywhere, meaning its return links no overflow to
+	 * any bathing water at all. For 2025 that is Yorkshire Water alone. Every
+	 * other absent site is an individual gap, and the other operators in the
+	 * list filed normally: Anglian has 32 ranked sites, Wessex 30, United
+	 * Utilities 28, Northumbrian 27.
+	 */
+	absent: {
+		count: number;
+		silentOperators: Array<{ name: string; count: number; previousYearCount: number }>;
+		/** Absent for a per-site reason rather than a whole-return omission. */
+		otherReasons: number;
+	};
 	/** Bathing waters in this place altogether. */
 	total: number;
 	/** Total spills across the ranked rows. */
@@ -137,6 +156,40 @@ export function getSpillLeaguePlaces(): Place[] {
 		.sort((a, b) => a.name.localeCompare(b.name, 'en-GB'));
 }
 
+/**
+ * Operators that appear among the absent sites and have not one ranked site,
+ * meaning their return for this year links no overflow to any bathing water.
+ * That is a checkable fact about a return, and the only absence claim strong
+ * enough to attach a company name to.
+ *
+ * `previousYearCount` is how many of those sites the same operator did link the
+ * year before, which is what turns "no data" into "stopped reporting".
+ */
+function findSilentOperators(
+	missing: Location[],
+	ranked: SpillLeagueEntry[],
+	year: number
+): Array<{ name: string; count: number; previousYearCount: number }> {
+	const rankedOperators = new Set(
+		ranked.map((e) => e.location.sewerageUndertaker).filter(Boolean) as string[]
+	);
+	const tally = new Map<string, Location[]>();
+	for (const l of missing) {
+		const name = l.sewerageUndertaker;
+		if (!name || rankedOperators.has(name)) continue;
+		tally.set(name, [...(tally.get(name) ?? []), l]);
+	}
+	return [...tally.entries()]
+		.map(([name, sites]) => ({
+			name,
+			count: sites.length,
+			previousYearCount: sites.filter((l) =>
+				comparableSpillYears(getSpillHistory(l.slug)?.attributed ?? []).some((y) => y.year === year - 1)
+			).length
+		}))
+		.sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'en-GB'));
+}
+
 export function getSpillLeague(slug: string): SpillLeague | null {
 	const place = getAllPlaces().find((p) => p.slug === slug);
 	if (!place || !isEnglish(place)) return null;
@@ -144,6 +197,20 @@ export function getSpillLeague(slug: string): SpillLeague | null {
 	const locations = locationsForPlace(place);
 	const ranked = rank(locations);
 	if (!ranked) return null;
+
+	const listed = new Set(ranked.entries.map((e) => e.location.slug));
+	const missing = locations.filter((l) => {
+		if (listed.has(l.slug)) return false;
+		const record = getSpillHistory(l.slug);
+		return Boolean(record) && comparableSpillYears(record?.attributed ?? []).length > 0;
+	});
+
+	// Only ever asserted nationally. An operator can have no ranked site inside
+	// one region simply because the region is small, so the same test on a
+	// regional page would accuse a company that filed perfectly well.
+	const silentOperators =
+		place.kind === 'country' ? findSilentOperators(missing, ranked.entries, ranked.year) : [];
+	const namedByOperator = silentOperators.reduce((sum, o) => sum + o.count, 0);
 
 	const childRegions = place.kind === 'country' ? getSpillLeaguePlaces() : [];
 	const parent =
@@ -158,6 +225,11 @@ export function getSpillLeague(slug: string): SpillLeague | null {
 		entries: ranked.entries,
 		ranked: ranked.entries.length,
 		withRecord: ranked.withRecord,
+		absent: {
+			count: missing.length,
+			silentOperators,
+			otherReasons: missing.length - namedByOperator
+		},
 		total: locations.length,
 		totalSpills: ranked.entries.reduce((sum, e) => sum + e.spills, 0),
 		childRegions,
