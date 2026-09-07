@@ -39,6 +39,56 @@ const OVERFLOW_ENDPOINTS: Record<string, string> = {
 		'https://services3.arcgis.com/KLNF7YxtENPLYVey/arcgis/rest/services/Spill_Prod__view/FeatureServer/0/query'
 };
 
+/**
+ * Each operator's own public storm-overflow map, so a reader can check a spill
+ * we report against the company that reported it. Keyed by the same operator
+ * names as OVERFLOW_ENDPOINTS, plus Thames Water, which is on its own API.
+ * The label is what the link says: the EA's legal names ("Dwr Cymru
+ * Cyfyngedig") are not what the company calls itself.
+ */
+const OPERATOR_MAPS: Record<string, { label: string; url: string }> = {
+	'Anglian Water Services Limited': {
+		label: 'Anglian Water',
+		url: 'https://www.anglianwater.co.uk/environment/storm-overflows/storm-overflow-map/'
+	},
+	'Southern Water Services Limited': {
+		label: 'Southern Water',
+		url: 'https://www.southernwater.co.uk/our-region/clean-rivers-and-seas-task-force/rivers-and-seas-watchi/'
+	},
+	'Northumbrian Water Limited': {
+		label: 'Northumbrian Water',
+		url: 'https://experience.arcgis.com/experience/38baf2cf48d74b8196539ef315bea6b5'
+	},
+	'South West Water Limited': {
+		label: 'South West Water',
+		url: 'https://www.southwestwater.co.uk/environment/rivers-and-bathing-waters/waterfitlive/storm-overflow-map'
+	},
+	'Yorkshire Water Services Ltd': {
+		label: 'Yorkshire Water',
+		url: 'https://www.yorkshirewater.com/environment/river-health/storm-overflow-investment/live-map/'
+	},
+	'United Utilities Water Limited': {
+		label: 'United Utilities',
+		url: 'https://www.unitedutilities.com/better-rivers/storm-overflow-map/'
+	},
+	'Severn Trent Water Limited': {
+		label: 'Severn Trent',
+		url: 'https://www.stwater.co.uk/in-my-area/storm-overflow-map/'
+	},
+	'Wessex Water Services Limited': {
+		label: 'Wessex Water',
+		url: 'https://www.wessexwater.co.uk/your-wastewater/coast-and-rivers-watch'
+	},
+	'Dwr Cymru Cyfyngedig': {
+		label: 'Welsh Water',
+		url: 'https://corporate.dwrcymru.com/en/community/environment/storm-overflow-map'
+	},
+	'Thames Water Utilities Limited': {
+		label: 'Thames Water',
+		url: 'https://www.thameswater.co.uk/edm-map'
+	}
+};
+
 function normaliseOperatorKey(input: string): string {
 	return input
 		.toLowerCase()
@@ -47,6 +97,21 @@ function normaliseOperatorKey(input: string): string {
 		.replace(/\blimited\b|\bltd\b/g, '')
 		.replace(/cyfyngedig/g, '')
 		.replace(/[^a-z]+/g, '');
+}
+
+const NORMALISED_MAPS = new Map<string, { label: string; url: string }>();
+for (const [name, entry] of Object.entries(OPERATOR_MAPS)) {
+	NORMALISED_MAPS.set(normaliseOperatorKey(name), entry);
+}
+
+/**
+ * The operator's own map for a site, so the page can offer a second source for
+ * a spill it reports. Null where we have no map, which is every site outside
+ * England and Wales.
+ */
+export function operatorMap(name: string | undefined): { label: string; url: string } | null {
+	if (!name) return null;
+	return NORMALISED_MAPS.get(normaliseOperatorKey(name)) ?? null;
 }
 
 const NORMALISED_ENDPOINTS = new Map<string, string>();

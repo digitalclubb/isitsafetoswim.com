@@ -396,10 +396,20 @@
 				>
 					<h2 id="discharges">Recent sewage discharges nearby</h2>
 					<p class="muted">
-						Storm overflows operated by {location.sewerageUndertaker ?? 'the local water company'}
-						within ten kilometres in the last 48 hours.
+						Storm overflows operated by {live.dischargeMap?.label ??
+							location.sewerageUndertaker ??
+							'the local water company'} within ten kilometres in the last 48 hours.
 					</p>
 					<DischargeList discharges={live.recentDischarges} />
+					{#if live.dischargeMap}
+						<p class="more">
+							<a href={live.dischargeMap.url} rel="nofollow noopener" target="_blank">
+								See {live.dischargeMap.label}'s own storm-overflow map<span
+									class="sr-only"> (opens in a new tab)</span
+								> →
+							</a>
+						</p>
+					{/if}
 					<p class="more">
 						<a href="/spills">See every spill happening now across the UK →</a>
 					</p>

@@ -20,7 +20,8 @@ vi.mock('./profile', () => ({
 vi.mock('./discharges', () => ({
 	fetchRecentDischarges: async () => [],
 	hasDischargeFeed: () => true,
-	isThamesWater: () => false
+	isThamesWater: () => false,
+	operatorMap: () => null
 }));
 
 const BRIGHTON: Location = {

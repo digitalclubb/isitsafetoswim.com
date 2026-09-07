@@ -18,6 +18,7 @@ function live(country: Country, partial: Partial<LiveLocationData> = {}): LiveLo
 		latestSample: null,
 		riskForecast: null,
 		recentDischarges: [],
+		dischargeMap: null,
 		hasDischargeFeed: false,
 		rainfall24hMm: null,
 		sampleHistory: [],

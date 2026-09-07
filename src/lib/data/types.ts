@@ -142,6 +142,11 @@ export interface LiveLocationData {
 	 * `recentDischarges` is an all-clear only when this is true.
 	 */
 	hasDischargeFeed: boolean;
+	/**
+	 * The operator's own public storm-overflow map, so a reader can check a spill
+	 * we report against the company that reported it. Null where we have none.
+	 */
+	dischargeMap: { label: string; url: string } | null;
 	rainfall24hMm: number | null;
 	sampleHistory: RecentSample[];
 	seaTemperatureC: number | null;

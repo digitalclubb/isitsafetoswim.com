@@ -8,7 +8,7 @@ import type {
 } from '$lib/data/types';
 import { decideAt, emptyVerdict } from '$lib/verdict/engine';
 import { attributionFor, type OverflowSource } from './attribution';
-import { fetchRecentDischarges, hasDischargeFeed, isThamesWater } from './discharges';
+import { fetchRecentDischarges, hasDischargeFeed, isThamesWater, operatorMap } from './discharges';
 import { fetchSampleHistory } from './history';
 import { fetchProfile, type ProfileFetchResult } from './profile';
 import { fetchRainfall24h } from './rainfall';
@@ -85,6 +85,7 @@ function assemble(
 		riskForecast: profile?.riskForecast ?? null,
 		recentDischarges,
 		hasDischargeFeed: hasDischargeFeed(location),
+		dischargeMap: operatorMap(location.sewerageUndertaker),
 		rainfall24hMm,
 		sampleHistory,
 		seaTemperatureC,

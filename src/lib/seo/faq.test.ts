@@ -20,6 +20,7 @@ function base(): LiveLocationData {
 		latestSample: null,
 		riskForecast: null,
 		recentDischarges: [],
+		dischargeMap: null,
 		hasDischargeFeed: true,
 		rainfall24hMm: 0,
 		sampleHistory: [],
