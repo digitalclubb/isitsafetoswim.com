@@ -36,7 +36,7 @@
 		--tone-color: var(--no);
 	}
 	.temp[data-tone='neutral'] {
-		--tone-color: var(--rule-strong);
+		--tone-color: var(--ink-muted);
 	}
 
 	.reading {

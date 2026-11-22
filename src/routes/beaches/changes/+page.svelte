@@ -225,7 +225,7 @@
 	}
 
 	.arrow {
-		color: var(--rule-strong);
+		color: var(--ink-muted);
 	}
 
 	.to {

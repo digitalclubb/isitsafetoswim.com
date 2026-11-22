@@ -292,7 +292,7 @@
 		font-style: italic;
 		font-size: clamp(40px, 6vw, 64px);
 		line-height: 1;
-		color: var(--rule-strong);
+		color: var(--ink-muted);
 		text-align: right;
 		letter-spacing: -0.02em;
 	}

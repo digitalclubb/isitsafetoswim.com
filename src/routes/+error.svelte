@@ -37,7 +37,7 @@
 		font-family: var(--font-serif);
 		font-size: var(--text-4xl);
 		line-height: 1;
-		color: var(--rule-strong);
+		color: var(--ink-muted);
 		margin: 0 0 var(--space-3);
 	}
 
