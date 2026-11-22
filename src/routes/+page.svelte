@@ -70,21 +70,18 @@
 			<NearMeButton />
 		</div>
 
-		<p class="map-link">
-			<a href="/map" data-sveltekit-preload-data="hover"
-				>Or see the safe beaches nearest you today →</a
-			>
-		</p>
-
-		<p class="map-link">
-			<a href="/spills" data-sveltekit-preload-data="hover">Sewage spills happening now →</a>
-		</p>
+		<ul class="quick-links">
+			<li>
+				<a href="/map" data-sveltekit-preload-data="hover">Map of safe beaches today →</a>
+			</li>
+			<li><a href="/spills" data-sveltekit-preload-data="hover">Sewage spills now →</a></li>
+			<li><a href="/beaches">Browse by area →</a></li>
+		</ul>
 
 		<p class="coverage">
-			Every designated bathing water in <a href="/beaches/england">England</a>,
+			{data.meta.count} designated bathing waters across <a href="/beaches/england">England</a>,
 			<a href="/beaches/wales">Wales</a>, <a href="/beaches/scotland">Scotland</a> and
-			<a href="/beaches/northern-ireland">Northern Ireland</a>. {data.meta.count} sites in total.
-			<a href="/beaches">Browse by area →</a>
+			<a href="/beaches/northern-ireland">Northern Ireland</a>.
 		</p>
 	</div>
 </section>
@@ -218,17 +215,26 @@
 		background: var(--rule);
 	}
 
-	.map-link {
-		margin: var(--space-4) 0 0;
+	/* One wrapping row rather than three stacked lines, so the cards start
+	   higher on a phone. */
+	.quick-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-2) var(--space-5);
+		margin: var(--space-5) 0 0;
+		padding: 0;
+		list-style: none;
 		font-size: var(--text-sm);
 	}
 
-	.map-link a {
+	.quick-links a {
+		display: inline-block;
+		padding-block: var(--space-2);
 		text-decoration: none;
 	}
 
 	.coverage {
-		margin: var(--space-7) 0 0;
+		margin: var(--space-4) 0 0;
 		font-size: var(--text-sm);
 		color: var(--ink-soft);
 		max-width: 48ch;
