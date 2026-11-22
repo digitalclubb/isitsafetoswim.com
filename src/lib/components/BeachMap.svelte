@@ -1,5 +1,8 @@
 <script lang="ts">
 	import 'maplibre-gl/dist/maplibre-gl.css';
+	// MapLibre 6 locates its worker with a runtime URL the bundler cannot see,
+	// so the worker is bundled here and its URL handed over before first use.
+	import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 	import { PUBLIC_BASEMAP_URL } from '$app/env/public';
 	import type { SearchLocation } from '#lib/data/search-index.ts';
 	import type { Verdict } from '#lib/data/types.ts';
@@ -54,7 +57,8 @@
 	onMount(() => {
 		let cleanup = () => {};
 		(async () => {
-			maplibre = (await import('maplibre-gl')).default;
+			maplibre = await import('maplibre-gl');
+			maplibre.setWorkerUrl(maplibreWorkerUrl);
 			const { Protocol } = await import('pmtiles');
 			const { layers, GRAYSCALE } = await import('@protomaps/basemaps');
 
