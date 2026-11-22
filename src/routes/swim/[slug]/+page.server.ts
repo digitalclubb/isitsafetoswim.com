@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { getLocationBySlug } from '#lib/data/locations.ts';
 import { getHubForLocation } from '#lib/data/places.ts';
-import { getSpillHistory } from '#lib/data/spill-history.ts';
+import { getSpillHistory, getSpillHistoryMeta } from '#lib/data/spill-history.ts';
 import { getSpillLeaguePlaces } from '#lib/data/spill-league.ts';
 import { buildPageData, type CachedSignals } from '#lib/live/verdict.ts';
 import { readProfiles, readRainfall } from '#lib/map/kv.ts';
@@ -56,6 +56,7 @@ export const load: PageServerLoad = async ({ params, request, setHeaders }) => {
 		location,
 		live: await buildPageData(location, cached, request.signal),
 		hub: { slug: hub.slug, name: hub.name, leaguePath },
-		spillHistory: getSpillHistory(location.slug)
+		spillHistory: getSpillHistory(location.slug),
+		spillMeta: getSpillHistoryMeta()
 	};
 };

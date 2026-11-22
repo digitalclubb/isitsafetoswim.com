@@ -1,13 +1,5 @@
-import { getFeaturedLocations } from '#lib/data/featured.ts';
-import { getIndexMeta } from '#lib/data/locations.ts';
 import { getSearchIndex } from '#lib/data/search-index.ts';
 
-export const prerender = true;
-
-export const load = () => {
-	return {
-		meta: getIndexMeta(),
-		featured: getFeaturedLocations(),
-		searchIndex: getSearchIndex()
-	};
-};
+// The slim search index stays universal so it rides in the chunk the map and
+// location pages already share and cache, rather than inline in this page's HTML.
+export const load = ({ data }) => ({ ...data, searchIndex: getSearchIndex() });

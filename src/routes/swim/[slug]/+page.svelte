@@ -14,7 +14,7 @@
 	import WaterTemperature from '#lib/components/WaterTemperature.svelte';
 	import { findNearestSlim } from '#lib/data/search-index.ts';
 	import type { RecentSample } from '#lib/data/types.ts';
-	import { comparableSpillYears, getSpillHistoryMeta } from '#lib/data/spill-history.ts';
+	import { comparableSpillYears } from '#lib/data/spill-history.ts';
 	import { coverageNotice, hasLiveSignals } from '#lib/live/coverage.ts';
 	import { buildFaq } from '#lib/seo/faq.ts';
 	import { safeJsonLd } from '#lib/seo/jsonLd.ts';
@@ -154,7 +154,7 @@
 	);
 	// Named in the sources list, because five-year totals on a page whose
 	// premise is "today" need to say plainly that they are an annual return.
-	const spillMeta = getSpillHistoryMeta();
+	const spillMeta = $derived(data.spillMeta);
 	let spillHeading = $derived(
 		spillYears ? `Sewage spills, ${spillYears}` : 'Storm overflows nearby'
 	);
