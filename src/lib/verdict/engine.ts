@@ -8,8 +8,8 @@ import type {
 	Verdict,
 	VerdictFactor,
 	VerdictResult
-} from '$lib/data/types';
-import { londonFullDate } from '$lib/util/time';
+} from '#lib/data/types.ts';
+import { londonFullDate } from '#lib/util/time.ts';
 
 /**
  * The verdict engine combines four signals into one British-English answer:

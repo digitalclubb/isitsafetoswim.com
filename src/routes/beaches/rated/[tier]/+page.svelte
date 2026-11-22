@@ -1,7 +1,7 @@
 <script lang="ts">
-	import LocationCard from '$lib/components/LocationCard.svelte';
-	import { safeJsonLd } from '$lib/seo/jsonLd';
-	import { joinList } from '$lib/util/text';
+	import LocationCard from '#lib/components/LocationCard.svelte';
+	import { safeJsonLd } from '#lib/seo/jsonLd.ts';
+	import { joinList } from '#lib/util/text.ts';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();

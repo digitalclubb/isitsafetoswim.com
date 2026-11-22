@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { VerdictResult } from '$lib/data/types';
-	import { londonClock, londonDate, londonIsoDate, londonIsoDateTime } from '$lib/util/time';
+	import type { VerdictResult } from '#lib/data/types.ts';
+	import { londonClock, londonDate, londonIsoDate, londonIsoDateTime } from '#lib/util/time.ts';
 
 	let {
 		verdict,

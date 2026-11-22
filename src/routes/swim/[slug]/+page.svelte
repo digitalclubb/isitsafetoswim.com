@@ -1,31 +1,31 @@
 <script lang="ts">
 	import { fade, slide } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
-	import ClassificationHistory from '$lib/components/ClassificationHistory.svelte';
-	import DischargeList from '$lib/components/DischargeList.svelte';
-	import FactorList from '$lib/components/FactorList.svelte';
-	import LocationCard from '$lib/components/LocationCard.svelte';
-	import SampleHistory from '$lib/components/SampleHistory.svelte';
-	import SampleSummary from '$lib/components/SampleSummary.svelte';
-	import SpillHistory from '$lib/components/SpillHistory.svelte';
-	import SupportNote from '$lib/components/SupportNote.svelte';
-	import TideTimes from '$lib/components/TideTimes.svelte';
-	import Verdict from '$lib/components/Verdict.svelte';
-	import WaterTemperature from '$lib/components/WaterTemperature.svelte';
-	import { findNearestSlim } from '$lib/data/search-index';
-	import type { RecentSample } from '$lib/data/types';
-	import { comparableSpillYears, getSpillHistoryMeta } from '$lib/data/spill-history';
-	import { coverageNotice, hasLiveSignals } from '$lib/live/coverage';
-	import { buildFaq } from '$lib/seo/faq';
-	import { safeJsonLd } from '$lib/seo/jsonLd';
+	import ClassificationHistory from '#lib/components/ClassificationHistory.svelte';
+	import DischargeList from '#lib/components/DischargeList.svelte';
+	import FactorList from '#lib/components/FactorList.svelte';
+	import LocationCard from '#lib/components/LocationCard.svelte';
+	import SampleHistory from '#lib/components/SampleHistory.svelte';
+	import SampleSummary from '#lib/components/SampleSummary.svelte';
+	import SpillHistory from '#lib/components/SpillHistory.svelte';
+	import SupportNote from '#lib/components/SupportNote.svelte';
+	import TideTimes from '#lib/components/TideTimes.svelte';
+	import Verdict from '#lib/components/Verdict.svelte';
+	import WaterTemperature from '#lib/components/WaterTemperature.svelte';
+	import { findNearestSlim } from '#lib/data/search-index.ts';
+	import type { RecentSample } from '#lib/data/types.ts';
+	import { comparableSpillYears, getSpillHistoryMeta } from '#lib/data/spill-history.ts';
+	import { coverageNotice, hasLiveSignals } from '#lib/live/coverage.ts';
+	import { buildFaq } from '#lib/seo/faq.ts';
+	import { safeJsonLd } from '#lib/seo/jsonLd.ts';
 	import {
 		londonClock,
 		londonDayAndMonth,
 		londonFullDate,
 		londonIsoDateTime,
 		newestTimestamp
-	} from '$lib/util/time';
-	import { bathingSeasonActive, seasonLabels } from '$lib/verdict/engine';
+	} from '#lib/util/time.ts';
+	import { bathingSeasonActive, seasonLabels } from '#lib/verdict/engine.ts';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();

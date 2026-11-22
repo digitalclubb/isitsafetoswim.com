@@ -1,9 +1,9 @@
 <script lang="ts">
 	import 'maplibre-gl/dist/maplibre-gl.css';
-	import { env } from '$env/dynamic/public';
-	import type { SearchLocation } from '$lib/data/search-index';
-	import type { Verdict } from '$lib/data/types';
-	import { UNKNOWN_HEX, verdictHex } from '$lib/map/colours';
+	import { PUBLIC_BASEMAP_URL } from '$app/env/public';
+	import type { SearchLocation } from '#lib/data/search-index.ts';
+	import type { Verdict } from '#lib/data/types.ts';
+	import { UNKNOWN_HEX, verdictHex } from '#lib/map/colours.ts';
 	import { onMount } from 'svelte';
 
 	let {
@@ -19,7 +19,7 @@
 	// The UK basemap is served from static/uk.pmtiles by default. Override with
 	// PUBLIC_BASEMAP_URL to point at a hosted file instead. Until the file exists
 	// the request 404s harmlessly and the pins render on a plain background.
-	const basemapUrl = env.PUBLIC_BASEMAP_URL || '/uk.pmtiles';
+	const basemapUrl = PUBLIC_BASEMAP_URL ?? '/uk.pmtiles';
 
 	let container: HTMLDivElement;
 	// biome-ignore lint: the maplibre types are loaded dynamically below.

@@ -4,7 +4,7 @@
 		latestSpillYear,
 		type SpillRecord,
 		spillTrend
-	} from '$lib/data/spill-history';
+	} from '#lib/data/spill-history.ts';
 
 	let {
 		record,

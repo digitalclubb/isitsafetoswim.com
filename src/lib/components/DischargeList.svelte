@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { DischargeEvent } from '$lib/data/types';
+	import type { DischargeEvent } from '#lib/data/types.ts';
 
 	let { discharges }: { discharges: DischargeEvent[] } = $props();
 

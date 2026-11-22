@@ -1,8 +1,8 @@
-import { classificationChange } from '$lib/data/rating';
-import type { LiveLocationData, RecentSample } from '$lib/data/types';
-import { joinList } from '$lib/util/text';
-import { londonFullDate } from '$lib/util/time';
-import { SAMPLE_CURRENT_DAYS } from '$lib/verdict/engine';
+import { classificationChange } from '#lib/data/rating.ts';
+import type { LiveLocationData, RecentSample } from '#lib/data/types.ts';
+import { joinList } from '#lib/util/text.ts';
+import { londonFullDate } from '#lib/util/time.ts';
+import { SAMPLE_CURRENT_DAYS } from '#lib/verdict/engine.ts';
 
 /**
  * The three questions the location page answers in the words search uses.

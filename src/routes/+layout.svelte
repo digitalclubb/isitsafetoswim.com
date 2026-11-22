@@ -1,12 +1,13 @@
 <script lang="ts">
-	import '$lib/styles/app.css';
-	import Masthead from '$lib/components/Masthead.svelte';
-	import NavProgress from '$lib/components/NavProgress.svelte';
-	import SiteFooter from '$lib/components/SiteFooter.svelte';
+	import '#lib/styles/app.css';
+	import Masthead from '#lib/components/Masthead.svelte';
+	import NavProgress from '#lib/components/NavProgress.svelte';
+	import SiteFooter from '#lib/components/SiteFooter.svelte';
 	import { onNavigate } from '$app/navigation';
 	import { navigating, page } from '$app/state';
-	import { injectAnalytics } from '@vercel/analytics/sveltekit';
-	import { redactAnalyticsUrl } from '$lib/util/redact';
+	import { browser } from '$app/env';
+	import { inject, pageview } from '@vercel/analytics';
+	import { redactAnalyticsUrl } from '#lib/util/redact.ts';
 
 	let { children } = $props();
 
@@ -18,8 +19,24 @@
 	// they search, and the coordinates the near-me button writes into the query
 	// string. beforeSend keeps the route and drops both, so the counts show how
 	// often each search is used without recording who used it from where.
-	injectAnalytics({
-		beforeSend: (event) => ({ ...event, url: redactAnalyticsUrl(event.url) })
+	//
+	// This is @vercel/analytics/sveltekit's injectAnalytics on $app/state: that
+	// wrapper subscribes to $app/stores, which throws under SvelteKit 3. Swap
+	// back once the package supports Kit 3.
+	if (browser) {
+		inject(
+			{
+				beforeSend: (event) => ({ ...event, url: redactAnalyticsUrl(event.url) }),
+				basePath: import.meta.env.VITE_VERCEL_OBSERVABILITY_BASEPATH,
+				disableAutoTrack: true,
+				framework: 'sveltekit'
+			},
+			import.meta.env.VITE_VERCEL_OBSERVABILITY_CLIENT_CONFIG
+		);
+	}
+
+	$effect(() => {
+		if (page.route.id) pageview({ route: page.route.id, path: page.url.pathname });
 	});
 
 	let current: '' | 'home' | 'map' | 'areas' | 'spills' | 'about' = $derived(

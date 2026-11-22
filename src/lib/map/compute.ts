@@ -1,10 +1,10 @@
-import { getAllLocations } from '$lib/data/locations';
-import type { DischargeEvent, Location, Verdict } from '$lib/data/types';
-import { fetchRecentDischarges } from '$lib/live/discharges';
-import type { ProfileFetchResult } from '$lib/live/profile';
-import { fetchRainfallByLocation } from '$lib/live/rainfall';
-import { deriveVerdict } from '$lib/live/verdict';
-import { mapPool } from '$lib/util/pool';
+import { getAllLocations } from '#lib/data/locations.ts';
+import type { DischargeEvent, Location, Verdict } from '#lib/data/types.ts';
+import { fetchRecentDischarges } from '#lib/live/discharges.ts';
+import type { ProfileFetchResult } from '#lib/live/profile.ts';
+import { fetchRainfallByLocation } from '#lib/live/rainfall.ts';
+import { deriveVerdict } from '#lib/live/verdict.ts';
+import { mapPool } from '#lib/util/pool.ts';
 import { readProfiles, readRainfall } from './kv';
 import { assembleColours, assembleRainfall, hasUsableCoverage, rainfallFrom } from './precompute';
 import type { ProfileCache } from './profiles';

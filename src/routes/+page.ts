@@ -1,6 +1,6 @@
-import { getFeaturedLocations } from '$lib/data/featured';
-import { getIndexMeta } from '$lib/data/locations';
-import { getSearchIndex } from '$lib/data/search-index';
+import { getFeaturedLocations } from '#lib/data/featured.ts';
+import { getIndexMeta } from '#lib/data/locations.ts';
+import { getSearchIndex } from '#lib/data/search-index.ts';
 
 export const prerender = true;
 

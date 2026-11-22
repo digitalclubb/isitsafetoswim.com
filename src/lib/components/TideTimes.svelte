@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { TideInfo } from '$lib/data/types';
-	import { londonClock, londonIsoDate, londonIsoDateTime, londonWeekday } from '$lib/util/time';
+	import type { TideInfo } from '#lib/data/types.ts';
+	import { londonClock, londonIsoDate, londonIsoDateTime, londonWeekday } from '#lib/util/time.ts';
 
 	let { tide }: { tide: TideInfo } = $props();
 

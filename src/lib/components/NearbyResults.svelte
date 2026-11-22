@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import type { SearchLocation } from '$lib/data/search-index';
-	import type { Verdict } from '$lib/data/types';
-	import type { MapColours } from '$lib/map/types';
+	import type { SearchLocation } from '#lib/data/search-index.ts';
+	import type { Verdict } from '#lib/data/types.ts';
+	import type { MapColours } from '#lib/map/types.ts';
 	import LocationCard from './LocationCard.svelte';
 
 	let {

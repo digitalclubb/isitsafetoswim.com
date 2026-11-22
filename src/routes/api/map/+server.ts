@@ -1,5 +1,4 @@
-import { json } from '@sveltejs/kit';
-import { readColours } from '$lib/map/kv';
+import { readColours } from '#lib/map/kv.ts';
 import type { RequestHandler } from './$types';
 
 export const prerender = false;
@@ -23,5 +22,5 @@ export const GET: RequestHandler = async ({ setHeaders }) => {
 			: 'public, s-maxage=60, stale-while-revalidate=300',
 		'content-type': 'application/json; charset=utf-8'
 	});
-	return json(blob ?? { generatedAt: '', colours: {} });
+	return Response.json(blob ?? { generatedAt: '', colours: {} });
 };

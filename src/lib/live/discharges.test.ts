@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getAllLocations } from '$lib/data/locations';
+import { getAllLocations } from '#lib/data/locations.ts';
 import { hasDischargeFeed, isDischarging, operatorMap } from './discharges';
 
 describe('isDischarging', () => {

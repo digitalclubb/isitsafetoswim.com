@@ -1,5 +1,5 @@
-import { getTierSummaries } from '$lib/data/classifications';
-import { getAllPlaces } from '$lib/data/places';
+import { getTierSummaries } from '#lib/data/classifications.ts';
+import { getAllPlaces } from '#lib/data/places.ts';
 import type { PageServerLoad } from './$types';
 
 export const prerender = true;

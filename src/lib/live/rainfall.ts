@@ -1,5 +1,5 @@
-import type { Location } from '$lib/data/types';
-import { mapPool } from '$lib/util/pool';
+import type { Location } from '#lib/data/types.ts';
+import { mapPool } from '#lib/util/pool.ts';
 import { haversineMetres } from './geo';
 import { fetchJson } from './http';
 

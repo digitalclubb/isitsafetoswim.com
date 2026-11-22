@@ -1,4 +1,4 @@
-import type { Country } from '$lib/data/types';
+import type { Country } from '#lib/data/types.ts';
 
 const EA = 'Contains Environment Agency information © Environment Agency and database right';
 const NRW = 'Contains Natural Resources Wales information © NRW and database right';

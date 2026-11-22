@@ -1,5 +1,5 @@
-import { distanceMetres } from '$lib/data/search-index';
-import type { Verdict } from '$lib/data/types';
+import { distanceMetres } from '#lib/data/search-index.ts';
+import type { Verdict } from '#lib/data/types.ts';
 import type { MapPoint } from './types';
 
 export interface NearbyPoint {

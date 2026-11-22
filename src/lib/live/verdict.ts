@@ -5,8 +5,8 @@ import type {
 	RecentSample,
 	TideInfo,
 	VerdictResult
-} from '$lib/data/types';
-import { decideAt, emptyVerdict } from '$lib/verdict/engine';
+} from '#lib/data/types.ts';
+import { decideAt, emptyVerdict } from '#lib/verdict/engine.ts';
 import { attributionFor, type OverflowSource } from './attribution';
 import { fetchRecentDischarges, hasDischargeFeed, isThamesWater, operatorMap } from './discharges';
 import { fetchSampleHistory } from './history';

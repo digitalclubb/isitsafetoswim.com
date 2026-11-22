@@ -1,4 +1,4 @@
-import type { Country, DischargeEvent } from '$lib/data/types';
+import type { Country, DischargeEvent } from '#lib/data/types.ts';
 import type { Spill } from './types';
 
 export interface SpillSource {

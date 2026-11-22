@@ -1,7 +1,7 @@
-import { getAllLocations } from '$lib/data/locations';
-import type { Location } from '$lib/data/types';
-import { fetchProfile, type ProfileFetchResult } from '$lib/live/profile';
-import { pacedMap } from '$lib/util/pool';
+import { getAllLocations } from '#lib/data/locations.ts';
+import type { Location } from '#lib/data/types.ts';
+import { fetchProfile, type ProfileFetchResult } from '#lib/live/profile.ts';
+import { pacedMap } from '#lib/util/pool.ts';
 
 export interface ProfileCache {
 	generatedAt: string;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { seaTemperatureBand } from '$lib/live/temperature';
+	import { seaTemperatureBand } from '#lib/live/temperature.ts';
 
 	let { celsius }: { celsius: number } = $props();
 

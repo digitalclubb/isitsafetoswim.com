@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { DischargeEvent, LiveLocationData, RecentSample } from '$lib/data/types';
+import type { DischargeEvent, LiveLocationData, RecentSample } from '#lib/data/types.ts';
 import { buildFaq } from './faq';
 
 const NOW = '2026-07-15T10:00:00Z';

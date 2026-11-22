@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Classification } from '$lib/data/types';
-	import { joinList } from '$lib/util/text';
+	import type { Classification } from '#lib/data/types.ts';
+	import { joinList } from '#lib/util/text.ts';
 
 	let {
 		history,

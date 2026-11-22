@@ -1,9 +1,9 @@
 <script lang="ts">
-	import LocationCard from '$lib/components/LocationCard.svelte';
-	import { RATED_TIERS } from '$lib/data/rating';
-	import type { Classification } from '$lib/data/types';
-	import { safeJsonLd } from '$lib/seo/jsonLd';
-	import { joinList } from '$lib/util/text';
+	import LocationCard from '#lib/components/LocationCard.svelte';
+	import { RATED_TIERS } from '#lib/data/rating.ts';
+	import type { Classification } from '#lib/data/types.ts';
+	import { safeJsonLd } from '#lib/seo/jsonLd.ts';
+	import { joinList } from '#lib/util/text.ts';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();

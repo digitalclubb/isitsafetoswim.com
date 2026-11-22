@@ -1,4 +1,4 @@
-import type { Classification, Location, RecentSample, RiskForecast } from '$lib/data/types';
+import type { Classification, Location, RecentSample, RiskForecast } from '#lib/data/types.ts';
 import { fetchDaeraForecast } from './daera';
 import { fetchJson } from './http';
 import { fetchSepaForecast } from './sepa';

@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
-import { getAllPlaces, getPlaceBySlug } from '$lib/data/places';
-import type { Location } from '$lib/data/types';
+import { getAllPlaces, getPlaceBySlug } from '#lib/data/places.ts';
+import type { Location } from '#lib/data/types.ts';
 import type { EntryGenerator, PageServerLoad } from './$types';
 
 export const prerender = true;

@@ -1,5 +1,5 @@
-import type { DischargeEvent, Location } from '$lib/data/types';
-import { parseLondonNaive } from '$lib/util/time';
+import type { DischargeEvent, Location } from '#lib/data/types.ts';
+import { parseLondonNaive } from '#lib/util/time.ts';
 import { haversineMetres, osgb36ToWgs84 } from './geo';
 import { fetchJson } from './http';
 

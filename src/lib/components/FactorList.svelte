@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { VerdictFactor } from '$lib/data/types';
+	import type { VerdictFactor } from '#lib/data/types.ts';
 
 	let { factors }: { factors: VerdictFactor[] } = $props();
 

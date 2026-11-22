@@ -1,4 +1,4 @@
-import type { Verdict } from '$lib/data/types';
+import type { Verdict } from '#lib/data/types.ts';
 
 interface VerdictStyle {
 	hex: string;

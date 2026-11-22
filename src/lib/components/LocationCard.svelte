@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { isAdverseRating, ratingLabel } from '$lib/data/rating';
-	import type { Classification, Country, CurrentAssessment, Verdict } from '$lib/data/types';
-	import { verdictLabel } from '$lib/map/colours';
+	import { isAdverseRating, ratingLabel } from '#lib/data/rating.ts';
+	import type { Classification, Country, CurrentAssessment, Verdict } from '#lib/data/types.ts';
+	import { verdictLabel } from '#lib/map/colours.ts';
 
 	interface CardLocation {
 		slug: string;

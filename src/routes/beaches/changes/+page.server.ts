@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
-import type { ClassificationMove } from '$lib/data/changes';
-import { getClassificationChanges } from '$lib/data/changes';
-import { getIndexMeta } from '$lib/data/locations';
+import type { ClassificationMove } from '#lib/data/changes.ts';
+import { getClassificationChanges } from '#lib/data/changes.ts';
+import { getIndexMeta } from '#lib/data/locations.ts';
 import type { PageServerLoad } from './$types';
 
 export const prerender = true;

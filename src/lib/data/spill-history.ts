@@ -1,4 +1,4 @@
-import spillHistoryJson from '$data/spill-history.json';
+import spillHistoryJson from '../../data/spill-history.json';
 
 /**
  * The per-bathing-water storm-overflow record, compiled from the Environment

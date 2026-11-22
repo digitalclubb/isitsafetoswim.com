@@ -1,6 +1,6 @@
-import { error, json } from '@sveltejs/kit';
-import { getLocationById, getLocationBySlug } from '$lib/data/locations';
-import { fetchSampleHistory } from '$lib/live/history';
+import { error } from '@sveltejs/kit';
+import { getLocationById, getLocationBySlug } from '#lib/data/locations.ts';
+import { fetchSampleHistory } from '#lib/live/history.ts';
 import type { RequestHandler } from './$types';
 
 export const prerender = false;
@@ -29,5 +29,5 @@ export const GET: RequestHandler = async ({ params, setHeaders, request }) => {
 		'content-type': 'application/json; charset=utf-8',
 		vary: 'Accept-Encoding'
 	});
-	return json({ sampleHistory });
+	return Response.json({ sampleHistory });
 };

@@ -1,4 +1,4 @@
-import type { Country, LiveLocationData } from '$lib/data/types';
+import type { Country, LiveLocationData } from '#lib/data/types.ts';
 
 /**
  * What the page should say about how much live data stands behind this verdict.

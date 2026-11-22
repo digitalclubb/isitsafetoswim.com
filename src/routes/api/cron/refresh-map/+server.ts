@@ -1,7 +1,7 @@
-import { error, json } from '@sveltejs/kit';
-import { env } from '$env/dynamic/private';
-import { computeMapColours } from '$lib/map/compute';
-import { writeColours, writeRainfall, writeSpills } from '$lib/map/kv';
+import { error } from '@sveltejs/kit';
+import { computeMapColours } from '#lib/map/compute.ts';
+import { writeColours, writeRainfall, writeSpills } from '#lib/map/kv.ts';
+import { CRON_SECRET } from '$app/env/private';
 import type { RequestHandler } from './$types';
 
 export const prerender = false;
@@ -19,7 +19,7 @@ export const config = {
  * bearer token on scheduled invocations.
  */
 export const GET: RequestHandler = async ({ request }) => {
-	const secret = env.CRON_SECRET;
+	const secret = CRON_SECRET;
 	if (!secret || request.headers.get('authorization') !== `Bearer ${secret}`) {
 		throw error(401, 'unauthorised');
 	}
@@ -47,7 +47,7 @@ export const GET: RequestHandler = async ({ request }) => {
 	// longer drops beaches, but a catastrophic failure (e.g. the whole compute)
 	// still should not overwrite a good snapshot with a mostly-neutral one.
 	if (computed < total * 0.5) {
-		return json({
+		return Response.json({
 			ok: false,
 			reason: 'too few beaches computed, keeping the previous snapshot',
 			computed,
@@ -62,7 +62,7 @@ export const GET: RequestHandler = async ({ request }) => {
 	// rather than a mostly-empty one.
 	await writeColours(blob);
 	await writeSpills({ generatedAt: blob.generatedAt, spills });
-	return json({
+	return Response.json({
 		ok: true,
 		generatedAt: blob.generatedAt,
 		computed,

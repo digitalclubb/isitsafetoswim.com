@@ -1,4 +1,4 @@
-import type { Location, RecentSample } from '$lib/data/types';
+import type { Location, RecentSample } from '#lib/data/types.ts';
 import { fetchJson } from './http';
 
 /**

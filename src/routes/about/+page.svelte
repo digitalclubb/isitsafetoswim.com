@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SupportNote from '$lib/components/SupportNote.svelte';
+	import SupportNote from '#lib/components/SupportNote.svelte';
 </script>
 
 <svelte:head>

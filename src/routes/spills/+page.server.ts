@@ -1,4 +1,4 @@
-import { readSpills } from '$lib/map/kv';
+import { readSpills } from '#lib/map/kv.ts';
 import type { PageServerLoad } from './$types';
 
 export const config = {

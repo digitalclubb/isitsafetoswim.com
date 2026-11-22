@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { DischargeEvent } from '$lib/data/types';
+import type { DischargeEvent } from '#lib/data/types.ts';
 import { _internals, bathingSeasonActive, decideAt, evaluateVerdict, seasonLabels } from './engine';
 
 const summerNow = new Date('2026-07-15T10:00:00Z');

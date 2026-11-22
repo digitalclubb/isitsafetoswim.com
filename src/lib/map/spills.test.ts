@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { DischargeEvent } from '$lib/data/types';
+import type { DischargeEvent } from '#lib/data/types.ts';
 import { aggregateSpills, type SpillSource } from './spills';
 
 function source(over: Partial<SpillSource> & { discharges: DischargeEvent[] }): SpillSource {

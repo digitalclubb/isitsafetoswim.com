@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import BeachMap from '$lib/components/BeachMap.svelte';
-	import type { Verdict } from '$lib/data/types';
-	import { UNKNOWN_HEX, VERDICT_LEGEND, verdictHex } from '$lib/map/colours';
-	import { nearestSafe } from '$lib/map/nearest';
-	import type { MapColours } from '$lib/map/types';
+	import BeachMap from '#lib/components/BeachMap.svelte';
+	import type { Verdict } from '#lib/data/types.ts';
+	import { UNKNOWN_HEX, VERDICT_LEGEND, verdictHex } from '#lib/map/colours.ts';
+	import { nearestSafe } from '#lib/map/nearest.ts';
+	import type { MapColours } from '#lib/map/types.ts';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();

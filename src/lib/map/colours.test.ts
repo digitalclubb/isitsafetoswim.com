@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Verdict } from '$lib/data/types';
+import type { Verdict } from '#lib/data/types.ts';
 import { VERDICT_LEGEND, verdictHex, verdictLabel } from './colours';
 
 describe('verdict colours', () => {

@@ -1,4 +1,4 @@
-import locationsJson from '$data/locations.json';
+import locationsJson from '../../data/locations.json';
 import type { Country, Location, LocationIndex } from './types';
 
 const index = locationsJson as unknown as LocationIndex;

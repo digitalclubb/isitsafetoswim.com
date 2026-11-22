@@ -1,7 +1,7 @@
-import { error, json } from '@sveltejs/kit';
-import { env } from '$env/dynamic/private';
-import { readProfiles, writeProfiles } from '$lib/map/kv';
-import { computeProfileCache } from '$lib/map/profiles';
+import { error } from '@sveltejs/kit';
+import { readProfiles, writeProfiles } from '#lib/map/kv.ts';
+import { computeProfileCache } from '#lib/map/profiles.ts';
+import { CRON_SECRET } from '$app/env/private';
 import type { RequestHandler } from './$types';
 
 export const prerender = false;
@@ -22,7 +22,7 @@ export const config = {
  * coverage converges.
  */
 export const GET: RequestHandler = async ({ request }) => {
-	const secret = env.CRON_SECRET;
+	const secret = CRON_SECRET;
 	if (!secret || request.headers.get('authorization') !== `Bearer ${secret}`) {
 		throw error(401, 'unauthorised');
 	}
@@ -36,7 +36,7 @@ export const GET: RequestHandler = async ({ request }) => {
 	);
 	await writeProfiles(cache);
 
-	return json({
+	return Response.json({
 		ok: true,
 		generatedAt: cache.generatedAt,
 		batch,

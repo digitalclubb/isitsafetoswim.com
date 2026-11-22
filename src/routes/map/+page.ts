@@ -1,4 +1,4 @@
-import { getSearchIndex } from '$lib/data/search-index';
+import { getSearchIndex } from '#lib/data/search-index.ts';
 import type { PageLoad } from './$types';
 
 export const prerender = true;

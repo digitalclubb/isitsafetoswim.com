@@ -1,4 +1,4 @@
-import { findNearestSlim } from '$lib/data/search-index';
+import { findNearestSlim } from '#lib/data/search-index.ts';
 import type { PageLoad } from './$types';
 
 export const prerender = false;

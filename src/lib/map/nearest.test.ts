@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Verdict } from '$lib/data/types';
+import type { Verdict } from '#lib/data/types.ts';
 import { nearestSafe } from './nearest';
 import type { MapPoint } from './types';
 

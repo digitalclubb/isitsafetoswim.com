@@ -1,4 +1,4 @@
-import searchJson from '$data/search-index.json';
+import searchJson from '../../data/search-index.json';
 import type { Classification, Country, CurrentAssessment } from './types';
 
 export interface SearchLocation {

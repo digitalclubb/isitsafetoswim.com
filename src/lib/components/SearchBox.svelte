@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { normalisePostcode } from '$lib/data/postcode';
-	import type { SearchLocation } from '$lib/data/search-index';
+	import { normalisePostcode } from '#lib/data/postcode.ts';
+	import type { SearchLocation } from '#lib/data/search-index.ts';
 
 	let {
 		locations,

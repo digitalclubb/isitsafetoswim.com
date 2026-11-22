@@ -1,4 +1,4 @@
-import type { Location, TideEvent, TideInfo } from '$lib/data/types';
+import type { Location, TideEvent, TideInfo } from '#lib/data/types.ts';
 import { fetchJson } from './http';
 
 /**

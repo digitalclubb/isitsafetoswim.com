@@ -1,5 +1,5 @@
-import { getIndexMeta } from '$lib/data/locations';
-import { buildDate, urlSet } from '$lib/seo/sitemap';
+import { getIndexMeta } from '#lib/data/locations.ts';
+import { buildDate, urlSet } from '#lib/seo/sitemap.ts';
 
 export const prerender = true;
 

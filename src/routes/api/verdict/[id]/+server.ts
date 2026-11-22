@@ -1,6 +1,6 @@
-import { error, json } from '@sveltejs/kit';
-import { getLocationById, getLocationBySlug } from '$lib/data/locations';
-import { buildLiveData } from '$lib/live/verdict';
+import { error } from '@sveltejs/kit';
+import { getLocationById, getLocationBySlug } from '#lib/data/locations.ts';
+import { buildLiveData } from '#lib/live/verdict.ts';
 import type { RequestHandler } from './$types';
 
 export const prerender = false;
@@ -21,5 +21,5 @@ export const GET: RequestHandler = async ({ params, setHeaders, request }) => {
 		'content-type': 'application/json; charset=utf-8',
 		vary: 'Accept-Encoding'
 	});
-	return json(data);
+	return Response.json(data);
 };

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { RecentSample } from '$lib/data/types';
-	import { eColiScaleCeiling, sampleBand } from '$lib/verdict/engine';
+	import type { RecentSample } from '#lib/data/types.ts';
+	import { eColiScaleCeiling, sampleBand } from '#lib/verdict/engine.ts';
 
 	let {
 		samples,

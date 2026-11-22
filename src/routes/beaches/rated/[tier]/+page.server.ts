@@ -1,8 +1,8 @@
 import { error } from '@sveltejs/kit';
-import { getRatingBySlug, tierSlug } from '$lib/data/classifications';
-import { getIndexMeta } from '$lib/data/locations';
-import { RATED_TIERS } from '$lib/data/rating';
-import type { Location } from '$lib/data/types';
+import { getRatingBySlug, tierSlug } from '#lib/data/classifications.ts';
+import { getIndexMeta } from '#lib/data/locations.ts';
+import { RATED_TIERS } from '#lib/data/rating.ts';
+import type { Location } from '#lib/data/types.ts';
 import type { EntryGenerator, PageServerLoad } from './$types';
 
 export const prerender = true;

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { Location } from '$lib/data/types';
+import type { Location } from '#lib/data/types.ts';
 import { fetchJson } from './http';
 import { fetchRainfallByLocation, nearestStation, sumRainfall } from './rainfall';
 

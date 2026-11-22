@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Country, LiveLocationData, RiskForecast } from '$lib/data/types';
+import type { Country, LiveLocationData, RiskForecast } from '#lib/data/types.ts';
 import { coverageNotice, hasLiveSignals } from './coverage';
 
 function live(country: Country, partial: Partial<LiveLocationData> = {}): LiveLocationData {

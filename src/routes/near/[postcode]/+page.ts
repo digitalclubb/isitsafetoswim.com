@@ -1,5 +1,5 @@
-import { normalisePostcode } from '$lib/data/postcode';
-import { findNearestSlim } from '$lib/data/search-index';
+import { normalisePostcode } from '#lib/data/postcode.ts';
+import { findNearestSlim } from '#lib/data/search-index.ts';
 import type { PageLoad } from './$types';
 
 export const prerender = false;

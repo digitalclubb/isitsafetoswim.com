@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { safeJsonLd } from '$lib/seo/jsonLd';
+	import { safeJsonLd } from '#lib/seo/jsonLd.ts';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();

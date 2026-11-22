@@ -1,5 +1,5 @@
 <script lang="ts">
-	import NearbyResults from '$lib/components/NearbyResults.svelte';
+	import NearbyResults from '#lib/components/NearbyResults.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();

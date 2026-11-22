@@ -1,5 +1,5 @@
 import { createClient } from 'redis';
-import { env } from '$env/dynamic/private';
+import { REDIS_URL } from '$app/env/private';
 import type { ProfileCache } from './profiles';
 import type { MapColours, RainfallBlob, SpillsBlob } from './types';
 
@@ -29,7 +29,7 @@ let client: RedisClient | null = null;
 let ready: Promise<unknown> | null = null;
 
 function connect(): RedisClient | null {
-	const url = env.REDIS_URL;
+	const url = REDIS_URL;
 	if (!url) return null;
 	if (!client) {
 		const c = makeClient(url);

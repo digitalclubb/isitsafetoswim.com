@@ -1,8 +1,8 @@
-import { getTierSummaries } from '$lib/data/classifications';
-import { getIndexMeta } from '$lib/data/locations';
-import { getAllPlaces } from '$lib/data/places';
-import { getSpillLeaguePlaces } from '$lib/data/spill-league';
-import { buildDate, urlSet } from '$lib/seo/sitemap';
+import { getTierSummaries } from '#lib/data/classifications.ts';
+import { getIndexMeta } from '#lib/data/locations.ts';
+import { getAllPlaces } from '#lib/data/places.ts';
+import { getSpillLeaguePlaces } from '#lib/data/spill-league.ts';
+import { buildDate, urlSet } from '#lib/seo/sitemap.ts';
 
 export const prerender = true;
 

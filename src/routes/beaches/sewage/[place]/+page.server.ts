@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { getSpillLeague, getSpillLeaguePlaces } from '$lib/data/spill-league';
+import { getSpillLeague, getSpillLeaguePlaces } from '#lib/data/spill-league.ts';
 import type { EntryGenerator, PageServerLoad } from './$types';
 
 export const prerender = true;

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { Location } from '$lib/data/types';
+import type { Location } from '#lib/data/types.ts';
 import type { ProfileFetchResult } from './profile';
 import { buildPageData, type CachedSignals, pickProfile } from './verdict';
 

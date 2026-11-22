@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { RecentSample } from '$lib/data/types';
-	import { londonFullDate, relativeDay } from '$lib/util/time';
+	import type { RecentSample } from '#lib/data/types.ts';
+	import { londonFullDate, relativeDay } from '#lib/util/time.ts';
 
 	let { sample }: { sample: RecentSample } = $props();
 

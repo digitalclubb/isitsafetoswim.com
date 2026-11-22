@@ -1,4 +1,4 @@
-import type { Country, Verdict } from '$lib/data/types';
+import type { Country, Verdict } from '#lib/data/types.ts';
 
 /**
  * The precomputed verdict snapshot the map reads. A few KB: one verdict per
