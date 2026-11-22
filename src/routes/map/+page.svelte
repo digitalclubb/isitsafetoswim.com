@@ -1,16 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import BeachMap from '#lib/components/BeachMap.svelte';
-	import type { Verdict } from '#lib/data/types.ts';
 	import { UNKNOWN_HEX, VERDICT_LEGEND, verdictHex } from '#lib/map/colours.ts';
 	import { nearestSafe } from '#lib/map/nearest.ts';
-	import { fetchTodayVerdicts } from '#lib/map/today.ts';
+	import { loadTodayVerdicts, today } from '#lib/map/today.svelte.ts';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
-	let colours = $state<Record<string, Verdict>>({});
-	let generatedAt = $state('');
+	let colours = $derived(today.colours);
+	let generatedAt = $derived(today.generatedAt);
 
 	type Status = 'idle' | 'locating' | 'denied' | 'error';
 	let status = $state<Status>('idle');
@@ -22,13 +21,8 @@
 		userLocation ? nearestSafe(userLocation, data.points, colours, 8) : []
 	);
 
-	onMount(async () => {
-		// Pins stay neutral when the snapshot is missing or stale.
-		const blob = await fetchTodayVerdicts();
-		if (!blob) return;
-		colours = blob.colours;
-		generatedAt = blob.generatedAt;
-	});
+	// Pins stay neutral when the snapshot is missing or stale.
+	onMount(loadTodayVerdicts);
 
 	function formatKm(metres: number): string {
 		const km = metres / 1000;

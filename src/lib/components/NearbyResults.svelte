@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import type { SearchLocation } from '#lib/data/search-index.ts';
-	import type { Verdict } from '#lib/data/types.ts';
-	import { fetchTodayVerdicts } from '#lib/map/today.ts';
+	import { today } from '#lib/map/today.svelte.ts';
 	import LocationCard from './LocationCard.svelte';
 
 	let {
@@ -19,24 +17,15 @@
 	// average, so the cards carry the same precomputed verdict the map reads and
 	// agree with the page they link to. Both /near routes are noindex and load on
 	// the client, so there is no prerendered copy of this to go stale. Until the
-	// blob arrives each card shows its annual rating, the same way the map holds
-	// its pins neutral.
-	let colours = $state<Record<string, Verdict>>({});
-	let generatedAt = $state('');
-	let showingVerdicts = $derived(results.some((r) => colours[r.location.id]));
+	// blob arrives the cards carry no badge, the same way the map holds its pins
+	// neutral.
+	let showingVerdicts = $derived(results.some((r) => today.colours[r.location.id]));
 
 	function formatTime(iso: string): string {
 		const t = Date.parse(iso);
 		if (!Number.isFinite(t)) return '';
 		return new Date(t).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 	}
-
-	onMount(async () => {
-		const blob = await fetchTodayVerdicts();
-		if (!blob) return;
-		colours = blob.colours ?? {};
-		generatedAt = blob.generatedAt;
-	});
 </script>
 
 <section class="block container">
@@ -49,7 +38,6 @@
 				<LocationCard
 					location={result.location}
 					distanceMetres={result.distanceMetres}
-					verdict={colours[result.location.id]}
 				/>
 			{/each}
 		</div>
@@ -58,7 +46,7 @@
 		     component exists to avoid. -->
 		<p class="note">
 			{#if showingVerdicts}
-				Verdicts as of {formatTime(generatedAt)} today. Open a beach for the reasoning behind each
+				Verdicts as of {formatTime(today.generatedAt)} today. Open a beach for the reasoning behind each
 				one.
 			{:else}
 				Showing each site's annual classification. Open a beach for today's verdict.

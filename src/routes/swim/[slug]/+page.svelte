@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { fade, slide } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import ClassificationHistory from '#lib/components/ClassificationHistory.svelte';
@@ -14,8 +13,7 @@
 	import Verdict from '#lib/components/Verdict.svelte';
 	import WaterTemperature from '#lib/components/WaterTemperature.svelte';
 	import { findNearestSlim } from '#lib/data/search-index.ts';
-	import type { RecentSample, Verdict as VerdictLevel } from '#lib/data/types.ts';
-	import { fetchTodayVerdicts } from '#lib/map/today.ts';
+	import type { RecentSample } from '#lib/data/types.ts';
 	import { comparableSpillYears } from '#lib/data/spill-history.ts';
 	import { coverageNotice, hasLiveSignals } from '#lib/live/coverage.ts';
 	import { buildFaq } from '#lib/seo/faq.ts';
@@ -93,12 +91,6 @@
 	let inSeason = $derived(bathingSeasonActive(new Date(live.verdict.fetchedAt), location.country));
 	let season = $derived(seasonLabels(location.country));
 	let history = $derived(location.classificationHistory ?? []);
-	// Cards beside a verdict must carry a verdict too, or a neighbour "Rated
-	// Good" reads as today's answer next to this page's No.
-	let nearbyVerdicts = $state<Record<string, VerdictLevel>>({});
-	onMount(async () => {
-		nearbyVerdicts = (await fetchTodayVerdicts())?.colours ?? {};
-	});
 	let nearby = $derived(
 		findNearestSlim({ lat: location.lat, lon: location.lon }, 5)
 			.map((r) => r.location)
@@ -511,7 +503,7 @@
 				<h2 id="nearby">Other beaches nearby</h2>
 				<div class="card-grid">
 					{#each nearby as n (n.id)}
-						<LocationCard location={n} verdict={nearbyVerdicts[n.id]} />
+						<LocationCard location={n} />
 					{/each}
 				</div>
 			</section>

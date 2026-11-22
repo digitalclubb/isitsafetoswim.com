@@ -1,9 +1,12 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { isAdverseRating, ratingLabel } from '#lib/data/rating.ts';
-	import type { Classification, Country, CurrentAssessment, Verdict } from '#lib/data/types.ts';
+	import type { Classification, Country, CurrentAssessment } from '#lib/data/types.ts';
 	import { verdictLabel } from '#lib/map/colours.ts';
+	import { loadTodayVerdicts, today } from '#lib/map/today.svelte.ts';
 
 	interface CardLocation {
+		id: string;
 		slug: string;
 		name: string;
 		region?: string;
@@ -12,11 +15,10 @@
 		currentAssessment?: CurrentAssessment;
 	}
 
-	let {
-		location,
-		distanceMetres,
-		verdict
-	}: { location: CardLocation; distanceMetres?: number; verdict?: Verdict } = $props();
+	let { location, distanceMetres }: { location: CardLocation; distanceMetres?: number } = $props();
+
+	onMount(loadTodayVerdicts);
+	let verdict = $derived(today.colours[location.id]);
 
 	function formatKm(metres: number): string {
 		const km = metres / 1000;
@@ -29,24 +31,26 @@
 </script>
 
 <!--
-	Only a verdict may wear the verdict palette. The classification is a
-	multi-year percentile that says nothing about today, so it renders as quiet
-	text and a site rated Excellent can sit under a Caution without appearing to
-	contradict it. data-tone is the verdict itself, so a card cannot reach a
-	coloured branch without one.
+	Only a verdict may wear the verdict palette, and only a verdict sits in the
+	badge corner. The classification is a multi-year percentile that says
+	nothing about today, so it always renders as quiet text under the name: in
+	the corner it read as the answer, and "Rated Good" over a beach that is a No
+	today looked like a contradiction. The badge arrives after hydration from
+	the hourly snapshot and stays empty without one.
 -->
 <a class="card" href={`/swim/${location.slug}`} data-tone={verdict}>
 	{#if verdict}
 		<span class="badge"><span class="sr-only">Verdict today: </span>{verdictLabel(verdict)}</span>
-	{:else}
+	{/if}
+	<span class="name">{location.name}</span>
+	<span class="meta">
+		{meta}
 		<span
 			class="rating"
 			class:adverse={isAdverseRating(location.classification, location.currentAssessment)}
 			aria-label={rating.announced}>{rating.label}</span
 		>
-	{/if}
-	<span class="name">{location.name}</span>
-	<span class="meta">{meta}</span>
+	</span>
 </a>
 
 <style>
@@ -96,15 +100,11 @@
 		color: var(--ink-soft);
 	}
 
-	.badge,
-	.rating {
+	.badge {
 		grid-area: badge;
 		align-self: start;
 		justify-self: end;
 		font-size: var(--text-xs);
-	}
-
-	.badge {
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
@@ -116,9 +116,7 @@
 
 	/* Deliberately not a pill: the rating must not read as a verdict badge. */
 	.rating {
-		color: var(--ink-soft);
-		text-align: right;
-		text-wrap: balance;
+		display: block;
 	}
 
 	/* Poor and Closed have to stay legible as warnings without reaching for the

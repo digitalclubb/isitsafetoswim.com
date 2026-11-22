@@ -11,6 +11,7 @@ export const entries: EntryGenerator = () => RATED_TIERS.map((tier) => ({ tier: 
 
 function toCard(l: Location) {
 	return {
+		id: l.id,
 		slug: l.slug,
 		name: l.name,
 		region: l.region,
