@@ -25,7 +25,7 @@
 		londonIsoDateTime,
 		newestTimestamp
 	} from '#lib/util/time.ts';
-	import { bathingSeasonActive, seasonLabels } from '#lib/verdict/engine.ts';
+	import { bathingSeasonActive, isUnconfirmedOngoing, seasonLabels } from '#lib/verdict/engine.ts';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -168,7 +168,9 @@
 				// A discharge still running is a claim about now, not about when it
 				// started, or a spill ongoing since September dates the page to then.
 				...live.recentDischarges.flatMap((d) =>
-					d.ongoing ? [live.verdict.fetchedAt] : [d.startedAt, d.endedAt]
+					d.ongoing && !isUnconfirmedOngoing(d, new Date(live.verdict.fetchedAt))
+						? [live.verdict.fetchedAt]
+						: [d.startedAt, d.endedAt]
 				)
 			],
 			live.verdict.fetchedAt
@@ -402,9 +404,10 @@
 					<p class="muted">
 						Storm overflows operated by {live.dischargeMap?.label ??
 							location.sewerageUndertaker ??
-							'the local water company'} within ten kilometres in the last 48 hours.
+							'the local water company'} within ten kilometres, running now or finished in the last 48
+						hours.
 					</p>
-					<DischargeList discharges={live.recentDischarges} />
+					<DischargeList discharges={live.recentDischarges} now={new Date(live.verdict.fetchedAt)} />
 					{#if live.dischargeMap}
 						<p class="more">
 							<a href={live.dischargeMap.url} rel="nofollow noopener" target="_blank">

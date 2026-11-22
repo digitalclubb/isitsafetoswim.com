@@ -1004,3 +1004,47 @@ describe('evaluateVerdict factor order', () => {
 		expect(result.factors[0].label).toBe('Annual classification');
 	});
 });
+
+describe('evaluateVerdict long-running discharge reports', () => {
+	const discharge = (startedAt: string) => ({
+		outfallName: 'SWS00007',
+		distanceMetres: 646,
+		startedAt,
+		ongoing: true,
+		lat: 0,
+		lon: 0
+	});
+	const base = {
+		classification: 'Good' as const,
+		latestSample: null,
+		riskForecast: null,
+		rainfall24hMm: 0,
+		now: winterNow
+	};
+
+	it('still says No for a discharge that started this week', () => {
+		const result = evaluateVerdict({
+			...base,
+			recentDischarges: [discharge('2026-01-10T10:00:00Z')]
+		});
+		expect(result.verdict).toBe('no');
+	});
+
+	it('cautions rather than says No when the feed has reported it for over a week', () => {
+		const result = evaluateVerdict({
+			...base,
+			recentDischarges: [discharge('2025-11-28T10:00:00Z')]
+		});
+		expect(result.verdict).toBe('caution');
+		expect(result.reason).toMatch(/since 28 November 2025/);
+		expect(result.factors[0].label).toBe('Discharge reported, not updated');
+	});
+
+	it('lets a confirmed discharge outrank a stuck one', () => {
+		const result = evaluateVerdict({
+			...base,
+			recentDischarges: [discharge('2025-11-28T10:00:00Z'), discharge('2026-01-15T08:00:00Z')]
+		});
+		expect(result.verdict).toBe('no');
+	});
+});

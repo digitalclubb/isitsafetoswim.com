@@ -2,7 +2,7 @@ import { classificationChange } from '#lib/data/rating.ts';
 import type { LiveLocationData, RecentSample } from '#lib/data/types.ts';
 import { joinList } from '#lib/util/text.ts';
 import { londonFullDate } from '#lib/util/time.ts';
-import { SAMPLE_CURRENT_DAYS } from '#lib/verdict/engine.ts';
+import { isUnconfirmedOngoing, SAMPLE_CURRENT_DAYS } from '#lib/verdict/engine.ts';
 
 /**
  * The three questions the location page answers in the words search uses.
@@ -96,10 +96,15 @@ function sewageAnswer(live: LiveLocationData): string {
 	// An overflow still running is kept regardless of when it started, so the
 	// two are counted separately rather than all being called "in the last 48
 	// hours", which would misdate a spill that began a week ago.
-	const ongoing = live.recentDischarges.filter((d) => d.ongoing).length;
-	const finished = total - ongoing;
+	const now = new Date(live.verdict.fetchedAt);
+	const stuck = live.recentDischarges.filter((d) => isUnconfirmedOngoing(d, now)).length;
+	const ongoing = live.recentDischarges.filter((d) => d.ongoing).length - stuck;
+	const finished = total - ongoing - stuck;
 	const parts = [
 		ongoing > 0 ? `${ongoing} discharging now` : null,
+		stuck > 0
+			? `${stuck} reported as discharging for over a week with no update from the water company`
+			: null,
 		finished > 0 ? `${finished} in the last 48 hours` : null
 	].filter((part): part is string => part !== null);
 

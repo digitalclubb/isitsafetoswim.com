@@ -64,6 +64,26 @@ const HEAVY_RAIN_MM = 15;
 const NOTICEABLE_RAIN_MM = 8;
 
 /**
+ * How long a feed may report one discharge as running before we stop treating
+ * it as a hard No. The feeds send no heartbeat, so a dead monitor stuck on
+ * "Start" looks exactly like a long spill: Southern Water's SWS00007 off
+ * Brighton read "ongoing since 28 September" for eight weeks with no update.
+ * Past this it still shows and still cautions, it just no longer pins a beach
+ * at No for months on what is most likely a stuck status.
+ */
+export const ONGOING_UNCONFIRMED_DAYS = 7;
+
+/** A discharge the feed calls ongoing that started too long ago to take on trust. */
+export function isUnconfirmedOngoing(
+	d: { ongoing: boolean; startedAt: string },
+	now: Date = new Date()
+): boolean {
+	if (!d.ongoing) return false;
+	const age = hoursSince(d.startedAt, now);
+	return age !== null && age > ONGOING_UNCONFIRMED_DAYS * 24;
+}
+
+/**
  * How long a sample keeps deciding the verdict. The regulator samples weekly in
  * season, so anything older than this is a gap or the tail of last season. Such
  * a reading is still shown as a factor, dated, but it no longer drives a No: a
@@ -207,9 +227,13 @@ function hoursSince(iso: string | undefined, now: Date): number | null {
 	return (now.getTime() - t) / 36e5;
 }
 
-function ongoingNearby(discharges: DischargeEvent[], withinMetres: number): DischargeEvent | null {
+function ongoingNearby(
+	discharges: DischargeEvent[],
+	withinMetres: number,
+	now: Date
+): DischargeEvent | null {
 	for (const d of discharges) {
-		if (d.ongoing && d.distanceMetres <= withinMetres) return d;
+		if (d.ongoing && !isUnconfirmedOngoing(d, now) && d.distanceMetres <= withinMetres) return d;
 	}
 	return null;
 }
@@ -256,7 +280,10 @@ export function evaluateVerdict(
 	// positive factor in November, or a stale "Increased" cautioning until May.
 	const riskForecast = inSeason ? inputs.riskForecast : null;
 
-	const ongoing = ongoingNearby(recentDischarges, DISTANCE_RELEVANT_M);
+	const ongoing = ongoingNearby(recentDischarges, DISTANCE_RELEVANT_M, now);
+	const unconfirmed = recentDischarges.find(
+		(d) => isUnconfirmedOngoing(d, now) && d.distanceMetres <= DISTANCE_RELEVANT_M
+	);
 	const justFinished = recentNearby(
 		recentDischarges.filter((d) => !d.ongoing),
 		DISTANCE_RELEVANT_M,
@@ -445,6 +472,19 @@ export function evaluateVerdict(
 		factors.push({
 			label: 'Discharge nearby',
 			value: `${fmtKm(recentWider.distanceMetres)} ${fmtHours(age)}`,
+			weight: 'negative'
+		});
+	}
+	// After recentWider, so a spill the feed has confirmed leads over a status
+	// that has not moved in a week.
+	if (unconfirmed) {
+		const since = londonFullDate(unconfirmed.startedAt);
+		cautions.push(
+			`A storm overflow ${fmtKm(unconfirmed.distanceMetres)} away has been reported as discharging since ${since} and not updated by the water company.`
+		);
+		factors.push({
+			label: 'Discharge reported, not updated',
+			value: `${fmtKm(unconfirmed.distanceMetres)} away, since ${since}`,
 			weight: 'negative'
 		});
 	}

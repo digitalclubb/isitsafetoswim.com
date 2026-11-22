@@ -1,9 +1,16 @@
 <script lang="ts">
+	import { londonDayAndMonth } from '#lib/util/time.ts';
+	import { isUnconfirmedOngoing } from '#lib/verdict/engine.ts';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
-	let ongoing = $derived(data.spills.filter((s) => s.ongoing));
+	// A feed with no heartbeat can leave a dead monitor on "Start" for weeks, so
+	// a spill reported as running for over a week is kept out of the live count
+	// and listed on its own, dated, rather than called "right now".
+	let asOf = $derived(data.generatedAt ? new Date(data.generatedAt) : new Date());
+	let unconfirmed = $derived(data.spills.filter((s) => isUnconfirmedOngoing(s, asOf)));
+	let ongoing = $derived(data.spills.filter((s) => s.ongoing && !isUnconfirmedOngoing(s, asOf)));
 	let finished = $derived(data.spills.filter((s) => !s.ongoing));
 
 	let headline = $derived(
@@ -106,6 +113,29 @@
 									</span>
 								</span>
 								<span class="since">ended {s.endedAt ? ago(s.endedAt) : ''}</span>
+							</a>
+						</li>
+					{/each}
+				</ul>
+			</section>
+		{/if}
+
+		{#if unconfirmed.length > 0}
+			<section class="block" aria-labelledby="unconfirmed">
+				<h2 id="unconfirmed" class="muted-h">Reported ongoing, not updated for over a week</h2>
+				<ul class="spills finished">
+					{#each unconfirmed as s (s.beachSlug + s.outfallName)}
+						<li>
+							<a href={`/swim/${s.beachSlug}`}>
+								<span class="where">
+									<span class="beach">{s.beachName}</span>
+									<span class="meta">
+										{s.outfallName}{s.receivingWater ? ` · ${s.receivingWater}` : ''} · {formatKm(
+											s.distanceMetres
+										)} away
+									</span>
+								</span>
+								<span class="since">since {londonDayAndMonth(s.startedAt)}</span>
 							</a>
 						</li>
 					{/each}

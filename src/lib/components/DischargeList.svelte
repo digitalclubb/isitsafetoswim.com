@@ -1,7 +1,11 @@
 <script lang="ts">
 	import type { DischargeEvent } from '#lib/data/types.ts';
+	import { londonFullDate } from '#lib/util/time.ts';
+	import { isUnconfirmedOngoing } from '#lib/verdict/engine.ts';
 
-	let { discharges }: { discharges: DischargeEvent[] } = $props();
+	// `now` is the clock the verdict was decided on, so a card near the
+	// seven-day mark cannot disagree with the verdict above it.
+	let { discharges, now }: { discharges: DischargeEvent[]; now: Date } = $props();
 
 	function formatTime(iso: string): string {
 		const t = Date.parse(iso);
@@ -24,11 +28,15 @@
 
 <ul class="list">
 	{#each discharges as event, i (event.outfallName + i)}
-		<li class:ongoing={event.ongoing}>
+		{@const stuck = isUnconfirmedOngoing(event, now)}
+		<li class:ongoing={event.ongoing && !stuck}>
 			<div class="when">
 				<span class="dot" aria-hidden="true"></span>
-				{#if event.ongoing}
-					<strong>Ongoing</strong> since {formatTime(event.startedAt)}
+				{#if stuck}
+					<strong>Reported ongoing</strong> since {londonFullDate(event.startedAt)}, not updated by
+					the water company
+				{:else if event.ongoing}
+					<strong>Ongoing</strong>, started {formatTime(event.startedAt)}
 				{:else if event.endedAt}
 					Ended {formatTime(event.endedAt)}
 				{:else}
