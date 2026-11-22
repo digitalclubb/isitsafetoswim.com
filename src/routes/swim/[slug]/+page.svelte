@@ -165,7 +165,11 @@
 		newestTimestamp(
 			[
 				live.latestSample?.sampledAt,
-				...live.recentDischarges.flatMap((d) => [d.startedAt, d.endedAt])
+				// A discharge still running is a claim about now, not about when it
+				// started, or a spill ongoing since September dates the page to then.
+				...live.recentDischarges.flatMap((d) =>
+					d.ongoing ? [live.verdict.fetchedAt] : [d.startedAt, d.endedAt]
+				)
 			],
 			live.verdict.fetchedAt
 		)
