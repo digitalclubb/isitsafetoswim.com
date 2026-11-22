@@ -29,7 +29,7 @@ Real-time storm-overflow data covers the nine English and Welsh water companies 
 
 ## Stack
 
-- pnpm + SvelteKit 2 + Svelte 5 (runes) + TypeScript
+- pnpm + SvelteKit 3 + Svelte 5 (runes) + TypeScript
 - Biome for lint and format
 - Vanilla CSS with design tokens. No Tailwind.
 - @vite-pwa/sveltekit for the PWA manifest and service worker

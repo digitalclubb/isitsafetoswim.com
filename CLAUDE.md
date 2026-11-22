@@ -10,10 +10,11 @@ Deployed to Vercel. ~700 designated bathing waters covered day one: England (EA)
 
 ## Stack (locked)
 
-- pnpm + SvelteKit 2 + Svelte 5 (runes) + TypeScript
+- pnpm + SvelteKit 3 + Svelte 5 (runes) + TypeScript 6 (Kit 3 and svelte-check pin ^6, so TypeScript 7 waits on them)
+- Kit 3 config lives in `vite.config.ts`, passed through `withPwa` from @vite-pwa/sveltekit. There is no `svelte.config.js`, and Kit 3 refuses to start if one exists. Library imports use `#lib/...` (a package.json subpath import) with explicit file extensions, not `$lib`.
 - Biome for lint and format, scoped to TS/JS/JSON. **No** ESLint, no Prettier. Biome does not lint `.svelte` files (its Svelte support is partial and flags template-used props as unused); `svelte-check` (`pnpm check`) validates those.
 - Vanilla CSS with custom properties. **No Tailwind.** No CSS-in-JS.
-- @vite-pwa/sveltekit for the manifest and service worker
+- @vite-pwa/sveltekit for the manifest. It also generates a service worker, but nothing registers it, so it is inert. Register it only with `navigateFallback` left off, or every ISR page not precached is answered with the homepage.
 - Vitest for unit tests
 - @sveltejs/adapter-vercel
 - @resvg/resvg-js for build-time SVG → PNG icon and OG card generation
@@ -75,7 +76,7 @@ isitsafetoswim.com/
 │   │   │                            and tides) and buildLiveData + deriveVerdict.
 │   │   ├── map/                    Map precompute: Redis store (kv.ts), hourly colour compute,
 │   │   │                            daily profile cache, nearest-safe, colour tokens.
-│   │   ├── components/             Svelte components. Scoped <style> per file (BeachMap.svelte = MapLibre).
+│   │   ├── components/             Svelte components. Scoped <style> per file (BeachMap.svelte = MapLibre 6, which needs its worker URL handed over via `?worker&url`).
 │   │   ├── seo/                    jsonLd.ts escaping, sitemap.ts urlset and index builders
 │   │   ├── util/                   Small shared helpers (pool.ts concurrency, time.ts London formatters)
 │   │   └── styles/
@@ -160,7 +161,7 @@ Any regulator the build cannot reach is backfilled per country from the cached i
 - **Crons need `CRON_SECRET`.** Vercel sends it as a bearer token and the endpoints 401 without it. Either cron can be triggered by hand from the Vercel Cron tab.
 - **Basemap.** Grayscale land and coastline come from a self-hosted Protomaps extract at `static/uk.pmtiles`, served at `/uk.pmtiles` (the map's default, override with `PUBLIC_BASEMAP_URL`). Label layers are filtered out so no third-party fonts are fetched. Regenerate with: `pmtiles extract https://build.protomaps.com/<YYYYMMDD>.pmtiles static/uk.pmtiles --bbox=-8.65,49.9,1.77,60.86 --maxzoom=9`.
 
-Runtime env vars (Vercel): `REDIS_URL` (colour, profile, spills and rainfall store), `CRON_SECRET` (cron auth), `PUBLIC_BASEMAP_URL` (optional basemap override).
+Runtime env vars (Vercel), declared in `src/env.ts` and read from `$app/env/private` or `$app/env/public`: `REDIS_URL` (colour, profile, spills and rainfall store), `CRON_SECRET` (cron auth), `PUBLIC_BASEMAP_URL` (optional basemap override).
 
 ## Area pages
 
