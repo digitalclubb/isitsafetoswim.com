@@ -1,11 +1,24 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import LocationCard from '#lib/components/LocationCard.svelte';
 	import NearMeButton from '#lib/components/NearMeButton.svelte';
 	import SearchBox from '#lib/components/SearchBox.svelte';
+	import type { Verdict } from '#lib/data/types.ts';
+	import { fetchTodayVerdicts } from '#lib/map/today.ts';
 	import { safeJsonLd } from '#lib/seo/jsonLd.ts';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+
+	// The homepage is prerendered, so on its own it only knows each site's
+	// annual classification. "Rated Good" over a beach that is a No today read
+	// as a contradiction, so the cards take today's verdict from the same
+	// snapshot the map uses and fall back to the classification without it.
+	let verdicts = $state<Record<string, Verdict>>({});
+	onMount(async () => {
+		verdicts = (await fetchTodayVerdicts())?.colours ?? {};
+	});
+	let showingVerdicts = $derived(data.featured.some((l) => verdicts[l.id]));
 
 	const structuredData = [
 		{
@@ -88,11 +101,18 @@
 <section class="block container">
 	<div class="block-head">
 		<h2>Popular places to check</h2>
-		<p class="muted">The big names people search for most.</p>
+		<p class="muted">
+			{#if showingVerdicts}
+				Today's verdict for the big names people search for most.
+			{:else}
+				The big names people search for most, with their annual classification. Open one for
+				today's verdict.
+			{/if}
+		</p>
 	</div>
 	<div class="card-grid">
 		{#each data.featured as loc (loc.id)}
-			<LocationCard location={loc} />
+			<LocationCard location={loc} verdict={verdicts[loc.id]} />
 		{/each}
 	</div>
 </section>

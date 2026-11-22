@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import type { SearchLocation } from '#lib/data/search-index.ts';
 	import type { Verdict } from '#lib/data/types.ts';
-	import type { MapColours } from '#lib/map/types.ts';
+	import { fetchTodayVerdicts } from '#lib/map/today.ts';
 	import LocationCard from './LocationCard.svelte';
 
 	let {
@@ -21,11 +21,6 @@
 	// the client, so there is no prerendered copy of this to go stale. Until the
 	// blob arrives each card shows its annual rating, the same way the map holds
 	// its pins neutral.
-	// Two runs of the hourly cron plus slack. A blob older than this is dropped
-	// rather than labelled "today", because presenting stale data as current is
-	// the confusion these cards exist to avoid.
-	const MAX_AGE_MS = 3 * 60 * 60 * 1000;
-
 	let colours = $state<Record<string, Verdict>>({});
 	let generatedAt = $state('');
 	let showingVerdicts = $derived(results.some((r) => colours[r.location.id]));
@@ -37,23 +32,10 @@
 	}
 
 	onMount(async () => {
-		const controller = new AbortController();
-		const timer = setTimeout(() => controller.abort(), 8000);
-		try {
-			const res = await fetch('/api/map', { signal: controller.signal });
-			if (res.ok) {
-				const blob: MapColours = await res.json();
-				const age = Date.now() - Date.parse(blob.generatedAt);
-				if (Number.isFinite(age) && age <= MAX_AGE_MS) {
-					colours = blob.colours ?? {};
-					generatedAt = blob.generatedAt;
-				}
-			}
-		} catch {
-			// The list still works; the cards keep their annual classification.
-		} finally {
-			clearTimeout(timer);
-		}
+		const blob = await fetchTodayVerdicts();
+		if (!blob) return;
+		colours = blob.colours ?? {};
+		generatedAt = blob.generatedAt;
 	});
 </script>
 

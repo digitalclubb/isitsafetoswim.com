@@ -4,7 +4,7 @@
 	import type { Verdict } from '#lib/data/types.ts';
 	import { UNKNOWN_HEX, VERDICT_LEGEND, verdictHex } from '#lib/map/colours.ts';
 	import { nearestSafe } from '#lib/map/nearest.ts';
-	import type { MapColours } from '#lib/map/types.ts';
+	import { fetchTodayVerdicts } from '#lib/map/today.ts';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -23,20 +23,11 @@
 	);
 
 	onMount(async () => {
-		try {
-			const controller = new AbortController();
-			const timer = setTimeout(() => controller.abort(), 8000);
-			try {
-				const res = await fetch('/api/map', { signal: controller.signal });
-				const blob: MapColours = res.ok ? await res.json() : { generatedAt: '', colours: {} };
-				colours = blob.colours;
-				generatedAt = blob.generatedAt;
-			} finally {
-				clearTimeout(timer);
-			}
-		} catch {
-			// The map still renders; pins stay neutral until colours arrive.
-		}
+		// Pins stay neutral when the snapshot is missing or stale.
+		const blob = await fetchTodayVerdicts();
+		if (!blob) return;
+		colours = blob.colours;
+		generatedAt = blob.generatedAt;
 	});
 
 	function formatKm(metres: number): string {
