@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-04T12:49:10.635Z",
+  "generatedAt": "2026-11-22T17:11:01.245Z",
   "count": 701,
   "partialFor": [],
   "byCountry": {
@@ -134,7 +134,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-629",
+      "id": "sepa-828",
       "name": "Aberdeen",
       "slug": "aberdeen",
       "country": "Scotland",
@@ -142,16 +142,16 @@
       "lat": 57.155469503302015,
       "lon": -2.077664648194776,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "629",
+        "sourceId": "828",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=233616"
       }
     },
     {
-      "id": "sepa-631",
+      "id": "sepa-830",
       "name": "Aberdour (Silversands)",
       "slug": "aberdour-silversands",
       "country": "Scotland",
@@ -159,28 +159,28 @@
       "lat": 56.05312680977983,
       "lon": -3.2844535998028053,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "631",
+        "sourceId": "830",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4568"
       }
     },
     {
-      "id": "sepa-630",
+      "id": "sepa-829",
       "name": "Aberdour Harbour (Black Sands)",
       "slug": "aberdour-harbour-black-sands",
       "country": "Scotland",
       "region": "Fife",
       "lat": 56.05104230339984,
       "lon": -3.2956234294705657,
-      "classification": "Excellent",
-      "classificationYear": 2025,
+      "classification": "Good",
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "630",
+        "sourceId": "829",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4569"
       }
     },
@@ -801,7 +801,7 @@
       "previousClassification": "Good"
     },
     {
-      "id": "sepa-632",
+      "id": "sepa-831",
       "name": "Achmelvich",
       "slug": "achmelvich",
       "country": "Scotland",
@@ -809,11 +809,11 @@
       "lat": 58.17034317876603,
       "lon": -5.307630768548057,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "632",
+        "sourceId": "831",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=304147"
       }
     },
@@ -1271,7 +1271,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-633",
+      "id": "sepa-832",
       "name": "Anstruther (Billow Ness)",
       "slug": "anstruther-billow-ness",
       "country": "Scotland",
@@ -1279,16 +1279,16 @@
       "lat": 56.217806092536264,
       "lon": -2.7066016179985186,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "633",
+        "sourceId": "832",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4552"
       }
     },
     {
-      "id": "sepa-634",
+      "id": "sepa-833",
       "name": "Arbroath (West Links)",
       "slug": "arbroath-west-links",
       "country": "Scotland",
@@ -1296,16 +1296,16 @@
       "lat": 56.55090955043248,
       "lon": -2.6023028854697694,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "634",
+        "sourceId": "833",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=9378"
       }
     },
     {
-      "id": "sepa-635",
+      "id": "sepa-834",
       "name": "Ayr (South Beach)",
       "slug": "ayr-south-beach",
       "country": "Scotland",
@@ -1313,11 +1313,11 @@
       "lat": 55.462238936753955,
       "lon": -4.643466111987608,
       "classification": "Sufficient",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "635",
+        "sourceId": "834",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124725"
       }
     },
@@ -1384,19 +1384,19 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-715",
+      "id": "sepa-895",
       "name": "Ballachulish Penninsula",
       "slug": "ballachulish-penninsula",
       "country": "Scotland",
       "region": "Highland",
-      "lat": 56.680900220233454,
-      "lon": -5.134325057338023,
-      "classification": "Unknown",
+      "lat": 56.680409220572976,
+      "lon": -5.132926211412469,
+      "classification": "Good",
       "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "715",
+        "sourceId": "895",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=603688"
       }
     },
@@ -1412,7 +1412,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-26T07:54:02.000Z"
+        "assessedAt": "2026-11-02T09:04:44.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -1433,7 +1433,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-26T09:46:35.000Z"
+        "assessedAt": "2026-11-02T11:21:06.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -1452,9 +1452,9 @@
       "lon": -5.64829199667685,
       "classification": "Unknown",
       "currentAssessment": {
-        "level": "satisfactory",
-        "label": "Satisfactory",
-        "assessedAt": "2026-08-28T10:09:27.000Z"
+        "level": "good",
+        "label": "Excellent",
+        "assessedAt": "2026-10-28T11:34:44.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -1475,7 +1475,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-26T07:22:58.000Z"
+        "assessedAt": "2026-10-28T08:45:08.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -1496,7 +1496,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-28T08:33:57.000Z"
+        "assessedAt": "2026-10-28T10:03:58.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -1506,7 +1506,7 @@
       }
     },
     {
-      "id": "sepa-636",
+      "id": "sepa-835",
       "name": "Balmedie",
       "slug": "balmedie",
       "country": "Scotland",
@@ -1514,11 +1514,11 @@
       "lat": 57.2556309623407,
       "lon": -2.0339679302709315,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "636",
+        "sourceId": "835",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=235334"
       }
     },
@@ -1709,19 +1709,19 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-704",
+      "id": "sepa-819",
       "name": "Barassie",
       "slug": "barassie",
       "country": "Scotland",
       "region": "South Ayrshire",
       "lat": 55.55652201937244,
       "lon": -4.6587731884782375,
-      "classification": "Good",
-      "classificationYear": 2025,
+      "classification": "Sufficient",
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "704",
+        "sourceId": "819",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=600000"
       }
     },
@@ -3996,19 +3996,19 @@
       "previousClassification": "Poor"
     },
     {
-      "id": "sepa-637",
+      "id": "sepa-836",
       "name": "Brighouse Bay",
       "slug": "brighouse-bay",
       "country": "Scotland",
       "region": "Dumfries and Galloway",
       "lat": 54.7855368817399,
       "lon": -4.123923944731248,
-      "classification": "Good",
-      "classificationYear": 2025,
+      "classification": "Sufficient",
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "637",
+        "sourceId": "836",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124793"
       }
     },
@@ -4323,7 +4323,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-638",
+      "id": "sepa-837",
       "name": "Broad Sands",
       "slug": "broad-sands",
       "country": "Scotland",
@@ -4331,11 +4331,11 @@
       "lat": 56.063289132600374,
       "lon": -2.7653946847760933,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "638",
+        "sourceId": "837",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=366962"
       }
     },
@@ -4537,7 +4537,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-29T08:16:40.000Z"
+        "assessedAt": "2026-10-28T11:48:22.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -4547,7 +4547,7 @@
       }
     },
     {
-      "id": "sepa-639",
+      "id": "sepa-838",
       "name": "Broughty Ferry",
       "slug": "broughty-ferry",
       "country": "Scotland",
@@ -4555,11 +4555,11 @@
       "lat": 56.46452259536812,
       "lon": -2.8633576615898177,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "639",
+        "sourceId": "838",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=10308"
       }
     },
@@ -4575,7 +4575,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-26T10:56:09.000Z"
+        "assessedAt": "2026-11-02T12:20:35.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -4647,19 +4647,19 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-640",
+      "id": "sepa-839",
       "name": "Burntisland",
       "slug": "burntisland",
       "country": "Scotland",
       "region": "Fife",
       "lat": 56.05809155095211,
       "lon": -3.2202876815976285,
-      "classification": "Sufficient",
-      "classificationYear": 2025,
+      "classification": "Good",
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "640",
+        "sourceId": "839",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4567"
       }
     },
@@ -5003,7 +5003,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-26T09:15:44.000Z"
+        "assessedAt": "2026-11-02T10:42:11.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -5013,7 +5013,7 @@
       }
     },
     {
-      "id": "sepa-641",
+      "id": "sepa-840",
       "name": "Carnoustie",
       "slug": "carnoustie",
       "country": "Scotland",
@@ -5021,16 +5021,16 @@
       "lat": 56.49797062578627,
       "lon": -2.70870257836077,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "641",
+        "sourceId": "840",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=9314"
       }
     },
     {
-      "id": "sepa-642",
+      "id": "sepa-841",
       "name": "Carrick",
       "slug": "carrick",
       "country": "Scotland",
@@ -5038,11 +5038,11 @@
       "lat": 54.82435145611257,
       "lon": -4.219694744799736,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "642",
+        "sourceId": "841",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=114580"
       }
     },
@@ -5120,7 +5120,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-28T09:10:11.000Z"
+        "assessedAt": "2026-10-19T09:25:53.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -6630,7 +6630,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-28T07:53:10.000Z"
+        "assessedAt": "2026-10-28T09:06:18.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -6771,7 +6771,7 @@
       "officialName": "Cold Knap Barry"
     },
     {
-      "id": "sepa-643",
+      "id": "sepa-842",
       "name": "Coldingham",
       "slug": "coldingham",
       "country": "Scotland",
@@ -6779,16 +6779,16 @@
       "lat": 55.89207086799219,
       "lon": -2.1331843373942743,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "643",
+        "sourceId": "842",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=9335"
       }
     },
     {
-      "id": "sepa-702",
+      "id": "sepa-817",
       "name": "Collieston",
       "slug": "collieston",
       "country": "Scotland",
@@ -6796,11 +6796,11 @@
       "lat": 57.3472432667341,
       "lon": -1.9338567945158627,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "702",
+        "sourceId": "817",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=233614"
       }
     },
@@ -7743,7 +7743,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-644",
+      "id": "sepa-843",
       "name": "Crail (Roome Bay)",
       "slug": "crail-roome-bay",
       "country": "Scotland",
@@ -7751,11 +7751,11 @@
       "lat": 56.26135156624498,
       "lon": -2.616213569028494,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "644",
+        "sourceId": "843",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4548"
       }
     },
@@ -7771,7 +7771,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-26T10:20:39.000Z"
+        "assessedAt": "2026-10-28T12:00:42.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -7854,7 +7854,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-28T10:50:44.000Z"
+        "assessedAt": "2026-10-28T12:14:13.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -8236,7 +8236,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-699",
+      "id": "sepa-814",
       "name": "Cruden Bay",
       "slug": "cruden-bay",
       "country": "Scotland",
@@ -8244,16 +8244,16 @@
       "lat": 57.40946446217156,
       "lon": -1.855849824325745,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "699",
+        "sourceId": "814",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=527186"
       }
     },
     {
-      "id": "sepa-645",
+      "id": "sepa-844",
       "name": "Cullen Bay",
       "slug": "cullen-bay",
       "country": "Scotland",
@@ -8261,16 +8261,16 @@
       "lat": 57.6945411409151,
       "lon": -2.8350450477976894,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "645",
+        "sourceId": "844",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=233605"
       }
     },
     {
-      "id": "sepa-646",
+      "id": "sepa-845",
       "name": "Culzean",
       "slug": "culzean",
       "country": "Scotland",
@@ -8278,11 +8278,11 @@
       "lat": 55.34883589204739,
       "lon": -4.8082157449317435,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "646",
+        "sourceId": "845",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124748"
       }
     },
@@ -8298,7 +8298,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-26T08:25:09.000Z"
+        "assessedAt": "2026-11-02T09:44:36.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -8834,7 +8834,7 @@
       "previousClassification": "Poor"
     },
     {
-      "id": "sepa-647",
+      "id": "sepa-846",
       "name": "Dhoon Bay",
       "slug": "dhoon-bay",
       "country": "Scotland",
@@ -8842,11 +8842,11 @@
       "lat": 54.814229581173265,
       "lon": -4.09069160994503,
       "classification": "Sufficient",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "647",
+        "sourceId": "846",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=320901"
       }
     },
@@ -8892,7 +8892,7 @@
       "currentAssessment": {
         "level": "satisfactory",
         "label": "Satisfactory",
-        "assessedAt": "2026-08-28T09:24:24.000Z"
+        "assessedAt": "2026-10-28T10:51:39.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -8902,7 +8902,7 @@
       }
     },
     {
-      "id": "sepa-648",
+      "id": "sepa-847",
       "name": "Dores",
       "slug": "dores",
       "country": "Scotland",
@@ -8910,16 +8910,16 @@
       "lat": 57.383708857165956,
       "lon": -4.335945330366836,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "inland",
       "source": {
         "api": "sepa",
-        "sourceId": "648",
+        "sourceId": "847",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=200305"
       }
     },
     {
-      "id": "sepa-649",
+      "id": "sepa-848",
       "name": "Dornoch",
       "slug": "dornoch",
       "country": "Scotland",
@@ -8927,11 +8927,11 @@
       "lat": 57.87799730897467,
       "lon": -4.0166313791034485,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "649",
+        "sourceId": "848",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=202936"
       }
     },
@@ -9071,7 +9071,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-26T10:07:58.000Z"
+        "assessedAt": "2026-11-02T11:34:59.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -9267,7 +9267,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-650",
+      "id": "sepa-849",
       "name": "Dunbar (Belhaven)",
       "slug": "dunbar-belhaven",
       "country": "Scotland",
@@ -9275,33 +9275,33 @@
       "lat": 56.003811980162894,
       "lon": -2.554939765695209,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "650",
+        "sourceId": "849",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4579"
       }
     },
     {
-      "id": "sepa-651",
+      "id": "sepa-850",
       "name": "Dunbar (East)",
       "slug": "dunbar-east",
       "country": "Scotland",
       "region": "East Lothian",
       "lat": 56.00276237845829,
       "lon": -2.5108774769804785,
-      "classification": "Sufficient",
-      "classificationYear": 2025,
+      "classification": "Poor",
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "651",
+        "sourceId": "850",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4575"
       }
     },
     {
-      "id": "sepa-652",
+      "id": "sepa-851",
       "name": "Dunnet",
       "slug": "dunnet",
       "country": "Scotland",
@@ -9309,11 +9309,11 @@
       "lat": 58.61754522669807,
       "lon": -3.351396347359348,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "652",
+        "sourceId": "851",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=200324"
       }
     },
@@ -9881,7 +9881,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-28T10:49:57.000Z"
+        "assessedAt": "2026-10-19T11:05:58.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -10016,7 +10016,7 @@
       "previousClassification": "Good"
     },
     {
-      "id": "sepa-653",
+      "id": "sepa-852",
       "name": "Elie (Harbour) and Earlsferry",
       "slug": "elie-harbour-and-earlsferry",
       "country": "Scotland",
@@ -10024,16 +10024,16 @@
       "lat": 56.1880624617224,
       "lon": -2.824913310997797,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "653",
+        "sourceId": "852",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4556"
       }
     },
     {
-      "id": "sepa-654",
+      "id": "sepa-853",
       "name": "Elie (Ruby Bay)",
       "slug": "elie-ruby-bay",
       "country": "Scotland",
@@ -10041,16 +10041,16 @@
       "lat": 56.18583027576146,
       "lon": -2.8146830049742206,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "654",
+        "sourceId": "853",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=10962"
       }
     },
     {
-      "id": "sepa-655",
+      "id": "sepa-854",
       "name": "Ettrick Bay",
       "slug": "ettrick-bay",
       "country": "Scotland",
@@ -10058,11 +10058,11 @@
       "lat": 55.84766505921792,
       "lon": -5.136785672527471,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "655",
+        "sourceId": "854",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124817"
       }
     },
@@ -10129,7 +10129,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-656",
+      "id": "sepa-855",
       "name": "Eyemouth",
       "slug": "eyemouth",
       "country": "Scotland",
@@ -10137,11 +10137,11 @@
       "lat": 55.87384372940648,
       "lon": -2.0900679191808336,
       "classification": "Sufficient",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "656",
+        "sourceId": "855",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=9334"
       }
     },
@@ -10536,7 +10536,7 @@
       "previousClassification": "Good"
     },
     {
-      "id": "sepa-657",
+      "id": "sepa-856",
       "name": "Findhorn",
       "slug": "findhorn",
       "country": "Scotland",
@@ -10544,11 +10544,11 @@
       "lat": 57.66396228868412,
       "lon": -3.6181471617682877,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "657",
+        "sourceId": "856",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=301895"
       }
     },
@@ -10616,19 +10616,19 @@
       "officialName": "Bournemouth Fisherman`s Walk"
     },
     {
-      "id": "sepa-703",
+      "id": "sepa-818",
       "name": "Fisherrow Sands",
       "slug": "fisherrow-sands",
       "country": "Scotland",
       "region": "East Lothian",
       "lat": 55.94627195956721,
       "lon": -3.0711538632589637,
-      "classification": "Poor",
-      "classificationYear": 2025,
+      "classification": "Sufficient",
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "703",
+        "sourceId": "818",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4592"
       }
     },
@@ -11073,7 +11073,7 @@
       "previousClassification": "Sufficient"
     },
     {
-      "id": "sepa-658",
+      "id": "sepa-857",
       "name": "Fraserburgh (Philorth)",
       "slug": "fraserburgh-philorth",
       "country": "Scotland",
@@ -11081,16 +11081,16 @@
       "lat": 57.67529672207544,
       "lon": -1.9661256393599382,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "658",
+        "sourceId": "857",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=233610"
       }
     },
     {
-      "id": "sepa-659",
+      "id": "sepa-858",
       "name": "Fraserburgh (Tiger Hill)",
       "slug": "fraserburgh-tiger-hill",
       "country": "Scotland",
@@ -11098,11 +11098,11 @@
       "lat": 57.68060043139701,
       "lon": -1.9931175804347392,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "659",
+        "sourceId": "858",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=235333"
       }
     },
@@ -11448,7 +11448,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-700",
+      "id": "sepa-815",
       "name": "Gairloch Beach",
       "slug": "gairloch-beach",
       "country": "Scotland",
@@ -11456,16 +11456,16 @@
       "lat": 57.71722173548588,
       "lon": -5.688710527828485,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "700",
+        "sourceId": "815",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=534661"
       }
     },
     {
-      "id": "sepa-660",
+      "id": "sepa-859",
       "name": "Ganavan",
       "slug": "ganavan",
       "country": "Scotland",
@@ -11473,16 +11473,16 @@
       "lat": 56.43888442398062,
       "lon": -5.469748616685143,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "660",
+        "sourceId": "859",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124482"
       }
     },
     {
-      "id": "sepa-661",
+      "id": "sepa-860",
       "name": "Girvan",
       "slug": "girvan",
       "country": "Scotland",
@@ -11490,11 +11490,11 @@
       "lat": 55.23731522300145,
       "lon": -4.861496100964096,
       "classification": "Sufficient",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "661",
+        "sourceId": "860",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124770"
       }
     },
@@ -12078,7 +12078,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-28T09:45:54.000Z"
+        "assessedAt": "2026-10-28T11:11:09.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -12088,7 +12088,7 @@
       }
     },
     {
-      "id": "sepa-662",
+      "id": "sepa-861",
       "name": "Gullane",
       "slug": "gullane",
       "country": "Scotland",
@@ -12096,11 +12096,11 @@
       "lat": 56.03985376431561,
       "lon": -2.844363739810782,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "662",
+        "sourceId": "861",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4587"
       }
     },
@@ -13165,7 +13165,7 @@
       "previousClassification": "Poor"
     },
     {
-      "id": "sepa-663",
+      "id": "sepa-862",
       "name": "Heads of Ayr",
       "slug": "heads-of-ayr",
       "country": "Scotland",
@@ -13173,11 +13173,11 @@
       "lat": 55.43448774463382,
       "lon": -4.685274885600843,
       "classification": "Sufficient",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "663",
+        "sourceId": "862",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124738"
       }
     },
@@ -13193,7 +13193,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-28T11:24:00.000Z"
+        "assessedAt": "2026-10-28T12:35:03.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -14505,24 +14505,24 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-664",
+      "id": "sepa-863",
       "name": "Inverboyndie",
       "slug": "inverboyndie",
       "country": "Scotland",
       "region": "Aberdeenshire",
       "lat": 57.671338441508965,
       "lon": -2.551746696084153,
-      "classification": "Good",
-      "classificationYear": 2025,
+      "classification": "Excellent",
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "664",
+        "sourceId": "863",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=233607"
       }
     },
     {
-      "id": "sepa-665",
+      "id": "sepa-864",
       "name": "Irvine",
       "slug": "irvine",
       "country": "Scotland",
@@ -14530,11 +14530,11 @@
       "lat": 55.60157430483206,
       "lon": -4.688780487030532,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "665",
+        "sourceId": "864",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124688"
       }
     },
@@ -14799,7 +14799,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-26T07:09:37.000Z"
+        "assessedAt": "2026-10-28T08:26:24.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -14871,7 +14871,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-666",
+      "id": "sepa-865",
       "name": "Kinghorn (Harbour Beach)",
       "slug": "kinghorn-harbour-beach",
       "country": "Scotland",
@@ -14879,16 +14879,16 @@
       "lat": 56.06752641441751,
       "lon": -3.1720926549548363,
       "classification": "Poor",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "666",
+        "sourceId": "865",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4565"
       }
     },
     {
-      "id": "sepa-667",
+      "id": "sepa-866",
       "name": "Kinghorn (Pettycur)",
       "slug": "kinghorn-pettycur",
       "country": "Scotland",
@@ -14896,11 +14896,11 @@
       "lat": 56.06274063130012,
       "lon": -3.1830293048993115,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "667",
+        "sourceId": "866",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4566"
       }
     },
@@ -14967,7 +14967,7 @@
       "previousClassification": "Good"
     },
     {
-      "id": "sepa-668",
+      "id": "sepa-867",
       "name": "Kingsbarns",
       "slug": "kingsbarns",
       "country": "Scotland",
@@ -14975,11 +14975,11 @@
       "lat": 56.302013191727696,
       "lon": -2.641302084766658,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "668",
+        "sourceId": "867",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=9320"
       }
     },
@@ -15046,19 +15046,19 @@
       "previousClassification": "Good"
     },
     {
-      "id": "sepa-712",
+      "id": "sepa-892",
       "name": "Kirkcaldy (Seafield)",
       "slug": "kirkcaldy-seafield",
       "country": "Scotland",
       "region": "Fife",
       "lat": 56.0945956862671,
       "lon": -3.157162728137328,
-      "classification": "Excellent",
-      "classificationYear": 2025,
+      "classification": "Good",
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "712",
+        "sourceId": "892",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=9337"
       }
     },
@@ -15249,7 +15249,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-626",
+      "id": "sepa-825",
       "name": "Largs (Pencil Beach)",
       "slug": "largs-pencil-beach",
       "country": "Scotland",
@@ -15257,11 +15257,11 @@
       "lat": 55.78241501900373,
       "lon": -4.860739943881484,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "626",
+        "sourceId": "825",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=472272"
       }
     },
@@ -15452,7 +15452,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-669",
+      "id": "sepa-868",
       "name": "Leven",
       "slug": "leven",
       "country": "Scotland",
@@ -15460,11 +15460,11 @@
       "lat": 56.20134418670744,
       "lon": -2.9750964989010296,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "669",
+        "sourceId": "868",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4561"
       }
     },
@@ -16348,7 +16348,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-670",
+      "id": "sepa-869",
       "name": "Loch Morlich",
       "slug": "loch-morlich",
       "country": "Scotland",
@@ -16356,11 +16356,11 @@
       "lat": 57.1670166456664,
       "lon": -3.7022133797778998,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "inland",
       "source": {
         "api": "sepa",
-        "sourceId": "670",
+        "sourceId": "869",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=366986"
       }
     },
@@ -16427,7 +16427,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-671",
+      "id": "sepa-870",
       "name": "Longniddry",
       "slug": "longniddry",
       "country": "Scotland",
@@ -16435,28 +16435,28 @@
       "lat": 55.984172901465485,
       "lon": -2.9052081201309226,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "671",
+        "sourceId": "870",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=344047"
       }
     },
     {
-      "id": "sepa-672",
+      "id": "sepa-871",
       "name": "Lossiemouth (East)",
       "slug": "lossiemouth-east",
       "country": "Scotland",
       "region": "Moray",
       "lat": 57.71781704550706,
       "lon": -3.276566121204644,
-      "classification": "Good",
-      "classificationYear": 2025,
+      "classification": "Excellent",
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "672",
+        "sourceId": "871",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=233603"
       }
     },
@@ -16541,7 +16541,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-705",
+      "id": "sepa-820",
       "name": "Lower Largo",
       "slug": "lower-largo",
       "country": "Scotland",
@@ -16549,11 +16549,11 @@
       "lat": 56.21186680217841,
       "lon": -2.934186347212841,
       "classification": "Poor",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "705",
+        "sourceId": "820",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=301920"
       }
     },
@@ -16744,7 +16744,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-706",
+      "id": "sepa-821",
       "name": "Lunan Bay",
       "slug": "lunan-bay",
       "country": "Scotland",
@@ -16752,16 +16752,16 @@
       "lat": 56.6551714373172,
       "lon": -2.5023496850424127,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "706",
+        "sourceId": "821",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=9380"
       }
     },
     {
-      "id": "sepa-673",
+      "id": "sepa-872",
       "name": "Lunderston Bay",
       "slug": "lunderston-bay",
       "country": "Scotland",
@@ -16769,16 +16769,16 @@
       "lat": 55.930043931190355,
       "lon": -4.876420094617986,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "673",
+        "sourceId": "872",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124599"
       }
     },
     {
-      "id": "sepa-627",
+      "id": "sepa-826",
       "name": "Luss Bay",
       "slug": "luss-bay",
       "country": "Scotland",
@@ -16786,11 +16786,11 @@
       "lat": 56.10340652067739,
       "lon": -4.638045088530923,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "inland",
       "source": {
         "api": "sepa",
-        "sourceId": "627",
+        "sourceId": "826",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=125079"
       }
     },
@@ -17139,19 +17139,19 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-674",
+      "id": "sepa-873",
       "name": "Machrihanish",
       "slug": "machrihanish",
       "country": "Scotland",
       "region": "Argyll and Bute",
       "lat": 55.42504149686713,
       "lon": -5.729595631504287,
-      "classification": "Excellent",
-      "classificationYear": 2025,
+      "classification": "Good",
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "674",
+        "sourceId": "873",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124505"
       }
     },
@@ -17229,7 +17229,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-28T08:27:08.000Z"
+        "assessedAt": "2026-10-19T08:22:20.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -17250,7 +17250,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-28T08:51:24.000Z"
+        "assessedAt": "2026-10-19T08:58:51.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -17322,7 +17322,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-675",
+      "id": "sepa-874",
       "name": "Maidens",
       "slug": "maidens",
       "country": "Scotland",
@@ -17330,11 +17330,11 @@
       "lat": 55.33812207762887,
       "lon": -4.812835551602134,
       "classification": "Sufficient",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "675",
+        "sourceId": "874",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124755"
       }
     },
@@ -18360,7 +18360,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-28T09:02:56.000Z"
+        "assessedAt": "2026-10-28T10:33:54.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -18370,7 +18370,7 @@
       }
     },
     {
-      "id": "sepa-676",
+      "id": "sepa-875",
       "name": "Millport Bay",
       "slug": "millport-bay",
       "country": "Scotland",
@@ -18378,11 +18378,11 @@
       "lat": 55.7527635559289,
       "lon": -4.923948832789163,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "676",
+        "sourceId": "875",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124651"
       }
     },
@@ -18574,7 +18574,7 @@
       "previousClassification": "Good"
     },
     {
-      "id": "sepa-707",
+      "id": "sepa-822",
       "name": "Monifieth",
       "slug": "monifieth",
       "country": "Scotland",
@@ -18582,16 +18582,16 @@
       "lat": 56.47743825565669,
       "lon": -2.8133236450432406,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "707",
+        "sourceId": "822",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=10307"
       }
     },
     {
-      "id": "sepa-677",
+      "id": "sepa-876",
       "name": "Montrose",
       "slug": "montrose",
       "country": "Scotland",
@@ -18599,11 +18599,11 @@
       "lat": 56.711708357016555,
       "lon": -2.4450653190658493,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "677",
+        "sourceId": "876",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=9381"
       }
     },
@@ -18918,7 +18918,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-678",
+      "id": "sepa-877",
       "name": "Mossyard",
       "slug": "mossyard",
       "country": "Scotland",
@@ -18926,11 +18926,11 @@
       "lat": 54.840669656136654,
       "lon": -4.255554621850475,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "678",
+        "sourceId": "877",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=114582"
       }
     },
@@ -19133,7 +19133,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-26T08:50:24.000Z"
+        "assessedAt": "2026-10-28T10:20:38.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -19205,7 +19205,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-713",
+      "id": "sepa-893",
       "name": "Nairn (Central)",
       "slug": "nairn-central",
       "country": "Scotland",
@@ -19213,28 +19213,28 @@
       "lat": 57.59018363679092,
       "lon": -3.871390340715345,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "713",
+        "sourceId": "893",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=206179"
       }
     },
     {
-      "id": "sepa-679",
+      "id": "sepa-878",
       "name": "Nairn (East)",
       "slug": "nairn-east",
       "country": "Scotland",
       "region": "Highland",
       "lat": 57.593488820924094,
       "lon": -3.856852709785879,
-      "classification": "Excellent",
-      "classificationYear": 2025,
+      "classification": "Good",
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "679",
+        "sourceId": "878",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=206178"
       }
     },
@@ -19578,7 +19578,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-26T09:15:57.000Z"
+        "assessedAt": "2026-10-28T10:38:02.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -19885,7 +19885,7 @@
       "officialName": "Norman`s Bay"
     },
     {
-      "id": "sepa-680",
+      "id": "sepa-879",
       "name": "North Berwick (Milsey Bay)",
       "slug": "north-berwick-milsey-bay",
       "country": "Scotland",
@@ -19893,16 +19893,16 @@
       "lat": 56.058771637111214,
       "lon": -2.7047496524686783,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "680",
+        "sourceId": "879",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4584"
       }
     },
     {
-      "id": "sepa-681",
+      "id": "sepa-880",
       "name": "North Berwick (West)",
       "slug": "north-berwick-west",
       "country": "Scotland",
@@ -19910,11 +19910,11 @@
       "lat": 56.05988739604533,
       "lon": -2.7215834681129136,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "681",
+        "sourceId": "880",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4585"
       }
     },
@@ -20393,7 +20393,7 @@
       "previousClassification": "Sufficient"
     },
     {
-      "id": "sepa-708",
+      "id": "sepa-823",
       "name": "Pease Bay",
       "slug": "pease-bay",
       "country": "Scotland",
@@ -20401,11 +20401,11 @@
       "lat": 55.93235588087325,
       "lon": -2.333473772861715,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "708",
+        "sourceId": "823",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=9336"
       }
     },
@@ -21130,7 +21130,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-682",
+      "id": "sepa-881",
       "name": "Peterhead (Lido)",
       "slug": "peterhead-lido",
       "country": "Scotland",
@@ -21138,11 +21138,11 @@
       "lat": 57.49660797941945,
       "lon": -1.7932923533986593,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "682",
+        "sourceId": "881",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=233612"
       }
     },
@@ -22246,7 +22246,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-28T11:34:44.000Z"
+        "assessedAt": "2026-10-19T11:50:26.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -23475,7 +23475,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-26T11:03:11.000Z"
+        "assessedAt": "2026-11-02T12:40:29.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -23485,7 +23485,7 @@
       }
     },
     {
-      "id": "sepa-711",
+      "id": "sepa-891",
       "name": "Portobello (Central)",
       "slug": "portobello-central",
       "country": "Scotland",
@@ -23493,28 +23493,28 @@
       "lat": 55.95271325135658,
       "lon": -3.1018236313179446,
       "classification": "Sufficient",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "711",
+        "sourceId": "891",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4593"
       }
     },
     {
-      "id": "sepa-710",
+      "id": "sepa-890",
       "name": "Portobello (West)",
       "slug": "portobello-west",
       "country": "Scotland",
       "region": "City of Edinburgh",
       "lat": 55.95962308653929,
       "lon": -3.117749047439397,
-      "classification": "Sufficient",
-      "classificationYear": 2025,
+      "classification": "Poor",
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "710",
+        "sourceId": "890",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4594"
       }
     },
@@ -23592,7 +23592,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-28T11:10:26.000Z"
+        "assessedAt": "2026-10-19T11:28:40.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -23613,7 +23613,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-28T10:01:21.000Z"
+        "assessedAt": "2026-10-19T10:15:09.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -23871,7 +23871,7 @@
       "previousClassification": "Good"
     },
     {
-      "id": "sepa-683",
+      "id": "sepa-882",
       "name": "Prestwick",
       "slug": "prestwick",
       "country": "Scotland",
@@ -23879,11 +23879,11 @@
       "lat": 55.501381550929,
       "lon": -4.622304498804085,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "683",
+        "sourceId": "882",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124714"
       }
     },
@@ -25226,7 +25226,7 @@
       "previousClassification": "Sufficient"
     },
     {
-      "id": "sepa-684",
+      "id": "sepa-883",
       "name": "Rockcliffe",
       "slug": "rockcliffe",
       "country": "Scotland",
@@ -25234,11 +25234,11 @@
       "lat": 54.86461259501979,
       "lon": -3.7967758872941455,
       "classification": "Sufficient",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "684",
+        "sourceId": "883",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124791"
       }
     },
@@ -25305,7 +25305,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-685",
+      "id": "sepa-884",
       "name": "Rosehearty",
       "slug": "rosehearty",
       "country": "Scotland",
@@ -25313,16 +25313,16 @@
       "lat": 57.698613410853376,
       "lon": -2.11254654187088,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "685",
+        "sourceId": "884",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=233608"
       }
     },
     {
-      "id": "sepa-709",
+      "id": "sepa-824",
       "name": "Rosemarkie",
       "slug": "rosemarkie",
       "country": "Scotland",
@@ -25330,11 +25330,11 @@
       "lat": 57.593436588960465,
       "lon": -4.111283533752915,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "709",
+        "sourceId": "824",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=206238"
       }
     },
@@ -25747,7 +25747,7 @@
       "previousClassification": "Good"
     },
     {
-      "id": "sepa-714",
+      "id": "sepa-894",
       "name": "Saltcoats/Ardrossan",
       "slug": "saltcoats-ardrossan",
       "country": "Scotland",
@@ -25755,11 +25755,11 @@
       "lat": 55.63936635026754,
       "lon": -4.806541705904865,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "714",
+        "sourceId": "894",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124673"
       }
     },
@@ -25826,7 +25826,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-701",
+      "id": "sepa-816",
       "name": "Sand Beach",
       "slug": "sand-beach",
       "country": "Scotland",
@@ -25834,11 +25834,11 @@
       "lat": 57.73504515037386,
       "lon": -5.766924069731412,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "701",
+        "sourceId": "816",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=536136"
       }
     },
@@ -26252,7 +26252,7 @@
       }
     },
     {
-      "id": "sepa-686",
+      "id": "sepa-885",
       "name": "Sandyhills",
       "slug": "sandyhills",
       "country": "Scotland",
@@ -26260,11 +26260,11 @@
       "lat": 54.87834865473809,
       "lon": -3.7284434093990613,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "686",
+        "sourceId": "885",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=114567"
       }
     },
@@ -26765,7 +26765,7 @@
       "previousClassification": "Good"
     },
     {
-      "id": "sepa-687",
+      "id": "sepa-886",
       "name": "Seacliff",
       "slug": "seacliff",
       "country": "Scotland",
@@ -26773,11 +26773,11 @@
       "lat": 56.05261357786157,
       "lon": -2.6357739820174504,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "687",
+        "sourceId": "886",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4403"
       }
     },
@@ -27092,19 +27092,19 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-688",
+      "id": "sepa-887",
       "name": "Seamill",
       "slug": "seamill",
       "country": "Scotland",
       "region": "North Ayrshire",
       "lat": 55.68578512639667,
       "lon": -4.867961475238444,
-      "classification": "Excellent",
-      "classificationYear": 2025,
+      "classification": "Good",
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "688",
+        "sourceId": "887",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124665"
       }
     },
@@ -27729,7 +27729,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-689",
+      "id": "sepa-888",
       "name": "Seton Sands",
       "slug": "seton-sands",
       "country": "Scotland",
@@ -27737,11 +27737,11 @@
       "lat": 55.97581232131166,
       "lon": -2.919130191286288,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "689",
+        "sourceId": "888",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=11789"
       }
     },
@@ -29204,7 +29204,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-690",
+      "id": "sepa-889",
       "name": "Southerness",
       "slug": "southerness",
       "country": "Scotland",
@@ -29212,11 +29212,11 @@
       "lat": 54.870329788210356,
       "lon": -3.5958526068390833,
       "classification": "Sufficient",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "690",
+        "sourceId": "889",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124787"
       }
     },
@@ -29593,7 +29593,7 @@
       "previousClassification": "Good"
     },
     {
-      "id": "sepa-691",
+      "id": "sepa-806",
       "name": "St Andrews (East Sands)",
       "slug": "st-andrews-east-sands",
       "country": "Scotland",
@@ -29601,16 +29601,16 @@
       "lat": 56.336601880854744,
       "lon": -2.7779753986345885,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "691",
+        "sourceId": "806",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=9318"
       }
     },
     {
-      "id": "sepa-692",
+      "id": "sepa-807",
       "name": "St Andrews (West Sands)",
       "slug": "st-andrews-west-sands",
       "country": "Scotland",
@@ -29618,11 +29618,11 @@
       "lat": 56.348859357923175,
       "lon": -2.802915382183341,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "692",
+        "sourceId": "807",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=9316"
       }
     },
@@ -30370,7 +30370,7 @@
       "previousClassification": "Good"
     },
     {
-      "id": "sepa-693",
+      "id": "sepa-808",
       "name": "Stonehaven",
       "slug": "stonehaven",
       "country": "Scotland",
@@ -30378,11 +30378,11 @@
       "lat": 56.96558639618718,
       "lon": -2.2040818571174907,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "693",
+        "sourceId": "808",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=233617"
       }
     },
@@ -31236,7 +31236,7 @@
       ]
     },
     {
-      "id": "sepa-694",
+      "id": "sepa-809",
       "name": "Thorntonloch",
       "slug": "thorntonloch",
       "country": "Scotland",
@@ -31244,11 +31244,11 @@
       "lat": 55.96206297424554,
       "lon": -2.3958788506989364,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "694",
+        "sourceId": "809",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4573"
       }
     },
@@ -31440,7 +31440,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-695",
+      "id": "sepa-810",
       "name": "Thurso",
       "slug": "thurso",
       "country": "Scotland",
@@ -31448,11 +31448,11 @@
       "lat": 58.59868197129937,
       "lon": -3.521095732191272,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "695",
+        "sourceId": "810",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=205952"
       }
     },
@@ -32313,7 +32313,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-696",
+      "id": "sepa-811",
       "name": "Troon (South Beach)",
       "slug": "troon-south-beach",
       "country": "Scotland",
@@ -32321,11 +32321,11 @@
       "lat": 55.54030719309083,
       "lon": -4.662877319295525,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "696",
+        "sourceId": "811",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=124706"
       }
     },
@@ -32589,7 +32589,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-26T08:06:19.000Z"
+        "assessedAt": "2026-10-28T09:20:37.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -33237,7 +33237,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-628",
+      "id": "sepa-827",
       "name": "Wardie Bay",
       "slug": "wardie-bay",
       "country": "Scotland",
@@ -33245,11 +33245,11 @@
       "lat": 55.98064108706622,
       "lon": -3.2171573072232778,
       "classification": "Good",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "628",
+        "sourceId": "827",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=567219"
       }
     },
@@ -33354,11 +33354,6 @@
       "lat": 54.0986303775565,
       "lon": -6.24765062440292,
       "classification": "Unknown",
-      "currentAssessment": {
-        "level": "satisfactory",
-        "label": "Satisfactory",
-        "assessedAt": "2026-08-26T10:48:49.000Z"
-      },
       "waterType": "coastal",
       "source": {
         "api": "daera",
@@ -33474,7 +33469,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-26T08:52:21.000Z"
+        "assessedAt": "2026-11-02T10:10:50.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -34174,7 +34169,7 @@
       "currentAssessment": {
         "level": "good",
         "label": "Excellent",
-        "assessedAt": "2026-08-28T10:37:40.000Z"
+        "assessedAt": "2026-10-19T10:55:02.000Z"
       },
       "waterType": "coastal",
       "source": {
@@ -35064,7 +35059,7 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-697",
+      "id": "sepa-812",
       "name": "Whitesands",
       "slug": "whitesands-scotland",
       "country": "Scotland",
@@ -35072,11 +35067,11 @@
       "lat": 55.989014795443246,
       "lon": -2.463443195235758,
       "classification": "Excellent",
-      "classificationYear": 2025,
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "697",
+        "sourceId": "812",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4574"
       }
     },
@@ -36018,19 +36013,19 @@
       "previousClassification": "Excellent"
     },
     {
-      "id": "sepa-698",
+      "id": "sepa-813",
       "name": "Yellow Craig",
       "slug": "yellow-craig",
       "country": "Scotland",
       "region": "East Lothian",
       "lat": 56.065181156247675,
       "lon": -2.7803366730931485,
-      "classification": "Sufficient",
-      "classificationYear": 2025,
+      "classification": "Good",
+      "classificationYear": 2026,
       "waterType": "coastal",
       "source": {
         "api": "sepa",
-        "sourceId": "698",
+        "sourceId": "813",
         "profileUrl": "https://bathingwaters.sepa.org.uk/locations-and-results/results?location=4586"
       }
     }
