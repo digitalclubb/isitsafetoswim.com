@@ -142,6 +142,19 @@ describe('evaluateVerdict — caution', () => {
 		expect(result.reason).toMatch(/risk/i);
 	});
 
+	it('ignores a forecast left over from last season', () => {
+		const result = evaluateVerdict({
+			classification: 'Excellent',
+			latestSample: null,
+			riskForecast: { riskLevel: 'increased' },
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			now: winterNow
+		});
+		expect(result.verdict).toBe('yes');
+		expect(result.factors.some((f) => f.label === 'Pollution risk forecast')).toBe(false);
+	});
+
 	it('returns Caution after heavy rain', () => {
 		const result = evaluateVerdict({
 			classification: 'Excellent',

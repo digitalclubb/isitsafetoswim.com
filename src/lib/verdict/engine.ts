@@ -246,12 +246,15 @@ function fmtHours(h: number): string {
 export function evaluateVerdict(
 	inputs: VerdictInputs
 ): Omit<VerdictResult, 'fetchedAt' | 'dataAge'> {
-	const { classification, latestSample, riskForecast, recentDischarges, rainfall24hMm, now } =
-		inputs;
+	const { classification, latestSample, recentDischarges, rainfall24hMm, now } = inputs;
 	const waterType = inputs.waterType ?? 'coastal';
 	const rainMatters = inputs.rainImpacted !== false;
 	const factors: VerdictFactor[] = [];
 	const inSeason = bathingSeasonActive(now, inputs.country);
+	// The regulator's profile keeps serving the last forecast of the season all
+	// winter, so out of season it is dropped: a September "Normal" listed as a
+	// positive factor in November, or a stale "Increased" cautioning until May.
+	const riskForecast = inSeason ? inputs.riskForecast : null;
 
 	const ongoing = ongoingNearby(recentDischarges, DISTANCE_RELEVANT_M);
 	const justFinished = recentNearby(
