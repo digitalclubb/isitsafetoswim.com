@@ -942,3 +942,65 @@ describe('the regulator reading appears on every verdict, not only the caution p
 		expect(r.reason).toContain('No annual classification is published');
 	});
 });
+
+describe('evaluateVerdict factor order', () => {
+	it('lists what decided the verdict first', () => {
+		const result = evaluateVerdict({
+			classification: 'Good',
+			latestSample: null,
+			riskForecast: null,
+			recentDischarges: [
+				{
+					outfallName: 'X',
+					distanceMetres: 600,
+					startedAt: '2026-01-15T08:00:00Z',
+					ongoing: true,
+					lat: 0,
+					lon: 0
+				}
+			],
+			rainfall24hMm: 0,
+			now: winterNow
+		});
+		expect(result.factors[0].label).toBe('Sewage discharge in progress');
+		expect(result.factors.at(-1)?.label).toBe('Bathing season');
+	});
+
+	it('keeps an expired high sample out of the lead', () => {
+		const result = evaluateVerdict({
+			classification: 'Excellent',
+			latestSample: { sampledAt: '2025-09-20T10:00:00Z', eColi: 1500, intestinalEnterococci: 500 },
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			now: winterNow
+		});
+		expect(result.verdict).toBe('yes');
+		expect(result.factors[0].label).toBe('Annual classification');
+	});
+
+	it("does not count an expired clean sample in the water's favour", () => {
+		const result = evaluateVerdict({
+			classification: 'Good',
+			latestSample: { sampledAt: '2025-09-20T10:00:00Z', eColi: 18 },
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			now: winterNow
+		});
+		expect(result.factors.find((f) => f.label === 'Latest E. coli')?.weight).toBe('neutral');
+	});
+
+	it('leads a Sufficient caution with the classification', () => {
+		const result = evaluateVerdict({
+			classification: 'Sufficient',
+			latestSample: null,
+			riskForecast: null,
+			recentDischarges: [],
+			rainfall24hMm: 0,
+			now: winterNow
+		});
+		expect(result.verdict).toBe('caution');
+		expect(result.factors[0].label).toBe('Annual classification');
+	});
+});

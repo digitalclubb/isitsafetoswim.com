@@ -295,7 +295,7 @@ export function evaluateVerdict(
 	// before the hard-No returns so it appears on every verdict, not just Yes.
 	if (!inSeason) {
 		factors.push({
-			label: 'Bathing season',
+			label: SEASON_LABEL,
 			value: `Closed until ${seasonLabels(inputs.country).opens}`,
 			weight: 'neutral'
 		});
@@ -554,6 +554,8 @@ export function evaluateVerdict(
 	};
 }
 
+const SEASON_LABEL = 'Bathing season';
+
 function appendBaseFactors(
 	existing: VerdictFactor[],
 	classification: Classification,
@@ -614,24 +616,34 @@ function appendBaseFactors(
 			weight: rain >= NOTICEABLE_RAIN_MM ? 'neutral' : 'positive'
 		});
 	}
+	// A sample past SAMPLE_CURRENT_DAYS no longer decides the verdict. A high
+	// one stays negative as a visible warning, but a clean one goes neutral: a
+	// September reading listed as a reason the water is fine in November is
+	// reassurance the data cannot give. An undated one counts as current,
+	// matching evaluateVerdict.
+	const sampleAge = hoursSince(sample?.sampledAt, now);
+	const sampleStale = sampleAge !== null && sampleAge > SAMPLE_CURRENT_DAYS * 24;
+	const sampleWeight = (count: number, elevated: number): VerdictFactor['weight'] =>
+		count >= elevated ? 'negative' : sampleStale ? 'neutral' : 'positive';
 	if (sample?.eColi !== undefined && !seen.has('Latest E. coli')) {
 		out.push({
 			label: 'Latest E. coli',
 			value: `${sample.eColi} cfu/100ml`,
-			weight: sample.eColi >= limits['E. coli'].elevated ? 'negative' : 'positive'
+			weight: sampleWeight(sample.eColi, limits['E. coli'].elevated)
 		});
 	}
 	if (sample?.intestinalEnterococci !== undefined && !seen.has('Latest intestinal enterococci')) {
 		out.push({
 			label: 'Latest intestinal enterococci',
 			value: `${sample.intestinalEnterococci} cfu/100ml`,
-			weight:
-				sample.intestinalEnterococci >= limits['intestinal enterococci'].elevated
-					? 'negative'
-					: 'positive'
+			weight: sampleWeight(sample.intestinalEnterococci, limits['intestinal enterococci'].elevated)
 		});
 	}
-	return out;
+	// The branch that decided the verdict pushed its factor first, so it already
+	// leads. The season row is the exception: it is pushed before every branch
+	// so it reaches every verdict, and out of season it sat above the spill that
+	// made a beach a No. It decides nothing, so it goes last. Stable sort.
+	return out.sort((a, b) => Number(a.label === SEASON_LABEL) - Number(b.label === SEASON_LABEL));
 }
 
 function classWeight(c: Classification): VerdictFactor['weight'] {
