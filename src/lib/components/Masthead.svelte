@@ -92,10 +92,9 @@
 		font-style: italic;
 	}
 
-	/* Wrapping rather than a fixed budget: five labels at 15px do not fit a
-	 * 390px phone once the container padding is taken out, and the exact width
-	 * depends on which system font the device resolves. Wrapping to a second
-	 * row cannot overflow whatever the metrics turn out to be. */
+	/* Wrapping rather than a fixed budget: the exact width depends on which
+	 * system font the device resolves, and a second row cannot overflow
+	 * whatever the metrics turn out to be. Phones get their own layout below. */
 	nav {
 		display: flex;
 		flex-wrap: wrap;
@@ -132,29 +131,26 @@
 		);
 	}
 
+	/* Phones: the brand takes its own row and the nav spans the full width
+	 * beneath it. Beside the brand the five labels need ~350px against ~300px
+	 * free at 390px, so they wrapped into a second 44px row with "About"
+	 * stranded on it. Full width, spaced by space-between, they need ~240px,
+	 * which fits a 320px phone; flex-wrap stays as the safety net. */
 	@media (max-width: 540px) {
 		.bar {
-			padding-block: var(--space-3);
+			flex-wrap: wrap;
+			row-gap: var(--space-1);
+			padding-block: var(--space-3) 0;
 		}
 
-		/* Icon-only brand on phones: clip the wordmark (matching .sr-only in
-		 * app.css) so it stays in the DOM and accessibility tree, keeping the home
-		 * link's name and crawlable text while freeing the row for the nav items.
-		 * A static class can't be used here because .sr-only would hide it at every
-		 * width. white-space: nowrap is inherited from the base .wordmark rule. */
-		.wordmark {
-			position: absolute;
-			width: 1px;
-			height: 1px;
-			padding: 0;
-			margin: -1px;
-			overflow: hidden;
-			clip: rect(0, 0, 0, 0);
-			border: 0;
+		nav {
+			flex-basis: 100%;
+			justify-content: space-between;
+			gap: 0;
 		}
 
 		nav a {
-			padding-inline: var(--space-2);
+			padding-inline: 0;
 		}
 	}
 </style>
