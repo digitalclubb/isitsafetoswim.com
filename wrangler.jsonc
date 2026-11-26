@@ -10,8 +10,9 @@
 	"limits": { "cpu_ms": 120000 },
 	"kv_namespaces": [{ "binding": "MAP_KV", "id": "e4dd20a28e7743aa8b1015ce4c00b063" }],
 	"observability": { "enabled": true },
-	// Only serve on the custom domain (no duplicate content on *.workers.dev).
-	"workers_dev": false,
-	"preview_urls": false,
-	"routes": [{ "pattern": "next.isitsafetoswim.com", "custom_domain": true }]
+	// Temporary: workers.dev is on to test the Worker until the zone is active.
+	// At cutover this becomes false plus a custom_domain route on the apex, so
+	// there is no duplicate content on *.workers.dev.
+	"workers_dev": true,
+	"preview_urls": false
 }
