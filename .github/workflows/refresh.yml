@@ -2,27 +2,34 @@ name: Weekly rebuild
 
 # Bathing-water classifications are republished about once a year, and the
 # area pages (cleanest beaches per region) are derived from them. A weekly
-# rebuild re-runs the production build so the catalogue and every derived page
-# stay current with no manual effort. Trigger it by hand from the Actions tab
-# whenever a fresh deploy is wanted.
+# rebuild re-runs the production build and deploys it so the catalogue and
+# every derived page stay current with no manual effort. Trigger it by hand
+# from the Actions tab whenever a fresh deploy is wanted.
+#
+# GitHub's runners are in the US, which environment.data.gov.uk 403s, so
+# England and Wales come from scripts/.locations.cache.json here. A
+# `pnpm run deploy` from a UK machine refreshes those too.
 on:
   schedule:
     - cron: '0 6 * * 1' # 06:00 UTC every Monday
   workflow_dispatch: {}
 
-permissions: {}
+permissions:
+  contents: read
 
 jobs:
-  rebuild:
+  deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 20
     steps:
-      - name: Trigger Vercel deploy hook
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run deploy
         env:
-          DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
-        run: |
-          if [ -z "$DEPLOY_HOOK" ]; then
-            echo "VERCEL_DEPLOY_HOOK secret is not set. Add it in Settings > Secrets and variables > Actions." >&2
-            exit 1
-          fi
-          curl -fsS --retry 3 --retry-connrefused --max-time 30 -X POST "$DEPLOY_HOOK"
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

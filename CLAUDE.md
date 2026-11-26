@@ -6,7 +6,7 @@ This file is the project briefing. Read it before doing any work.
 
 isitsafetoswim.com answers "is it safe to swim at X today?" for every designated UK bathing water with a single confident verdict (Yes / Caution / No), a plain-English reason and the underlying data. Built and run by Gareth Clubb as part of a portfolio of single-page SEO answer engines (isthisaromanroad.com, ispowercheap.co.uk, ispollenhigh.co.uk, isthisdodgy.co.uk).
 
-Deployed to Vercel. ~700 designated bathing waters covered day one: England (EA), Wales (NRW), Scotland (SEPA), Northern Ireland (DAERA).
+Deployed to Cloudflare Workers (migrated from Vercel in November 2026). ~700 designated bathing waters covered day one: England (EA), Wales (NRW), Scotland (SEPA), Northern Ireland (DAERA).
 
 ## Stack (locked)
 
@@ -14,9 +14,10 @@ Deployed to Vercel. ~700 designated bathing waters covered day one: England (EA)
 - Kit 3 config lives in `vite.config.ts`, passed through `withPwa` from @vite-pwa/sveltekit. There is no `svelte.config.js`, and Kit 3 refuses to start if one exists. Library imports use `#lib/...` (a package.json subpath import) with explicit file extensions, not `$lib`.
 - Biome for lint and format, scoped to TS/JS/JSON. **No** ESLint, no Prettier. Biome does not lint `.svelte` files (its Svelte support is partial and flags template-used props as unused); `svelte-check` (`pnpm check`) validates those.
 - Vanilla CSS with custom properties. **No Tailwind.** No CSS-in-JS.
-- @vite-pwa/sveltekit for the manifest. It also generates a service worker, but nothing registers it, so it is inert. Register it only with `navigateFallback` left off, or every ISR page not precached is answered with the homepage.
+- @vite-pwa/sveltekit for the manifest. It also generates a service worker, but nothing registers it, so it is inert. Register it only with `navigateFallback` left off, or every on-demand page not precached is answered with the homepage.
 - Vitest for unit tests
-- @sveltejs/adapter-vercel
+- @sveltejs/adapter-cloudflare 9 plus wrangler. Config in `wrangler.jsonc`. Deploy with `pnpm run deploy` (bare `pnpm deploy` is pnpm's own command). The cron Worker in `cron/` deploys separately with `pnpm run deploy:cron`.
+- Workers runtime types are declared by hand in `src/worker.d.ts`. Do not commit `wrangler types` output: its runtime globals clash with the DOM types the components are checked against.
 - @resvg/resvg-js for build-time SVG → PNG icon and OG card generation
 
 If a future task wants to introduce Tailwind, a UI library or a different CSS approach, push back. The styling system is deliberately hand-crafted.
@@ -74,7 +75,7 @@ isitsafetoswim.com/
 │   │   │                            SEPA daily prediction, ArcGIS CSO feeds, EA
 │   │   │                            flood-monitoring rainfall, Open-Meteo sea temperature
 │   │   │                            and tides) and buildLiveData + deriveVerdict.
-│   │   ├── map/                    Map precompute: Redis store (kv.ts), hourly colour compute,
+│   │   ├── map/                    Map precompute: KV store (kv.ts), hourly colour compute,
 │   │   │                            daily profile cache, nearest-safe, colour tokens.
 │   │   ├── components/             Svelte components. Scoped <style> per file (BeachMap.svelte = MapLibre 6, which needs its worker URL handed over via `?worker&url`).
 │   │   ├── seo/                    jsonLd.ts escaping, sitemap.ts urlset and index builders
@@ -87,7 +88,7 @@ isitsafetoswim.com/
 │       ├── +layout.svelte          Masthead + footer chrome
 │       ├── +page.svelte            Homepage, prerendered
 │       ├── about/                  About page, prerendered
-│       ├── swim/[slug]/            Per-location page, Vercel ISR (5 min)
+│       ├── swim/[slug]/            Per-location page, cached 5 min (hooks.server.ts)
 │       ├── map/                    Interactive map + nearest-safe list
 │       ├── beaches/                Area hubs (/beaches, /beaches/[place])
 │       ├── near/                   Geolocation + postcode results
@@ -148,20 +149,22 @@ Bathing season dates are per country, not UK-wide: England and Wales run 15 May 
 
 Attribution is rendered per location page via `src/lib/live/attribution.ts`. Do not strip the attribution lines.
 
-Any regulator the build cannot reach is backfilled per country from the cached index in `scripts/.locations.cache.json`, so the catalogue stays complete rather than shipping a partial deploy. England (EA) and Wales (NRW) share the `environment.data.gov.uk` host, which 403s datacentre IPs, so both fail together on Vercel and are served from cache there. The build only aborts when a regulator fails and the cache holds no rows for its country.
+Any regulator the build cannot reach is backfilled per country from the cached index in `scripts/.locations.cache.json`, so the catalogue stays complete rather than shipping a partial deploy. England (EA) and Wales (NRW) share the `environment.data.gov.uk` host, which 403s non-UK IPs, so both fail together on a US build machine (GitHub Actions) and are served from cache there. A `pnpm run deploy` from a UK machine refreshes them. The build only aborts when a regulator fails and the cache holds no rows for its country.
 
 ## Map and the verdict precompute
 
 `/map` shows every bathing water on a MapLibre map coloured by today's verdict, plus a "nearest safe beach" list. Pins and list read one precomputed snapshot so they never disagree, and the per-location page stays the live authority on click-through. Code lives in `src/lib/map/`.
 
-- **Colour blob.** A Vercel Cron (`/api/cron/refresh-map`, hourly) computes every beach's verdict and writes `{generatedAt, colours: {id: yes|caution|no}}` to Redis under `map:colours`. The map reads it via `/api/map` (edge-cached `s-maxage=1800`). `computeMapColours` in `src/lib/map/compute.ts` drives it.
+- **Colour blob.** An hourly cron (`/api/cron/refresh-map`) computes every beach's verdict and writes `{generatedAt, colours: {id: yes|caution|no}}` to Workers KV (`MAP_KV`) under `map:colours`. The map reads it via `/api/map` (edge-cached `s-maxage=1800`). `computeMapColours` in `src/lib/map/compute.ts` drives it.
 - **One verdict engine.** The precompute reuses `deriveVerdict`, extracted from `buildLiveData` in `src/lib/live/verdict.ts`, so the map verdict equals the page verdict from the same inputs. They may differ only by time, never by metric. Keep it that way.
-- **Profile cache.** Fetching ~600 EA and NRW profiles at once rate-limits the shared `environment.data.gov.uk` host. An hourly cron (`/api/cron/refresh-profiles`, at :30) refreshes the least-recently-attempted batch into Redis under `map:profiles`, paced (`pacedMap`) under the host's per-minute limit and rotating on attempt time so a persistent block can never starve the rest; coverage converges over a few hours. The colour run reads the cache with a keep-previous-on-failure merge and falls back to the classification for any beach not yet cached, so map coverage is always complete. The colour run's only per-beach call is the discharge feed (ArcGIS, not rate-limited).
-- **Rainfall cache.** The hourly colour run batches rainfall for the whole catalogue (`fetchRainfallByLocation`) and writes it to Redis under `map:rainfall`. **The location page reads that blob rather than calling the flood-monitoring host itself.** Resolving the nearest station (`/id/stations?dist=15`) is the slowest call the page can make, measured between 0.1s and 15s, and it was what made a cold location render take ten seconds. Both the map and the page read the blob through `rainfallFrom`, so they can never disagree on the figure. A blob older than `RAINFALL_MAX_AGE_MS` (3h, two cron intervals) is treated as absent, because a stale 24h total drives real cautions. A batch covering less than 40% of the catalogue is discarded rather than written (`hasUsableCoverage`); a healthy run covers about 66%, since only England has stations in range: 462 of 464, against 0 of 114 in Wales, 1 of 90 in Scotland and 0 of 33 in Northern Ireland.
-- **Crons need `CRON_SECRET`.** Vercel sends it as a bearer token and the endpoints 401 without it. Either cron can be triggered by hand from the Vercel Cron tab.
+- **Profile cache.** Fetching ~600 EA and NRW profiles at once rate-limits the shared `environment.data.gov.uk` host. An hourly cron (`/api/cron/refresh-profiles`, at :30) refreshes the least-recently-attempted batch into KV under `map:profiles`, paced (`pacedMap`) under the host's per-minute limit and rotating on attempt time so a persistent block can never starve the rest; coverage converges over a few hours. The colour run reads the cache with a keep-previous-on-failure merge and falls back to the classification for any beach not yet cached, so map coverage is always complete. The colour run's only per-beach call is the discharge feed (ArcGIS, not rate-limited).
+- **Rainfall cache.** The hourly colour run batches rainfall for the whole catalogue (`fetchRainfallByLocation`) and writes it to KV under `map:rainfall`. **The location page reads that blob rather than calling the flood-monitoring host itself.** Resolving the nearest station (`/id/stations?dist=15`) is the slowest call the page can make, measured between 0.1s and 15s, and it was what made a cold location render take ten seconds. Both the map and the page read the blob through `rainfallFrom`, so they can never disagree on the figure. A blob older than `RAINFALL_MAX_AGE_MS` (3h, two cron intervals) is treated as absent, because a stale 24h total drives real cautions. A batch covering less than 40% of the catalogue is discarded rather than written (`hasUsableCoverage`); a healthy run covers about 66%, since only England has stations in range: 462 of 464, against 0 of 114 in Wales, 1 of 90 in Scotland and 0 of 33 in Northern Ireland.
+- **Crons run from a second Worker.** The adapter's Worker exports only `fetch`, so `cron/` (`isitsafetoswim-cron`) holds the Cron Triggers and calls the two endpoints over a service binding with `CRON_SECRET` as a bearer token. The endpoints 401 without it, and the secret must be set on both Workers. Either cron can be run by hand with `curl -H "authorization: Bearer $CRON_SECRET" https://isitsafetoswim.com/api/cron/refresh-map`.
+- **London placement.** `environment.data.gov.uk` 403s non-UK IPs. `wrangler.jsonc` pins every invocation near AWS London (`placement: targeted, aws:eu-west-2`), which replaced Vercel's `lhr1` pin. `limits.cpu_ms` is raised for the map run. Its ~1,500 fetches fit the Workers Paid default of 10,000 subrequests, so do not set `limits.subrequests` below that.
+- **Response cache.** Adapter 9 does not cache, and there is no ISR. `src/hooks.server.ts` puts any 200 GET carrying `s-maxage` into the per-data-centre Cache API, keyed without the query string (except `__data.json`) so tracking parameters cannot force a cold render, so the location page, `/api/verdict` and `/api/map` reach their upstreams at most once per window per data centre. It ignores `stale-while-revalidate` and does nothing on workers.dev.
 - **Basemap.** Grayscale land and coastline come from a self-hosted Protomaps extract at `static/uk.pmtiles`, served at `/uk.pmtiles` (the map's default, override with `PUBLIC_BASEMAP_URL`). Label layers are filtered out so no third-party fonts are fetched. Regenerate with: `pmtiles extract https://build.protomaps.com/<YYYYMMDD>.pmtiles static/uk.pmtiles --bbox=-8.65,49.9,1.77,60.86 --maxzoom=9`.
 
-Runtime env vars (Vercel), declared in `src/env.ts` and read from `$app/env/private` or `$app/env/public`: `REDIS_URL` (colour, profile, spills and rainfall store), `CRON_SECRET` (cron auth), `PUBLIC_BASEMAP_URL` (optional basemap override).
+Runtime env vars (Worker secrets and vars), declared in `src/env.ts` and read from `$app/env/private` or `$app/env/public`: `CRON_SECRET` (cron auth), `PUBLIC_BASEMAP_URL` (optional basemap override). The store is the `MAP_KV` binding, read through `cloudflare:workers` in `src/lib/map/kv.ts`.
 
 ## Area pages
 
@@ -169,7 +172,7 @@ Runtime env vars (Vercel), declared in `src/env.ts` and read from `$app/env/priv
 
 **An unclassified place cannot be ranked by classification.** `PlacePage.classified` says whether the regulator publishes one at all. Where it does not, `/beaches/[place]` orders by the regulator's reading instead and says so. Reading an empty `cleanest` as "no bathing water here holds an Excellent or Good classification" is the same overclaim inverted, and it is what the page said for Northern Ireland until it was caught in review.
 
-**Scottish regions are derived, not given.** SEPA's feed carries no district, so all 90 Scottish sites used to roll up to a single country page against 29 region pages for England. `addScottishRegions` in the build reverse-geocodes each site through postcodes.io, the same open service the site already uses for postcode entry, in one bulk POST. That yields 8 Scottish region pages (Fife, Highland, East Lothian, Aberdeenshire, South Ayrshire, Dumfries and Galloway, North Ayrshire, Angus). The search radius is `POSTCODE_SEARCH_RADIUS_M` (2km): the worst genuine match across all 90 sites is 673m, and a wider radius would let an estuary site match across the water in the wrong council, since both the Forth and the Clyde are under 5km across in places. Requests are chunked at `POSTCODE_BULK_LIMIT` (100), which is postcodes.io's hard cap: unchunked, ten more Scottish designations would 400 the whole POST and silently delete every Scottish region hub on the next build. A weekly GitHub Action (`.github/workflows/refresh.yml`) pings a Vercel deploy hook (secret `VERCEL_DEPLOY_HOOK`) to rebuild and keep them current.
+**Scottish regions are derived, not given.** SEPA's feed carries no district, so all 90 Scottish sites used to roll up to a single country page against 29 region pages for England. `addScottishRegions` in the build reverse-geocodes each site through postcodes.io, the same open service the site already uses for postcode entry, in one bulk POST. That yields 8 Scottish region pages (Fife, Highland, East Lothian, Aberdeenshire, South Ayrshire, Dumfries and Galloway, North Ayrshire, Angus). The search radius is `POSTCODE_SEARCH_RADIUS_M` (2km): the worst genuine match across all 90 sites is 673m, and a wider radius would let an estuary site match across the water in the wrong council, since both the Forth and the Clyde are under 5km across in places. Requests are chunked at `POSTCODE_BULK_LIMIT` (100), which is postcodes.io's hard cap: unchunked, ten more Scottish designations would 400 the whole POST and silently delete every Scottish region hub on the next build. A weekly GitHub Action (`.github/workflows/refresh.yml`) rebuilds and runs `wrangler deploy` (secrets `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`) to keep them current.
 
 They are titled "Cleanest beaches in X" rather than the regulator's phrasing, because that is the demand they answer and it is the only demand that survives the winter. Sampling and the daily pollution-risk forecast both stop on 30 September, so classification-led pages carry the site through to May. Keep the share card in `scripts/lib/og-card.mjs` saying the same thing as the title.
 
@@ -277,7 +280,7 @@ The copy also says the overflows are still in the return and in the EA's nationa
 ## URL shape
 
 - `/` homepage, prerendered
-- `/swim/[slug]` per-location page, Vercel ISR (5 min revalidation)
+- `/swim/[slug]` per-location page, rendered on demand and cached 5 min
 - `/map` interactive map plus nearest-safe list, prerendered shell
 - `/beaches` and `/beaches/[place]` area hubs, prerendered
 - `/beaches/rated/[tier]` classification hubs (`excellent`, `good`, `sufficient`, `poor`), prerendered
@@ -336,7 +339,7 @@ Documented for future sessions, not blocking launch:
 
    Two things about that feed differ from the English ones and both are load-bearing:
    - **Status is a phrase, not a 0/1 flag.** `isDischarging` in `discharges.ts` tests the negative forms first, because `Overflow Not Operating (Has in the last 24 hours)` contains the word "Operating" and a substring match would report a finished spill as running, which is a hard No on the beach page.
-   - **Timestamps are naive UK local time.** `2026-09-04T11:02:34` means 11:02 BST. `Date.parse` reads that in the host's zone, which is UTC on Vercel, putting every summer event an hour into the future. `parseLondonNaive` in `src/lib/util/time.ts` handles it, and `parseDate` in `discharges.ts` routes every string feed through it: a string carrying its own offset is left alone.
+   - **Timestamps are naive UK local time.** `2026-09-04T11:02:34` means 11:02 BST. `Date.parse` reads that in the host's zone, which is UTC on Workers, putting every summer event an hour into the future. `parseLondonNaive` in `src/lib/util/time.ts` handles it, and `parseDate` in `discharges.ts` routes every string feed through it: a string carrying its own offset is left alone.
 
    Scotland (90) and Northern Ireland (33) still have no CSO feed, so `hasDischargeFeed` still keeps those pages honest.
 9. Done. `/beaches/sewage` and `/beaches/sewage/[place]` are the league tables, built by `src/lib/data/spill-league.ts` over the same catalogue and spill record: England plus 23 English regions with at least five ranked sites. See **Sewage league tables** above for the rules they follow.

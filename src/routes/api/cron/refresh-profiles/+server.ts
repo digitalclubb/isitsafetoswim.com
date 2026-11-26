@@ -6,15 +6,10 @@ import type { RequestHandler } from './$types';
 
 export const prerender = false;
 
-export const config = {
-	runtime: 'nodejs22.x',
-	maxDuration: 300
-};
-
 /**
- * Hourly Vercel Cron target. Refreshes the cached classifications, forecasts
- * and samples that the map run reads, so that run does not have to fetch ~600
- * profiles itself. Each run refreshes the least-recently-attempted batch, paced
+ * Hourly cron target, called by the isitsafetoswim-cron Worker (cron/).
+ * Refreshes the cached classifications, forecasts and samples that the map
+ * run reads, so that run does not have to fetch ~600 profiles itself. Each run refreshes the least-recently-attempted batch, paced
  * under the host's rate limit, and the hourly schedule cycles through the
  * catalogue over a few hours. Secured by CRON_SECRET. Always safe to write:
  * failures keep the previously cached profile rather than overwriting it.

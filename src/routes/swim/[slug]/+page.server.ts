@@ -8,22 +8,15 @@ import { readProfiles, readRainfall } from '#lib/map/kv.ts';
 import { rainfallFrom } from '#lib/map/precompute.ts';
 import type { PageServerLoad } from './$types';
 
-export const config = {
-	runtime: 'nodejs22.x',
-	isr: {
-		expiration: 300
-	}
-};
-
 /**
  * The verdict is built on the server so the HTML ships with today's real
  * answer, not a placeholder that flips a moment later. Forecast, sample and
  * discharges are fetched live; the precomputed cache supplies the 24h rainfall
  * total and stands in for the profile when the regulator host is slow or
- * blocked. Vercel ISR caches each render for five minutes and serves
- * stale-while-revalidate on top, so the live fetches rarely block a visitor.
+ * blocked. hooks.server.ts caches each render for five minutes per data
+ * centre, so the live fetches rarely block a visitor.
  *
- * Both Redis reads are started here but awaited inside buildPageData, alongside
+ * Both KV reads are started here but awaited inside buildPageData, alongside
  * the live fetches rather than ahead of them. The chain cannot reject, so the
  * unawaited promise is never an unhandled rejection: a missing, unreachable or
  * stale store reads as null, which the verdict engine treats as "no signal".

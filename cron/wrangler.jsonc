@@ -1,0 +1,13 @@
+{
+	"$schema": "../node_modules/wrangler/config-schema.json",
+	// The SvelteKit adapter's Worker only exports fetch, so the schedule lives
+	// here and calls the site's cron endpoints over a service binding.
+	"name": "isitsafetoswim-cron",
+	"main": "index.js",
+	"compatibility_date": "2026-11-01",
+	"triggers": { "crons": ["0 * * * *", "30 * * * *"] },
+	"services": [{ "binding": "SITE", "service": "isitsafetoswim" }],
+	"observability": { "enabled": true },
+	"workers_dev": false,
+	"preview_urls": false
+}

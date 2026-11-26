@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { track } from '@vercel/analytics';
-
 	let {
 		attribution = [] as string[],
 		support = true
@@ -23,7 +21,6 @@
 							href="https://ko-fi.com/digitalclubb"
 							target="_blank"
 							rel="external noopener"
-							onclick={() => track('support_click', { placement: 'footer' })}
 							>Buy me a coffee<span class="sr-only"> (opens in a new tab)</span></a
 						> if it helped.
 					</p>

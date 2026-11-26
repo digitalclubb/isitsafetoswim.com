@@ -52,7 +52,7 @@ const COUNTRY = {
 };
 
 // England (EA) and Wales (NRW) are both served from environment.data.gov.uk,
-// which 403s datacentre IP ranges, so on Vercel they fail together. When a
+// which 403s non-UK IPs, so on a US build machine they fail together. When a
 // regulator is unreachable we backfill its rows from the committed cache rather
 // than refusing the build: this index is the static catalogue (names, location,
 // annual classification), not the live verdict data, so cached rows cost no

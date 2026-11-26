@@ -32,7 +32,7 @@
 
 	let location = $derived(data.location);
 
-	// The verdict is built on the server and cached by ISR, so the page ships
+	// The verdict is built on the server and cached for five minutes, so the page ships
 	// with today's real answer already in place. No client-side swap.
 	let live = $derived(data.live);
 

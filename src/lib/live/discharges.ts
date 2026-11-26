@@ -180,7 +180,7 @@ function parseDate(value: unknown): string | undefined {
 	if (typeof value === 'string') {
 		// These feeds are all UK operators and several publish a naive local
 		// timestamp, which Date.parse would read in the host's zone (UTC on
-		// Vercel) and place an hour into the future all summer.
+		// Workers) and place an hour into the future all summer.
 		const t = parseLondonNaive(value);
 		return t === null ? undefined : new Date(t).toISOString();
 	}

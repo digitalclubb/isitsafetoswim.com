@@ -14,7 +14,7 @@ const REFRESH_MS = 30 * 60 * 1000;
 /**
  * Today's precomputed verdicts, the same snapshot the map paints from. Empty
  * until loadTodayVerdicts succeeds, and on the server, where it is never
- * filled: prerendered and ISR pages must not bake a "today" into their HTML.
+ * filled: prerendered and cached pages must not bake a "today" into their HTML.
  */
 export const today = $state<{ colours: Record<string, Verdict>; generatedAt: string }>({
 	colours: {},

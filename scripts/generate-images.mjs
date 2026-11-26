@@ -12,7 +12,7 @@ const repoRoot = resolve(here, '..');
 const staticDir = resolve(repoRoot, 'static');
 
 // Bundle the font so text renders identically whatever fonts the build host
-// happens to have (Vercel's build image has few). Source Serif 4 is OFL.
+// happens to have (CI build images have few). Source Serif 4 is OFL.
 const FONT = {
 	fontFiles: [resolve(here, 'fonts/SourceSerif4.ttf')],
 	loadSystemFonts: false,

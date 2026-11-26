@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-vercel';
+import adapter from '@sveltejs/adapter-cloudflare';
 import { withPwa } from '@vite-pwa/sveltekit';
 import { defineConfig } from 'vitest/config';
 
@@ -6,13 +6,7 @@ export default defineConfig({
 	plugins: [
 		withPwa(
 			{
-				adapter: adapter({
-					runtime: 'nodejs22.x',
-					// environment.data.gov.uk geo-blocks non-UK IPs (the default US region
-					// 403s). London is AWS eu-west-2, whose egress is UK, so the live
-					// regulator fetch works. Requires a Vercel Pro plan to pin the region.
-					regions: ['lhr1']
-				}),
+				adapter: adapter(),
 				prerender: {
 					handleHttpError: 'warn',
 					handleMissingId: 'warn',
@@ -60,7 +54,7 @@ export default defineConfig({
 					// it is inert today. Kept to the app shell for when it is: a bare '**'
 					// from .svelte-kit/output listed every file twice and swept in ~1,500
 					// OG share images (57 MB). No navigation fallback either, or every page
-					// not precached, including every ISR location page, would be answered
+					// not precached, including every on-demand location page, would be answered
 					// with the homepage.
 					globPatterns: [
 						'client/_app/immutable/**/*.{js,css}',

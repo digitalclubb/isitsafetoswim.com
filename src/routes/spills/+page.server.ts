@@ -1,10 +1,6 @@
 import { readSpills } from '#lib/map/kv.ts';
 import type { PageServerLoad } from './$types';
 
-export const config = {
-	runtime: 'nodejs22.x'
-};
-
 /**
  * Rendered server-side so the spills list is in the HTML for crawlers, and
  * edge-cached for five minutes. The blob itself is refreshed hourly by the map

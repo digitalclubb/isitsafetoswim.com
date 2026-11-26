@@ -3,40 +3,37 @@
 	import Masthead from '#lib/components/Masthead.svelte';
 	import NavProgress from '#lib/components/NavProgress.svelte';
 	import SiteFooter from '#lib/components/SiteFooter.svelte';
-	import { onNavigate } from '$app/navigation';
+	import { beforeNavigate, onNavigate } from '$app/navigation';
 	import { navigating, page } from '$app/state';
 	import { browser } from '$app/env';
-	import { inject, pageview } from '@vercel/analytics';
-	import { redactAnalyticsUrl } from '#lib/util/redact.ts';
 
 	let { children } = $props();
 
-	// Vercel Web Analytics: a ~1KB first-party script (/_vercel/insights), no
-	// cookies. mode 'auto' sends only from the Vercel production deployment and
-	// stays silent in dev. Speed Insights is deliberately not included.
-	//
-	// A visitor can put their own location into the URL two ways: the postcode
-	// they search, and the coordinates the near-me button writes into the query
-	// string. beforeSend keeps the route and drops both, so the counts show how
-	// often each search is used without recording who used it from where.
-	//
-	// This is @vercel/analytics/sveltekit's injectAnalytics on $app/state: that
-	// wrapper subscribes to $app/stores, which throws under SvelteKit 3. Swap
-	// back once the package supports Kit 3.
-	if (browser) {
-		inject(
-			{
-				beforeSend: (event) => ({ ...event, url: redactAnalyticsUrl(event.url) }),
-				basePath: import.meta.env.VITE_VERCEL_OBSERVABILITY_BASEPATH,
-				disableAutoTrack: true,
-				framework: 'sveltekit'
-			},
-			import.meta.env.VITE_VERCEL_OBSERVABILITY_CLIENT_CONFIG
-		);
+	// Cloudflare Web Analytics: no cookies and no identifier. A visitor can put
+	// their own location into the URL two ways, the postcode they search and the
+	// coordinates the near-me button writes, and both live under /near. The
+	// beacon has no hook to redact a URL and reads the current path when the tab
+	// is hidden, so a page running it must never show a /near URL: it is not
+	// loaded on a /near landing, and every way into /near is a full page load.
+	// near/+layout.svelte keeps the path out of the referrer on the way back out.
+	if (browser && !location.pathname.startsWith('/near')) {
+		const beacon = document.createElement('script');
+		beacon.defer = true;
+		beacon.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+		beacon.dataset.cfBeacon = '{"token": "e2c101fc383748c9804e92ccc88af1e4"}';
+		document.head.append(beacon);
 	}
 
-	$effect(() => {
-		if (page.route.id) pageview({ route: page.route.id, path: page.url.pathname });
+	beforeNavigate((navigation) => {
+		const to = navigation.to?.url;
+		if (
+			navigation.type !== 'leave' &&
+			to?.pathname.startsWith('/near') &&
+			!location.pathname.startsWith('/near')
+		) {
+			navigation.cancel();
+			location.assign(to.href);
+		}
 	});
 
 	let current: '' | 'home' | 'map' | 'areas' | 'spills' | 'about' = $derived(

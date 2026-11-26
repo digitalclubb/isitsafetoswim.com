@@ -1,0 +1,17 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "isitsafetoswim",
+	"compatibility_date": "2026-11-01",
+	// environment.data.gov.uk 403s non-UK IPs, so run every invocation next to
+	// AWS London rather than wherever the visitor happens to be.
+	"placement": { "mode": "targeted", "region": "aws:eu-west-2" },
+	// The map cron computes the whole catalogue in one invocation, past the
+	// default 30s CPU. Its ~1,500 fetches fit the Paid default of 10,000.
+	"limits": { "cpu_ms": 120000 },
+	"kv_namespaces": [{ "binding": "MAP_KV", "id": "e4dd20a28e7743aa8b1015ce4c00b063" }],
+	"observability": { "enabled": true },
+	// Only serve on the custom domain (no duplicate content on *.workers.dev).
+	"workers_dev": false,
+	"preview_urls": false,
+	"routes": [{ "pattern": "next.isitsafetoswim.com", "custom_domain": true }]
+}

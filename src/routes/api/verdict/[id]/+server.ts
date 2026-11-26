@@ -5,10 +5,6 @@ import type { RequestHandler } from './$types';
 
 export const prerender = false;
 
-export const config = {
-	runtime: 'nodejs22.x'
-};
-
 export const GET: RequestHandler = async ({ params, setHeaders, request }) => {
 	const lookup = params.id ?? '';
 	const location = getLocationById(lookup) ?? getLocationBySlug(lookup);

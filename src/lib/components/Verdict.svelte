@@ -18,10 +18,10 @@
 		verdict.verdict === 'yes' ? 'yes' : verdict.verdict === 'caution' ? 'caution' : 'no'
 	);
 
-	// An absolute clock time rather than "just now". The page is cached by ISR
-	// for five minutes and served stale for longer, so a relative phrase is
-	// already wrong by the time most visitors read it, and computing one during
-	// render made the server and client HTML disagree.
+	// An absolute clock time rather than "just now". The page is cached for
+	// five minutes, so a relative phrase is already wrong by the time most
+	// visitors read it, and computing one during render made the server and
+	// client HTML disagree.
 	let formattedTime = $derived(londonClock(verdict.fetchedAt));
 	let formattedDate = $derived(londonDate(verdict.fetchedAt));
 	let isoDate = $derived(londonIsoDate(verdict.fetchedAt));

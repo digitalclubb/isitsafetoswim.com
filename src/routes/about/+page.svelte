@@ -105,17 +105,16 @@
 			There are no adverts, no cookies and no sign-in. Nothing here is sold or shared.
 		</p>
 		<p>
-			We count page views through Vercel Web Analytics so we can see which beaches people
+			We count page views through Cloudflare Web Analytics so we can see which beaches people
 			actually look up and where the site falls short. Each view records the page, the referring
-			site, an approximate location worked out from your connection which can be as precise as a
-			city, and the browser and device type. It sets no cookies, stores no IP address and cannot
-			follow you to another website. The temporary identifier it uses is discarded after 24
-			hours.
+			site, the country your connection comes from, the browser and device type and how quickly
+			the page loaded. It sets no
+			cookies, gives you no identifier and cannot follow you to another website.
 		</p>
 		<p>
 			Searching by postcode puts that postcode in the address bar, and pressing "Use my location"
-			puts your rounded coordinates there. Both are removed before the page view is counted, so
-			the figures show which kind of search was used without showing where you were. Looking up a
+			puts your rounded coordinates there. Neither page is counted at all, so the figures never
+			show where you were. Looking up a
 			postcode sends it to <a href="https://postcodes.io" rel="external">postcodes.io</a> to turn
 			it into coordinates, and "Use my location" rounds your position to about 110 metres before
 			it is used at all.

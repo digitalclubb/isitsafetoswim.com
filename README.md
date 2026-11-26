@@ -35,13 +35,13 @@ Real-time storm-overflow data covers the nine English and Welsh water companies 
 - @vite-pwa/sveltekit for the PWA manifest and service worker
 - @resvg/resvg-js to rasterise the brand SVG into PNG icons and a 1200x630 share card at build time
 - Vitest for unit tests
-- Deployed on Vercel via `@sveltejs/adapter-vercel`
+- Deployed on Cloudflare Workers via `@sveltejs/adapter-cloudflare` (`pnpm run deploy`)
 
 ## How it's built
 
 ```
 /                     prerendered homepage with search, geolocation and methodology
-/swim/[slug]          per-location page, Vercel ISR at 5 minute revalidation
+/swim/[slug]          per-location page, rendered on demand and cached for 5 minutes
 /api/verdict/[id]     JSON endpoint, edge-cacheable with stale-while-revalidate
 /about                methodology page, prerendered
 /sitemap.xml          703 URLs, prerendered at build

@@ -6,17 +6,10 @@ import type { RequestHandler } from './$types';
 
 export const prerender = false;
 
-export const config = {
-	runtime: 'nodejs22.x',
-	// The whole catalogue is computed in one run, so allow well beyond the
-	// default function budget.
-	maxDuration: 300
-};
-
 /**
- * Hourly Vercel Cron target. Recomputes every beach's verdict and writes the
- * colour blob the map reads. Secured by CRON_SECRET, which Vercel sends as a
- * bearer token on scheduled invocations.
+ * Hourly cron target, called by the isitsafetoswim-cron Worker (cron/).
+ * Recomputes every beach's verdict and writes the colour blob the map reads.
+ * Secured by CRON_SECRET, sent as a bearer token.
  */
 export const GET: RequestHandler = async ({ request }) => {
 	const secret = CRON_SECRET;
@@ -34,7 +27,7 @@ export const GET: RequestHandler = async ({ request }) => {
 	// reads it instead of calling the flood-monitoring host itself, so it must
 	// not be withheld by an unrelated verdict failure. A null blob means the
 	// batch was too thin to replace the stored one. The write is caught because
-	// it is the first of three: a Redis hiccup here must not abort the run and
+	// it is the first of three: a KV hiccup here must not abort the run and
 	// leave the map and spills unrefreshed as well.
 	const rainfallWritten = rainfall
 		? await writeRainfall(rainfall).then(

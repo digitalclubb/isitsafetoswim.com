@@ -35,7 +35,7 @@ describe('relativeDay', () => {
 	});
 });
 
-// Vercel runs UTC, so every case below is written as a UTC instant and asserted
+// The server runs UTC, so every case below is written as a UTC instant and asserted
 // against what a visitor in the UK should see.
 describe('London formatters', () => {
 	const summerEvening = '2026-08-14T20:26:43.452Z';

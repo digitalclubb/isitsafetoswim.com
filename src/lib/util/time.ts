@@ -20,7 +20,7 @@ export function relativeDay(iso: string, now: number = Date.now()): string {
  * The most recent of the timestamps behind a page's content, ignoring anything
  * unparseable, with `fallback` when none of them survive.
  *
- * A verdict is recomputed on every ISR revalidation, so the render time says
+ * A verdict is recomputed on every cache refresh, so the render time says
  * only that the page was rebuilt. Google discounts a dateModified that always
  * reads "now" at crawl time, so the date offered is the newest reading the
  * verdict was actually drawn from.
@@ -38,7 +38,7 @@ export function newestTimestamp(candidates: Array<string | undefined>, fallback:
 }
 
 /**
- * Every bathing water is in the UK and Vercel runs UTC, so the clock a visitor
+ * Every bathing water is in the UK and the server runs UTC, so the clock a visitor
  * reads has to be pinned to London rather than taken from the host.
  */
 const UK = 'Europe/London';
@@ -75,7 +75,7 @@ function londonOffsetMs(t: number): number {
 /**
  * Parse a naive "2026-09-04T11:02:34" as London wall-clock time and return the
  * UTC instant. Several water-company feeds publish timestamps with no zone at
- * all, and JavaScript reads those as the host's local time, which on Vercel is
+ * all, and JavaScript reads those as the host's local time, which on Workers is
  * UTC: in summer that puts every event an hour into the future, so a spill that
  * started twenty minutes ago reads as not yet begun.
  *

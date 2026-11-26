@@ -5,10 +5,6 @@ import type { RequestHandler } from './$types';
 
 export const prerender = false;
 
-export const config = {
-	runtime: 'nodejs22.x'
-};
-
 /**
  * The sample-history sparkline, the one decoration the location page still
  * defers. It reads the rate-limited regulator sample host, which is what made a

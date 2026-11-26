@@ -11,6 +11,8 @@
 		"dev": "vite dev",
 		"build": "node ./scripts/build-location-index.mjs && node ./scripts/generate-images.mjs && vite build",
 		"preview": "vite preview",
+		"deploy": "pnpm build && wrangler deploy",
+		"deploy:cron": "wrangler deploy -c cron/wrangler.jsonc",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "biome format --write .",
@@ -25,11 +27,10 @@
 	"devDependencies": {
 		"@biomejs/biome": "^2.6.8",
 		"@resvg/resvg-js": "^2.6.2",
-		"@sveltejs/adapter-vercel": "^7.0.5",
+		"@sveltejs/adapter-cloudflare": "^9.0.1",
 		"@sveltejs/kit": "^3.4.0",
 		"@sveltejs/vite-plugin-svelte": "^7.3.1",
 		"@types/node": "^25.9.9",
-		"@vercel/analytics": "^2.0.1",
 		"@vite-pwa/sveltekit": "^2.0.4",
 		"magicast": "^0.5.5",
 		"svelte": "^5.59.1",
@@ -37,7 +38,8 @@
 		"typescript": "^6.0.3",
 		"vite": "^8.3.8",
 		"vite-plugin-pwa": "^2.0.0",
-		"vitest": "^5.1.1"
+		"vitest": "^5.1.1",
+		"wrangler": "^4.168.0"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
@@ -47,7 +49,6 @@
 	"dependencies": {
 		"@protomaps/basemaps": "^5.7.2",
 		"maplibre-gl": "^6.19.0",
-		"pmtiles": "^4.5.0",
-		"redis": "^6.3.1"
+		"pmtiles": "^4.5.0"
 	}
 }
